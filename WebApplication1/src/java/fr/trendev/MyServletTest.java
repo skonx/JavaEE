@@ -8,7 +8,6 @@ package fr.trendev;
 import fr.trendev.bean.MyBean;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MyServletTest", urlPatterns = {"/test"})
 public class MyServletTest extends HttpServlet {
-
-    private static int count = 0;
     
+    private static int count = 0;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
