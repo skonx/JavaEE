@@ -10,8 +10,17 @@ package fr.trendev.bean;
  * @author jsie
  */
 public class MyBean {
-    
+
+    private int iter;
     private String svname;
+
+    public int getIter() {
+        return iter;
+    }
+
+    public void setIter(int iter) {
+        this.iter = iter;
+    }
 
     /**
      * Get the value of svname

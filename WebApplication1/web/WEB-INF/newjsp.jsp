@@ -16,9 +16,10 @@
         <div>
             <h1>Hello World!</h1>
             <p>This page is accessed through a servlet : <c:out value="${requestScope.myBean.svname}"/></p>
-    </div>
-    <div>
-        <a href="index.html">Back to index.html</a>
-    </div>
+        <p>Iteration = <c:out value="${requestScope.myBean.iter}"/></p>
+</div>
+<div>
+    <a href="<c:url value='index.html'/>"><c:url value="index.html"/></a>
+</div>
 </body>
 </html>

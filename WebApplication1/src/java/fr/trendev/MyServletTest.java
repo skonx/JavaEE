@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "MyServletTest", urlPatterns = {"/test"})
 public class MyServletTest extends HttpServlet {
 
+    private static int count = 0;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -63,6 +65,7 @@ public class MyServletTest extends HttpServlet {
         //processRequest(request, response);
         MyBean mb = new MyBean();
         mb.setSvname(this.getServletName());
+        mb.setIter(++count);
         request.setAttribute("myBean", mb);
         this.getServletContext().getRequestDispatcher("/WEB-INF/newjsp.jsp").forward(request, response);
     }
