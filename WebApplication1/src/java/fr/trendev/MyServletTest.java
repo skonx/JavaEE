@@ -5,8 +5,10 @@
  */
 package fr.trendev;
 
+import fr.trendev.bean.MyBean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +19,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jsie
  */
-@WebServlet(name = "MyServlet", urlPatterns = {"/test"})
-public class MyServlet extends HttpServlet {
+@WebServlet(name = "MyServletTest", urlPatterns = {"/test"})
+public class MyServletTest extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,6 +61,9 @@ public class MyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
+        MyBean mb = new MyBean();
+        mb.setSvname(this.getServletName());
+        request.setAttribute("myBean", mb);
         this.getServletContext().getRequestDispatcher("/WEB-INF/newjsp.jsp").forward(request, response);
     }
 
