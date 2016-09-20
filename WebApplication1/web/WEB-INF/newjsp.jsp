@@ -10,13 +10,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>My JSP #2</title>
+        <title>My JSP #<c:out value="${sessionScope.myBean.iter}"/></title>
     </head>
     <body>
         <div>
             <h1>Hello World!</h1>
-            <p>This page is accessed through a servlet : <c:out value="${requestScope.myBean.svname}"/></p>
-        <p>Iteration = <c:out value="${requestScope.myBean.iter}"/></p>
+            <p>This page is accessed through a servlet : <c:out value="${sessionScope.myBean.svname}"/></p>
+        <p>Iteration #<c:out value="${sessionScope.myBean.iter}"/></p>
 </div>
 <div>
     <a href="<c:url value='index.html'/>"><c:url value="index.html"/></a>

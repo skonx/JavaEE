@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.trendev;
+package fr.trendev.web;
 
 import fr.trendev.bean.MyBean;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -20,8 +21,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MyServletTest", urlPatterns = {"/test"})
 public class MyServletTest extends HttpServlet {
-    
+
     private static int count = 0;
+
+    private final String MYBEAN = "myBean";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,11 +39,10 @@ public class MyServletTest extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MyServlet</title>");            
+            out.println("<title>Servlet MyServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet MyServlet at " + request.getContextPath() + "</h1>");
@@ -61,11 +63,21 @@ public class MyServletTest extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        MyBean mb = new MyBean();
-        mb.setSvname(this.getServletName());
+
+//TODO: check what kind of system parameters/configs the servlet can access
+        HttpSession session = request.getSession();
+
+        MyBean mb = (MyBean) session.getAttribute(MYBEAN);
+
+        if (mb == null) {
+            this.log("No bean in session " + session.getId());
+            mb = new MyBean();
+            mb.setSvname(this.getServletName());
+        }
+
         mb.setIter(++count);
-        request.setAttribute("myBean", mb);
+        this.log("Adding myBean... Iteration #" + mb.getIter());
+        session.setAttribute("myBean", mb);
         this.getServletContext().getRequestDispatcher("/WEB-INF/newjsp.jsp").forward(request, response);
     }
 
