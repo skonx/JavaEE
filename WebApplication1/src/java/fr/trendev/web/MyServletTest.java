@@ -69,9 +69,14 @@ public class MyServletTest extends HttpServlet {
 
         MyBean mb = (MyBean) session.getAttribute(MYBEAN);
 
+        /**
+         * Session is killed after 2 minutes.
+         * Tuned in web.xml config file.
+         */
         if (mb == null) {
             this.log("No bean in session " + session.getId());
             mb = new MyBean();
+            count = 0;
             mb.setSvname(this.getServletName());
         }
 
