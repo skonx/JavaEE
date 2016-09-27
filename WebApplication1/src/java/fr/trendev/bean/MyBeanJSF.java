@@ -33,6 +33,8 @@ public class MyBeanJSF implements Serializable {
     private int iter;
 
     private int incr;
+    
+    private final static int bound = 100;
 
     private static final Logger logger = Logger.getLogger("MyBeanJSF");
 
@@ -65,6 +67,12 @@ public class MyBeanJSF implements Serializable {
     public void setIncr(int incr) {
         this.incr = incr;
     }
+
+    public int getBound() {
+        return bound;
+    }
+    
+    
 
     @PostConstruct
     public void init() {

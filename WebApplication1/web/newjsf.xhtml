@@ -16,8 +16,11 @@
             <h:outputText id="incr" value="incr value = #{myBeanJSF.incr}"/>
             <h:inputText id="incrset" value="#{myBeanJSF.incr}"/>
             <h:commandButton value="Increment" action="#{myBeanJSF.add()}">
-                <f:ajax execute="incrset" render="incr iter" immediate="true"/>
+                <f:ajax execute="incrset" render="@form" immediate="true"/>
             </h:commandButton>
+            <p/>
+            <h:outputText id="text" rendered="#{myBeanJSF.iter > myBeanJSF.bound}" style="color: red"
+                          value="Well, you're greater than #{myBeanJSF.bound} now !!!" />
             <p/>
             <h:commandLink value="index.html" action="#{myBeanJSF.back()}" />
         </h:form>
