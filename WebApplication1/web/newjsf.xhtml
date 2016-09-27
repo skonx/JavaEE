@@ -11,7 +11,13 @@
         <h:form>
             <h:outputText value="Hello from Facelets on : #{myBeanJSF.svname}"/>
             <p/>
-            <h:outputText value="Iteration : ##{myBeanJSF.iter}"/>
+            <h:outputText id="iter" value="Iteration : ##{myBeanJSF.iter}"/>
+            <p/>
+            <h:outputText id="incr" value="incr value = #{myBeanJSF.incr}"/>
+            <h:inputText id="incrset" value="#{myBeanJSF.incr}"/>
+            <h:commandButton value="Increment" action="#{myBeanJSF.add()}">
+                <f:ajax execute="incrset" render="incr iter" immediate="true"/>
+            </h:commandButton>
             <p/>
             <h:commandLink value="index.html" action="#{myBeanJSF.back()}" />
         </h:form>

@@ -32,6 +32,8 @@ public class MyBeanJSF implements Serializable {
 
     private int iter;
 
+    private int incr;
+
     private static final Logger logger = Logger.getLogger("MyBeanJSF");
 
     /**
@@ -56,18 +58,32 @@ public class MyBeanJSF implements Serializable {
         this.iter = iter;
     }
 
+    public int getIncr() {
+        return incr;
+    }
+
+    public void setIncr(int incr) {
+        this.incr = incr;
+    }
+
     @PostConstruct
     public void init() {
         iter = 1;
+        incr = 0;
         svname = FacesContext.getCurrentInstance().getExternalContext().getSessionId(true);
         logger.log(Level.WARNING, "NEW INIT : {0}", LocalDateTime.now().toString());
     }
 
     public void back() throws IOException {
         iter++;
+        incr = 0;
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         logger.log(Level.INFO, "BACK LINK ");
         ec.redirect(ec.getRequestContextPath() + "/index.html");
+    }
+
+    public void add() {
+        iter += incr;
     }
 }
 //
