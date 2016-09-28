@@ -5,6 +5,7 @@
  */
 package fr.trendev.bean;
 
+import fr.trendev.constraints.MyMax;
 import java.io.IOException;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -27,14 +29,17 @@ public class MyBeanJSF implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private static final long bound = 100;
+
     //@ManagedProperty(value = "#{param.svname}")
     private String svname;
 
-    private int iter;
+    private long iter;
 
-    private int incr;
-    
-    private final static int bound = 100;
+    //TODO : override this annotation with a custom message in french
+    @MyMax(bound)
+    @NotNull
+    private long incr;
 
     private static final Logger logger = Logger.getLogger("MyBeanJSF");
 
@@ -52,27 +57,25 @@ public class MyBeanJSF implements Serializable {
         this.svname = svname;
     }
 
-    public int getIter() {
+    public long getIter() {
         return iter;
     }
 
-    public void setIter(int iter) {
+    public void setIter(long iter) {
         this.iter = iter;
     }
 
-    public int getIncr() {
+    public long getIncr() {
         return incr;
     }
 
-    public void setIncr(int incr) {
+    public void setIncr(long incr) {
         this.incr = incr;
     }
 
-    public int getBound() {
+    public long getBound() {
         return bound;
     }
-    
-    
 
     @PostConstruct
     public void init() {
