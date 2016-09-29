@@ -13,14 +13,16 @@
             <p/>
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
-            <h:outputText id="incr" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
+            <h:outputLabel value="#{bundle.IncrValue} : " for="incrset"/>
             <h:inputText id="incrset" value="#{myBeanJSF.incr}"/>
             <h:commandButton value="#{bundle.Increment}" action="#{myBeanJSF.add()}">
                 <f:ajax execute="incrset" render="@form" immediate="true"/>
             </h:commandButton>
-            <h:message for="incrset" id="incrsetmsg" showDetail="true"/>
+            <h:message for="incrset" id="incrsetmsg" showDetail="true" style="color: red"/>
             <p/>
-            <h:outputText id="text" rendered="#{myBeanJSF.iter > myBeanJSF.bound}" style="color: red"
+            <h:outputText id="incr" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
+            <p/>
+            <h:outputText id="text" rendered="#{myBeanJSF.iter > myBeanJSF.bound}" style="color : green"
                           value="#{bundle.Congrat} #{myBeanJSF.bound}!!!" />
             <p/>
             <h:commandLink value="index.html" action="#{myBeanJSF.back()}" />

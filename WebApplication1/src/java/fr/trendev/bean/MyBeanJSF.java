@@ -25,10 +25,12 @@ import javax.validation.constraints.NotNull;
 //@ManagedBean(eager = true)
 @Named
 @SessionScoped
+
 public class MyBeanJSF implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    
     private static final long bound = 100;
 
     //@ManagedProperty(value = "#{param.svname}")
