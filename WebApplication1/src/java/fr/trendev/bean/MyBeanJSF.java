@@ -17,6 +17,9 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 /**
  *
@@ -25,12 +28,10 @@ import javax.validation.constraints.NotNull;
 //@ManagedBean(eager = true)
 @Named
 @SessionScoped
-
 public class MyBeanJSF implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    
     private static final long bound = 100;
 
     //@ManagedProperty(value = "#{param.svname}")
@@ -83,7 +84,11 @@ public class MyBeanJSF implements Serializable {
     public void init() {
         iter = 1;
         incr = 0;
-        svname = FacesContext.getCurrentInstance().getExternalContext().getSessionId(true);
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (fc != null) {
+            svname = fc.getExternalContext().getSessionId(true);
+        }
+
         logger.log(Level.WARNING, "NEW INIT : {0}", LocalDateTime.now().toString());
     }
 
@@ -98,5 +103,6 @@ public class MyBeanJSF implements Serializable {
     public void add() {
         iter += incr;
     }
+
 }
 //
