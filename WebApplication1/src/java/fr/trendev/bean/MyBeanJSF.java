@@ -54,12 +54,7 @@ public class MyBeanJSF implements Serializable {
     }
 
     public String getSn() {
-        if (sn == null) {
-            FacesContext fc = FacesContext.getCurrentInstance();
-            if (fc != null) {
-                sn = fc.getExternalContext().getSessionId(true);
-            }
-        }
+
         return sn;
     }
 
@@ -92,7 +87,13 @@ public class MyBeanJSF implements Serializable {
         iter = 1;
         incr = 0;
         sn = null;
-        logger.log(Level.WARNING, "NEW INIT : {0}", LocalDateTime.now().toString());
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (fc != null) {
+            sn = fc.getExternalContext().getSessionId(true);
+        }
+
+        logger.log(Level.WARNING, "NEW INIT {0}: {1}", new String[]{sn, LocalDateTime.now().toString()});
     }
 
     public void back() throws IOException {

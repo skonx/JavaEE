@@ -7,18 +7,21 @@ package fr.trendev.web;
 
 import fr.trendev.bean.MyBeanJSF;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 
 /**
  * REST Web Service
  *
  */
 @Path("/MB")
-@Singleton
+@Stateless
 public class MyBound {
 
     public static final Logger logger
@@ -26,6 +29,16 @@ public class MyBound {
 
     @Inject
     private MyBeanJSF myBeanJSF;
+    @Context
+    private HttpServletRequest req;
+
+    @PostConstruct
+    public void init() {
+        if (myBeanJSF.getSn() == null) {
+            myBeanJSF.setSn(req.getSession(true).getId());
+            logger.info("SESSION ID = " + myBeanJSF.getSn());
+        }
+    }
 
     @GET
     @Path("bound")
@@ -48,4 +61,10 @@ public class MyBound {
         return myBeanJSF.getIncr();
     }
 
+    @GET
+    @Path("test")
+    @Produces("text/plain")
+    public boolean testSessionID() {
+        return myBeanJSF.getSn().equals(req.getSession(true).getId());
+    }
 }
