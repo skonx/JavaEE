@@ -6,6 +6,7 @@
 package fr.trendev.web;
 
 import fr.trendev.bean.MyBeanJSF;
+import java.util.logging.Logger;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -19,6 +20,9 @@ import javax.ws.rs.Produces;
 @Path("/MB")
 @Singleton
 public class MyBound {
+
+    public static final Logger logger
+            = Logger.getLogger(MyBound.class.getCanonicalName());
 
     @Inject
     private MyBeanJSF myBeanJSF;

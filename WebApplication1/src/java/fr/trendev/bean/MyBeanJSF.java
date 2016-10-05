@@ -44,7 +44,8 @@ public class MyBeanJSF implements Serializable {
     @NotNull
     private long incr;
 
-    private static final Logger logger = Logger.getLogger("MyBeanJSF");
+    public static final Logger logger
+            = Logger.getLogger(MyBeanJSF.class.getCanonicalName());
 
     /**
      * Creates a new instance of MyBeanJSF
