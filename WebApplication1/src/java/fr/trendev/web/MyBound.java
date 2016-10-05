@@ -24,12 +24,24 @@ public class MyBound {
     private MyBeanJSF myBeanJSF;
 
     @GET
+    @Path("bound")
     @Produces("text/plain")
-    public String getValues() {
-        String result = "\nBOUND  = " + myBeanJSF.getBound();
-        result += "\nITER = " + myBeanJSF.getIter();
-        result += "\nINCR  = " + myBeanJSF.getIncr();
-        return result;
+    public long getBound() {
+        return myBeanJSF.getBound();
+    }
+
+    @GET
+    @Path("iter")
+    @Produces("text/plain")
+    public long getIter() {
+        return myBeanJSF.getIter();
+    }
+
+    @GET
+    @Path("incr")
+    @Produces("text/plain")
+    public long getIncr() {
+        return myBeanJSF.getIncr();
     }
 
 }

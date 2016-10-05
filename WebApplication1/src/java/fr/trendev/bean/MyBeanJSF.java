@@ -7,19 +7,16 @@ package fr.trendev.bean;
 
 import fr.trendev.constraints.MyMax;
 import java.io.IOException;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 
 /**
  *
@@ -34,8 +31,11 @@ public class MyBeanJSF implements Serializable {
 
     private static final long bound = 100;
 
-    //@ManagedProperty(value = "#{param.svname}")
-    private String svname;
+    //@ManagedProperty(value = "#{param.sn}")
+    /**
+     * Session Name
+     */
+    private String sn;
 
     private long iter;
 
@@ -52,12 +52,18 @@ public class MyBeanJSF implements Serializable {
     public MyBeanJSF() {
     }
 
-    public String getSvname() {
-        return svname;
+    public String getSn() {
+        if (sn == null) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            if (fc != null) {
+                sn = fc.getExternalContext().getSessionId(true);
+            }
+        }
+        return sn;
     }
 
-    public void setSvname(String svname) {
-        this.svname = svname;
+    public void setSn(String sn) {
+        this.sn = sn;
     }
 
     public long getIter() {
@@ -84,11 +90,7 @@ public class MyBeanJSF implements Serializable {
     public void init() {
         iter = 1;
         incr = 0;
-        FacesContext fc = FacesContext.getCurrentInstance();
-        if (fc != null) {
-            svname = fc.getExternalContext().getSessionId(true);
-        }
-
+        sn = null;
         logger.log(Level.WARNING, "NEW INIT : {0}", LocalDateTime.now().toString());
     }
 
