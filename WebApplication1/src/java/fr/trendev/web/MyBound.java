@@ -96,6 +96,8 @@ public class MyBound {
         for (HttpSession session : tracker.getList()) {
             sb.append(session.getId()).append("\n");
         }
+        if(tracker.getList().isEmpty())
+            sb.append("## NO ACTIVE SESSION ##");
         return sb.toString();
     }
 }
