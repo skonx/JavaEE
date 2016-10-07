@@ -6,9 +6,11 @@
 package fr.trendev.web;
 
 import fr.trendev.bean.MyBeanJSF;
+import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -21,7 +23,7 @@ import javax.ws.rs.core.Context;
  *
  */
 @Path("/MB")
-@Stateless
+@Singleton
 public class MyBound {
 
     public static final Logger logger
@@ -36,7 +38,7 @@ public class MyBound {
     public void init() {
         if (myBeanJSF.getSn() == null) {
             myBeanJSF.setSn(req.getSession(true).getId());
-            logger.info("SESSION ID = " + myBeanJSF.getSn());
+            logger.log(Level.INFO, "SESSION ID = {0}", myBeanJSF.getSn());
         }
     }
 
@@ -64,7 +66,19 @@ public class MyBound {
     @GET
     @Path("test")
     @Produces("text/plain")
-    public boolean testSessionID() {
-        return myBeanJSF.getSn().equals(req.getSession(true).getId());
+    public String testSessionID() {
+
+        boolean result;
+        
+        if (Objects.nonNull(myBeanJSF.getSn()) && Objects.nonNull(req.getSession(true)) && Objects.nonNull(req.getSession(true).getId())) {
+            result = myBeanJSF.getSn().equals(req.getSession(true).getId());
+        } else {
+            result = false;
+        }
+
+        String message = "TEST = " + result;
+        message += ("\nmyBeanJSF.getSn() = " + myBeanJSF.getSn());
+        message += ("\nreq.getSession(true).getId() = " + req.getSession(true).getId());
+        return message;
     }
 }

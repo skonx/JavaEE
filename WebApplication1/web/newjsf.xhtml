@@ -16,7 +16,7 @@
             <h:outputLabel value="#{bundle.IncrValue} : " for="incrset"/>
             <h:inputText id="incrset" value="#{myBeanJSF.incr}"/>
             <h:commandButton value="#{bundle.Increment}" action="#{myBeanJSF.add()}">
-                <f:ajax execute="incrset" render="@form" immediate="true"/>
+                <f:ajax execute="incrset" render="@form" immediate="true" onerror="/index.html"/>
             </h:commandButton>
             <h:message for="incrset" id="incrsetmsg" showDetail="true" style="color: red"/>
             <p/>

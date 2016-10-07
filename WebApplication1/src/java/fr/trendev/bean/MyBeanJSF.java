@@ -16,6 +16,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -91,6 +92,10 @@ public class MyBeanJSF implements Serializable {
         FacesContext fc = FacesContext.getCurrentInstance();
         if (fc != null) {
             sn = fc.getExternalContext().getSessionId(true);
+            HttpSession session = (HttpSession) fc.getExternalContext().getSession(true);
+            if(session instanceof HttpSession)
+                logger.log(Level.INFO, "Session is a HttpSession : {0}",session.getId());
+                    
         }
 
         logger.log(Level.WARNING, "NEW INIT {0}: {1}", new String[]{sn, LocalDateTime.now().toString()});
