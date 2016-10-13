@@ -12,11 +12,15 @@ import java.util.Date;
 import java.util.List;
 import javaeetutorial.producerfields.db.UserDatabase;
 import javaeetutorial.producerfields.entity.ToDo;
+import javaeetutorial.producerfields.entity.ToDo_;
 import javax.ejb.EJBException;
 import javax.ejb.Stateful;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 @ConversationScoped
 @Stateful
@@ -25,6 +29,21 @@ public class RequestBean {
     @Inject
     @UserDatabase
     EntityManager em;
+
+    /**
+     * Returns all texts using JPA Criteria API
+     *
+     * @return the details of the TODO
+     */
+    public List<String> getAllTaskDetails() {
+
+        CriteriaQuery<String> cq = em.getCriteriaBuilder().createQuery(String.class);
+
+        Root<ToDo> pet = cq.from(ToDo.class);
+        cq.select(pet.get(ToDo_.taskText));
+        TypedQuery<String> q = em.createQuery(cq);
+        return q.getResultList();
+    }
 
     public ToDo createToDo(String inputString) {
         ToDo toDo;
@@ -41,12 +60,17 @@ public class RequestBean {
         }
     }
 
+    /**
+     * Returns the TODO list using JPA JPQL request
+     *
+     * @return the TODO list.
+     */
     public List<ToDo> getToDos() {
         try {
             List<ToDo> toDos
                     = (List<ToDo>) em.createQuery(
                             "SELECT t FROM ToDo t ORDER BY t.timeCreated")
-                    .getResultList();
+                            .getResultList();
             return toDos;
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
