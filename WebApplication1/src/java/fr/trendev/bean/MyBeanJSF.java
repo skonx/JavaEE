@@ -92,19 +92,24 @@ public class MyBeanJSF implements Serializable {
         FacesContext fc = FacesContext.getCurrentInstance();
         if (fc != null) {
             sn = fc.getExternalContext().getSessionId(true);
-            HttpSession session = (HttpSession) fc.getExternalContext().getSession(true);
-            if(session instanceof HttpSession)
-                logger.log(Level.INFO, "Session is a HttpSession : {0}",session.getId());
-                    
+            HttpSession session = (HttpSession) fc.getExternalContext().
+                    getSession(true);
+            if (session instanceof HttpSession) {
+                logger.log(Level.INFO, "Session is a HttpSession : {0}",
+                        session.getId());
+            }
+
         }
 
-        logger.log(Level.WARNING, "NEW INIT {0}: {1}", new String[]{sn, LocalDateTime.now().toString()});
+        logger.log(Level.WARNING, "NEW INIT {0}: {1}", new String[]{sn,
+            LocalDateTime.now().toString()});
     }
 
     public void back() throws IOException {
         iter++;
         incr = 0;
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ExternalContext ec = FacesContext.getCurrentInstance().
+                getExternalContext();
         logger.log(Level.INFO, "BACK LINK ");
         ec.redirect(ec.getRequestContextPath() + "/index.html");
     }
