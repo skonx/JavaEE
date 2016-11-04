@@ -32,11 +32,14 @@ public class MyBound {
     public static final Logger logger
             = Logger.getLogger(MyBound.class.getCanonicalName());
 
+    //myBeanJSF is a CDI, should be injected using @Inject
     @Inject
     private MyBeanJSF myBeanJSF;
+
     @Context
     private HttpServletRequest req;
 
+    //tracker is an EJB, should be injected using @EJB
     @EJB
     ActiveSessionTracker tracker;
 
@@ -76,7 +79,9 @@ public class MyBound {
 
         boolean result;
 
-        if (Objects.nonNull(myBeanJSF.getSn()) && Objects.nonNull(req.getSession(true)) && Objects.nonNull(req.getSession(true).getId())) {
+        if (Objects.nonNull(myBeanJSF.getSn()) && Objects.nonNull(req.
+                getSession(true)) && Objects.nonNull(req.getSession(true).
+                getId())) {
             result = myBeanJSF.getSn().equals(req.getSession(true).getId());
         } else {
             result = false;
@@ -84,7 +89,8 @@ public class MyBound {
 
         String message = "TEST = " + result;
         message += ("\nmyBeanJSF.getSn() = " + myBeanJSF.getSn());
-        message += ("\nreq.getSession(true).getId() = " + req.getSession(true).getId());
+        message += ("\nreq.getSession(true).getId() = " + req.getSession(true).
+                getId());
         return message;
     }
 
@@ -96,8 +102,9 @@ public class MyBound {
         for (HttpSession session : tracker.getList()) {
             sb.append(session.getId()).append("\n");
         }
-        if(tracker.getList().isEmpty())
+        if (tracker.getList().isEmpty()) {
             sb.append("## NO ACTIVE SESSION ##");
+        }
         return sb.toString();
     }
 }

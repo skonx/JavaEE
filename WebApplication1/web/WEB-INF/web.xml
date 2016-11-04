@@ -39,7 +39,7 @@
     
     <servlet-mapping>
         <servlet-name>javax.ws.rs.core.Application</servlet-name>
-        <url-pattern>/webapi/*</url-pattern>
+        <url-pattern>/webresources/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
