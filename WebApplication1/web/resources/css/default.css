@@ -7,8 +7,38 @@ and open the template in the editor.
     Created on : Oct 14, 2016, 5:28:49 PM
     Author     : jsie
 */
+
 body
 {
-    background-color: lightskyblue;
+    background-color: lightskyblue; 
+    border : 5px dotted lightgreen;
+    border-radius: 10px;
+}
+
+div, form
+{
+    margin: 25px 50px 25px 50px;
     color: white;
+    text-align: justify;
+
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+
+}
+
+a, a:visited 
+{
+    color: black;
+    margin-right: 10px;
+}
+
+a:hover 
+{
+    text-decoration: underline;
+    color: lightseagreen;
+}
+
+.outofbound{
+    color : limegreen;
 }

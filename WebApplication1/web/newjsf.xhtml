@@ -23,7 +23,7 @@
             <p/>
             <h:outputText id="incr" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
-            <h:outputText id="text" rendered="#{myBeanJSF.iter > myBeanJSF.bound}" style="color : green"
+            <h:outputText id="text" rendered="#{myBeanJSF.iter > myBeanJSF.bound}" styleClass="outofbound"
                           value="#{bundle.Congrat} #{myBeanJSF.bound}!!!" />
             <p/>
             <h:commandLink value="index.html" action="#{myBeanJSF.back()}" />
