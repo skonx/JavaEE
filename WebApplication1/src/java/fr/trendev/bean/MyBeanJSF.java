@@ -155,6 +155,4 @@ public class MyBeanJSF implements Serializable {
         iter += incr;
         logger.log(Level.INFO, "And now, iter = {0}", iter);
     }
-
 }
-//

@@ -15,13 +15,14 @@
             <p/>
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
-            <h:outputLabel value="#{bundle.IncrValue} : " for="incrset"/>
-            <h:inputText  id="incrset" value="#{myBeanJSF.incr}">
-                <f:ajax event="change" listener="#{myBeanJSF.add}" render="iter incr"  onerror="/index.html"/>
+            <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
+            <h:inputText id="incr" p:type="number" value="#{myBeanJSF.incr}">
+                <f:ajax render="@form" listener="#{myBeanJSF.add}"  />
+                <!-- onerror="/index.html" -->
             </h:inputText>
-            <h:message for="incrset" id="incrsetmsg" showDetail="true" style="color: red"/>
+            <h:message for="incr" id="incrmsg" showDetail="true" style="color: red"/>
             <p/>
-            <h:outputText id="incr" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
+            <h:outputText id="incrset" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
             <!-- 
             <h:outputLabel value="#{bundle.EnterDate} : " for="day" />
