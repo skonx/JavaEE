@@ -155,4 +155,8 @@ public class MyBeanJSF implements Serializable {
         iter += incr;
         logger.log(Level.INFO, "And now, iter = {0}", iter);
     }
+
+    public void keyPressed(AjaxBehaviorEvent event) {
+        logger.log(Level.INFO, "A KEY HAS BEEN PRESSED");
+    }
 }
