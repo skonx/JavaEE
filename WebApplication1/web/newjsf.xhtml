@@ -16,9 +16,13 @@
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
-            <h:inputText id="incr" p:type="number" value="#{myBeanJSF.incr}">
-                <f:ajax render="@form" listener="#{myBeanJSF.add}"  />
-                <!-- onerror="/index.html" -->
+            <h:inputText id="incr" value="#{myBeanJSF.incr}" >
+                <f:ajax event="change" render="@form" listener="#{myBeanJSF.add}"  />
+                <!-- //TODO : resolve this issue using javascript or filtering events
+                When press Enter : full request => error : full request vs ajax refresh
+                
+                Avoid to use the following attribute if you want to catch errors
+                onerror="/index.html" -->
             </h:inputText>
             <h:message for="incr" id="incrmsg" showDetail="true" style="color: red"/>
             <p/>
