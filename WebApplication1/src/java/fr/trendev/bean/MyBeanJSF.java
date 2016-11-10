@@ -22,6 +22,8 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
@@ -146,8 +148,12 @@ public class MyBeanJSF implements Serializable {
         ec.redirect(ec.getRequestContextPath() + "/index.html");
     }
 
-    public void add() {
+    public void add(AjaxBehaviorEvent event)
+            throws AbortProcessingException {
+        logger.log(Level.INFO, "iter = {0}", iter);
+        logger.log(Level.INFO, "incr = {0}", incr);
         iter += incr;
+        logger.log(Level.INFO, "And now, iter = {0}", iter);
     }
 
 }

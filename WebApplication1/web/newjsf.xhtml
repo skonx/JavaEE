@@ -16,18 +16,19 @@
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incrset"/>
-            <h:inputText id="incrset" value="#{myBeanJSF.incr}"/>
-            <h:commandButton value="#{bundle.Increment}" action="#{myBeanJSF.add()}">
-                <f:ajax execute="incrset" render="iter incr" onerror="/index.html"/>
-            </h:commandButton>
+            <h:inputText  id="incrset" value="#{myBeanJSF.incr}">
+                <f:ajax event="change" listener="#{myBeanJSF.add}" render="iter incr"  onerror="/index.html"/>
+            </h:inputText>
             <h:message for="incrset" id="incrsetmsg" showDetail="true" style="color: red"/>
             <p/>
             <h:outputText id="incr" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
+            <!-- 
             <h:outputLabel value="#{bundle.EnterDate} : " for="day" />
             <h:inputText id="day" title="#{bundle.EnterDate}" value="#{myBeanJSF.date}" label="date" p:placeholder="#{bundle.DateLabel}" required="true">
                 <f:convertDateTime pattern="dd/MM/yyyy" />
             </h:inputText>
+            -->
             <p/>
             <h:outputText id="text" rendered="#{myBeanJSF.iter > myBeanJSF.bound}" styleClass="outofbound"
                           value="#{bundle.Congrat} #{myBeanJSF.bound}!!!" />
