@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
     <h:head>
         <title>#{bundle.Iteration} ##{myBeanJSF.iter}</title>
         <h:outputStylesheet library="css" name="default.css"/>
@@ -17,16 +18,23 @@
             <h:outputLabel value="#{bundle.IncrValue} : " for="incrset"/>
             <h:inputText id="incrset" value="#{myBeanJSF.incr}"/>
             <h:commandButton value="#{bundle.Increment}" action="#{myBeanJSF.add()}">
-                <f:ajax execute="incrset" render="@form" immediate="true" onerror="/index.html"/>
+                <f:ajax execute="incrset" render="iter incr" onerror="/index.html"/>
             </h:commandButton>
             <h:message for="incrset" id="incrsetmsg" showDetail="true" style="color: red"/>
             <p/>
             <h:outputText id="incr" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
+            <h:outputLabel value="#{bundle.EnterDate} : " for="day" />
+            <h:inputText id="day" title="#{bundle.EnterDate}" value="#{myBeanJSF.date}" label="date" p:placeholder="#{bundle.DateLabel}" required="true">
+                <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:inputText>
+            <p/>
             <h:outputText id="text" rendered="#{myBeanJSF.iter > myBeanJSF.bound}" styleClass="outofbound"
                           value="#{bundle.Congrat} #{myBeanJSF.bound}!!!" />
             <p/>
-            <h:commandLink value="index.html" action="#{myBeanJSF.back()}" />
+            <h:commandLink  action="#{myBeanJSF.back()}" >
+                <h:outputText value="index.html"/>
+            </h:commandLink>
             <h:commandButton type="reset" value="#{bundle.Reset}"/>
         </h:form>
     </h:body>

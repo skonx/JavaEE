@@ -8,7 +8,14 @@ package fr.trendev.bean;
 import fr.trendev.constraints.MyMax;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -32,18 +39,22 @@ public class MyBeanJSF implements Serializable {
 
     private static final long bound = 100;
 
+    //private final String pattern = "EEEE dd MMMM uuuu HH:mm:ss - VV - zzzz - XXX";
+    private final String pattern = "EEEE dd MMMM uuuu";
+
     //@ManagedProperty(value = "#{param.sn}")
     /**
-     * Session Name
+     * Session's Name
      */
     private String sn;
 
     private long iter;
 
-    //TODO : override this annotation with a custom message in french
     @MyMax(bound)
     @NotNull
     private long incr;
+
+    private Date date;
 
     public static final Logger logger
             = Logger.getLogger(MyBeanJSF.class.getCanonicalName());
@@ -52,6 +63,27 @@ public class MyBeanJSF implements Serializable {
      * Creates a new instance of MyBeanJSF
      */
     public MyBeanJSF() {
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+        Instant instant = date.toInstant();
+        //ZonedDateTime can also be used and the pattern cab be extend using additionnal zone information
+        ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
+        //LocalDate is used for Date only
+        LocalDate ld = zdt.toLocalDate();
+        //LocalDateTime is used for Date and Time only
+        //LocalDateTime ld = zdt.toLocalDateTime();
+        //For present date and time
+        //LocalDateTime ld = LocalDateTime.now();
+        String d = ld.
+                format(DateTimeFormatter.
+                        ofPattern(pattern, Locale.FRENCH));
+        System.out.println("Date field is : " + d);
     }
 
     public String getSn() {
