@@ -11,6 +11,9 @@
     </h:head>
     <h:body>
         <h:form>
+            <!-- No automatic submit if Enter is pressed :
+            onkeypress="return event.keyCode != 13;"
+            -->
             <h:outputText value="#{bundle.Welcome} : #{myBeanJSF.sn}"/>
             <p/>
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
