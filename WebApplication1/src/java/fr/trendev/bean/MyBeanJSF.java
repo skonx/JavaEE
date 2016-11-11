@@ -15,6 +15,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -41,6 +43,9 @@ public class MyBeanJSF implements Serializable {
 
     private static final long bound = 100;
 
+    private final String WebMessages_BASENAME = "WebMessages";
+    private final String WebMessages_BUNDLE_CONGRAT = "Congrat";
+
     /**
      * Avoid to use VV or zzzz or XXX in the pattern if time / timezone is not
      * kept.
@@ -49,10 +54,10 @@ public class MyBeanJSF implements Serializable {
     private final String pattern = "EEEE dd MMMM uuuu";
 
     /**
-     * This field is used to render the hidden value "text" in the facelet.
-     * Text is rendered if the condition (iter > bound) is true. Another
-     * solution should be to render this item using the condition and the
-     * attribute render in the facelet.
+     * This field is used to render the hidden value "text" in the facelet. Text
+     * is rendered if the condition (iter > bound) is true. Another solution
+     * should be to render this item using the condition and the attribute
+     * render in the facelet.
      */
     private UIOutput text = null;
 
@@ -201,10 +206,10 @@ public class MyBeanJSF implements Serializable {
         iter += incr;
 
         if (text != null) {
-            FacesContext fc = FacesContext.getCurrentInstance();
-            //TODO : add the bundle value
-            //value="#{bundle.Congrat} #{myBeanJSF.bound}!!!" 
-            String value = "" + bound;
+            ResourceBundle bundle = ResourceBundle.getBundle(
+                    WebMessages_BASENAME, this.getFacesContextLocale());
+            String value = bundle.getString(WebMessages_BUNDLE_CONGRAT) + " "
+                    + bound;
             text.setValue((iter > bound) ? value : "");
         }
 
@@ -212,7 +217,7 @@ public class MyBeanJSF implements Serializable {
     }
 
     public void reset() {
-        logger.log(Level.WARNING, "Reset called !!!");
+        logger.log(Level.WARNING, "~~ Reset called ~~");
         incr = 0;
         date = null;
     }
@@ -221,7 +226,7 @@ public class MyBeanJSF implements Serializable {
         logger.log(Level.WARNING, "showFullDateMessage() called !!!");
         fulldate.setValue(convertDate(date));
         fulldate.setRendered(true);
-        fulldate.setInView(true);
+        //fulldate.setInView(true);
     }
 
     private String convertDate(@NotNull Date date) {
@@ -237,9 +242,13 @@ public class MyBeanJSF implements Serializable {
         //LocalDateTime ld = LocalDateTime.now();
         String d = ld.
                 format(DateTimeFormatter.
-                        ofPattern(pattern/*, Locale.FRENCH*/));
-        //TODO : get the FacesContext Locale
+                        ofPattern(pattern, this.getFacesContextLocale()));
 
         return d;
+    }
+
+    private Locale getFacesContextLocale() {
+        return FacesContext.getCurrentInstance().
+                getViewRoot().getLocale();
     }
 }
