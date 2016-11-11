@@ -5,6 +5,7 @@
  */
 package fr.trendev.constraints;
 
+import fr.trendev.bean.MyBeanJSF;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -15,7 +16,7 @@ import javax.validation.ConstraintValidatorContext;
 public class MyMaxValidator implements ConstraintValidator<MyMax, Long> {
 
     private long bound;
-    
+
     @Override
     public void initialize(MyMax constraintAnnotation) {
         bound = constraintAnnotation.value();
@@ -23,7 +24,7 @@ public class MyMaxValidator implements ConstraintValidator<MyMax, Long> {
 
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
-        return !(value > 100);
+        return !(value > MyBeanJSF.bound);
     }
 
 }

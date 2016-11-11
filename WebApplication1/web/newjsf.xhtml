@@ -16,19 +16,20 @@
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
-            <h:inputText id="incr" value="#{myBeanJSF.incr}" p:autocomplete="off" required="true">
+            <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{myBeanJSF.incr}" p:autocomplete="off" required="true">
                 <f:ajax event="change" render="iter increrrormsg incrset text" listener="#{myBeanJSF.add}"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
             <p/>
             <h:outputText id="incrset" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
-            <h:outputLabel value="#{bundle.EnterDate} : " for="day" />
-            <h:inputText id="day" title="#{bundle.EnterDate}" value="#{myBeanJSF.date}" label="date" p:placeholder="#{bundle.DateLabel}" p:autocomplete="off" required="true">
+            <h:outputLabel value="#{bundle.EnterDate} : " for="date" />
+            <h:inputText id="date" title="#{bundle.EnterDate}" value="#{myBeanJSF.date}" label="date" p:placeholder="#{bundle.DateLabel}" p:autocomplete="off" required="true">
                 <f:convertDateTime pattern="dd/MM/yyyy" />
-                <f:ajax event="change" render="fullday" listener="#{myBeanJSF.showFullDateMessage}"/>
+                <f:ajax event="change" render="fulldate datemessage" listener="#{myBeanJSF.showFullDateMessage}"/>
             </h:inputText>
-            <h:outputText id="fullday" rendered="true" binding="#{myBeanJSF.fulldate}"/>
+            <h:message for="date" id="datemessage" showDetail="true" style="color: red"/>
+            <h:outputText id="fulldate" rendered="true" binding="#{myBeanJSF.fulldate}"/>
             <p/>
             <h:outputText id="text" binding="#{myBeanJSF.text}" styleClass="outofbound"
                           rendered="true" />

@@ -41,7 +41,7 @@ public class MyBeanJSF implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final long bound = 100;
+    public static final long bound = 100;
 
     private final String WebMessages_BASENAME = "WebMessages";
     private final String WebMessages_BUNDLE_CONGRAT = "Congrat";
@@ -188,7 +188,8 @@ public class MyBeanJSF implements Serializable {
         ExternalContext ec = FacesContext.getCurrentInstance().
                 getExternalContext();
         logger.log(Level.INFO, "BACK LINK ");
-        ec.redirect(ec.getRequestContextPath() + "/index.html");
+        ec.
+                redirect(ec.getRequestContextPath());
     }
 
     /**

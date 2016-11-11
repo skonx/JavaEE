@@ -36,15 +36,12 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>javax.ws.rs.core.Application</servlet-name>
         <url-pattern>/webresources/*</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>
-            2
-        </session-timeout>
+        <session-timeout>1</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

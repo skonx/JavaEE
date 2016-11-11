@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.trendev.web;
+package fr.trendev.web.filter;
 
 import fr.trendev.bean.ActiveSessionTracker;
 import java.io.IOException;
