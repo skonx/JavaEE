@@ -35,7 +35,8 @@ public class MyServletTest extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -45,7 +46,8 @@ public class MyServletTest extends HttpServlet {
             out.println("<title>Servlet MyServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MyServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MyServlet at " + request.getContextPath()
+                    + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,17 +63,16 @@ public class MyServletTest extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
 
-//TODO: check what kind of system parameters/configs the servlet can access
         HttpSession session = request.getSession();
 
         MyBean mb = (MyBean) session.getAttribute(MYBEAN);
 
         /**
-         * Session is killed after 2 minutes.
-         * Tuned in web.xml config file.
+         * Session is killed after 2 minutes. Tuned in web.xml config file.
          */
         if (mb == null) {
             this.log("No bean in session " + session.getId());
@@ -83,7 +84,8 @@ public class MyServletTest extends HttpServlet {
         mb.setIter(++count);
         this.log("Adding myBean... Iteration #" + mb.getIter());
         session.setAttribute("myBean", mb);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/newjsp.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/newjsp.jsp").
+                forward(request, response);
     }
 
     /**
@@ -95,7 +97,8 @@ public class MyServletTest extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
