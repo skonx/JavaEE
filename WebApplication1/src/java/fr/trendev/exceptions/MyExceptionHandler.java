@@ -40,6 +40,8 @@ public class MyExceptionHandler extends ExceptionHandlerWrapper {
             logger.log(Level.SEVERE, "ExceptionHandler : {0}", e.getMessage());
             if (e instanceof ViewExpiredException) {
                 try {
+                    logger.log(Level.SEVERE,
+                            "Automatic redirection to the welcome page");
                     ec.redirect(ec.getRequestContextPath());
                 } catch (IOException ex) {
                     Logger.getLogger(MyExceptionHandler.class.getName()).

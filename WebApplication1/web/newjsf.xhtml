@@ -34,8 +34,9 @@
             <h:outputText id="text" binding="#{myBeanJSF.text}" styleClass="outofbound"
                           rendered="true" />
             <p/>
-            <h:commandLink  action="#{myBeanJSF.back()}" >
+            <h:commandLink action="#{myBeanJSF.back()}" >
                 <h:outputText value="index.html"/>
+                <f:ajax render="@none"/>
             </h:commandLink>
             <h:commandButton action="#{myBeanJSF.reset}" value="#{bundle.Reset}">
                 <f:ajax render="@form"/>
