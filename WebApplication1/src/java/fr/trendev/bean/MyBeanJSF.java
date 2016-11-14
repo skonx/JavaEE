@@ -79,6 +79,7 @@ public class MyBeanJSF implements Serializable {
     @NotNull
     private long incr;
 
+    @NotNull
     private Date date;
 
     public static final Logger logger
@@ -220,7 +221,8 @@ public class MyBeanJSF implements Serializable {
     public void reset() {
         logger.log(Level.WARNING, "~~ Reset called ~~");
         incr = 0;
-        date = null;
+        /*date = null;
+        getFulldate().setValue("");*/
     }
 
     public void showFullDateMessage(AjaxBehaviorEvent event) {
@@ -230,7 +232,7 @@ public class MyBeanJSF implements Serializable {
         //fulldate.setInView(true);
     }
 
-    private String convertDate(@NotNull Date date) {
+    private String convertDate(Date date) {
 
         Instant instant = date.toInstant();
         //ZonedDateTime can also be used and the pattern cab be extend using additionnal zone information

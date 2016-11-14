@@ -16,7 +16,7 @@
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
-            <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{myBeanJSF.incr}" p:autocomplete="off" required="true">
+            <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{bundle.IncrValue}" p:autocomplete="off" required="true">
                 <f:ajax event="change" render="iter increrrormsg incrset text" listener="#{myBeanJSF.add}"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
@@ -24,19 +24,30 @@
             <h:outputText id="incrset" value="#{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
             <h:outputLabel value="#{bundle.EnterDate} : " for="date" />
-            <h:inputText id="date" title="#{bundle.EnterDate}" value="#{myBeanJSF.date}" label="date" p:placeholder="#{bundle.DateLabel}" p:autocomplete="off" required="true">
+            <input type="date" jsf:id="date" name="date" jsf:title="#{bundle.EnterDate}" jsf:value="#{myBeanJSF.date}" jsf:label="date" placeholder="#{bundle.DateLabel}" autocomplete="off" required="required">
                 <f:convertDateTime pattern="dd/MM/yyyy" />
                 <f:ajax event="change" render="fulldate datemessage" listener="#{myBeanJSF.showFullDateMessage}"/>
-            </h:inputText>
+            </input>
             <h:message for="date" id="datemessage" showDetail="true" style="color: red"/>
+            <p/>
             <h:outputText id="fulldate" rendered="true" binding="#{myBeanJSF.fulldate}"/>
             <p/>
             <h:outputText id="text" binding="#{myBeanJSF.text}" styleClass="outofbound"
                           rendered="true" />
             <p/>
-            <h:commandLink action="#{myBeanJSF.back()}" >
+            <h:commandLink action="#{myBeanJSF.back}" >
                 <h:outputText value="index.html"/>
-                <f:ajax render="@none"/>
+                <!--
+                If the user change the "incr" or "date" value and click on this link, 
+                validation is automatically performed by this action.
+                "increrrormsg" and "datemessage" must also be rendered otherwise, 
+                at the very first time, if the user clicks on this link without having changed "date",
+                no error message will be displayed.
+                Avoid to use @form for render or execute, otherwise, 
+                you should expect ajax and full requests conflicts and issues regarding 
+                the data integrity.
+                -->
+                <f:ajax execute="incr date" render="increrrormsg datemessage"/>
             </h:commandLink>
             <h:commandButton action="#{myBeanJSF.reset}" value="#{bundle.Reset}">
                 <f:ajax render="@form"/>
