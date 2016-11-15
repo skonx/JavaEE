@@ -15,11 +15,12 @@
             <p/>
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
-            <progress jsf:id="progress" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}"/>
+            <!-- TODO : implement a progress bar -->
+            <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: #{myBeanJSF.iter}%"/>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
             <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{bundle.IncrValue}" p:autocomplete="off" required="true">
-                <f:ajax event="change" render="iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}"/>
+                <f:ajax event="change" render="iter increrrormsg incrset text progressbar" listener="#{myBeanJSF.add}"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
             <p/>
