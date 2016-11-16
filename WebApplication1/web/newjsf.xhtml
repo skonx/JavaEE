@@ -20,11 +20,11 @@
             <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: #{myBeanJSF.incr}%"/>
             -->
             <h:panelGroup layout="block" id="progress">
-                <mc:progressbar id="pbar1" value="#{myBeanJSF.incr}"/>
+                <mc:progressbar id="pbar1" value="#{myBeanJSF.incr}" max="#{myBeanJSF.bound}"/>
                 <p/>
-                <mc:progressbar id="pbar2" value="#{myBeanJSF.incr/2}" color="purple"/>
+                <mc:progressbar id="pbar2" value="#{myBeanJSF.incr/2}" max="#{myBeanJSF.bound}" color="purple"/>
                 <p/>
-                <mc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" color="yellow"/>
+                <mc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" max="#{myBeanJSF.bound}" color="yellow"/>
             </h:panelGroup>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
@@ -37,7 +37,7 @@
             <p/>
             <h:outputLabel value="#{bundle.EnterDate} : " for="date" />
             <input type="date" jsf:id="date" name="date" jsf:title="#{bundle.EnterDate}" jsf:value="#{myBeanJSF.date}" jsf:label="date" placeholder="#{bundle.DateLabel}" autocomplete="off" required="required">
-                <f:convertDateTime pattern="dd/MM/yyyy" />
+                <f:convertDateTime pattern="yyyy-MM-dd" />
                 <f:ajax event="change" render="fulldate datemessage" listener="#{myBeanJSF.showFullDateMessage}"/>
             </input>
             <h:message for="date" id="datemessage" showDetail="true" style="color: red"/>

@@ -42,7 +42,7 @@ public class MyBeanJSF implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final long bound = 100;
+    public static final long bound = 200;
 
     private final String WebMessages_BASENAME = "WebMessages";
     private final String WebMessages_BUNDLE_CONGRAT = "Congrat";

@@ -13,25 +13,21 @@
     </h:head>
     <h:body>
         <cc:interface>
-            <cc:attribute name="value" default="0" required="true" type="java.lang.Long"/>
+            <cc:attribute name="value" required="true" type="java.lang.Long"/>
+            <cc:attribute name="max" required="true" type="java.lang.Long"/>
             <cc:attribute name="color" default="#4CAF50" type="java.lang.String"/>
         </cc:interface>
         <cc:implementation>
             <h:panelGroup layout="block" id="font" styleClass="progressfont">
-                <h:panelGroup layout="block" id="bar" styleClass="progressbar" p:style="
-                              width:#{cc.attrs.value}%;
-                              background-color:#{cc.attrs.color}">
-                    <c:choose>
-                        <c:when test="#{(cc.attrs.value ge 0) and (100 ge cc.attrs.value)}">
-                            <h:outputText id="label" styleClass="progresslabel" value="#{cc.attrs.value}%"/>
-                        </c:when>
-                        <c:otherwise>
-                            <h:outputText id="label" styleClass="progresslabel" value="LESS THAN 0"/>
-                        </c:otherwise>
-                    </c:choose>
-
-
-                </h:panelGroup>
+                <c:set var="value" value="#{(100 * cc.attrs.value)/cc.attrs.max}"/>
+                <c:set var="color" value="#{cc.attrs.color}"/>
+                <c:if test="#{value ge 0}">
+                    <h:panelGroup layout="block" id="bar" styleClass="progressbar" p:style="
+                                  width:#{value}%;
+                                  background-color:#{color}">
+                        <h:outputText id="label" styleClass="progresslabel" value="#{value}%"/>
+                    </h:panelGroup>
+                </c:if>
             </h:panelGroup>
         </cc:implementation>
     </h:body>
