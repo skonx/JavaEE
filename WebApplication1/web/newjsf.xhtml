@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:mc="http://xmlns.jcp.org/jsf/composite/mycomp">
+      xmlns:lc="http://xmlns.jcp.org/jsf/composite/libcomp">
     <h:head>
         <title>#{bundle.Iteration} ##{myBeanJSF.iter}</title>
         <h:outputStylesheet library="css" name="default.css"/>
@@ -20,11 +20,11 @@
             <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: #{myBeanJSF.incr}%"/>
             -->
             <h:panelGroup layout="block" id="progress">
-                <mc:progressbar id="pbar1" value="#{myBeanJSF.incr}" max="#{myBeanJSF.bound}"/>
+                <lc:progressbar id="pbar1" value="#{myBeanJSF.incr}" max="#{myBeanJSF.bound}"/>
                 <p/>
-                <mc:progressbar id="pbar2" value="#{myBeanJSF.incr/2}" max="#{myBeanJSF.bound}" color="purple"/>
+                <lc:progressbar id="pbar2" value="#{myBeanJSF.incr/2}" max="#{myBeanJSF.bound}" color="purple"/>
                 <p/>
-                <mc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" max="#{myBeanJSF.bound}" color="yellow"/>
+                <lc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" max="#{myBeanJSF.bound}" color="yellow"/>
             </h:panelGroup>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
