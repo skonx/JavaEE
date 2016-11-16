@@ -4,7 +4,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:mc="http://xmlns.jcp.org/jsf/composite/mycomp">
     <h:head>
         <title>#{bundle.Iteration} ##{myBeanJSF.iter}</title>
         <h:outputStylesheet library="css" name="default.css"/>
@@ -15,12 +16,20 @@
             <p/>
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
             <p/>
-            <!-- TODO : implement a progress bar -->
-            <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: #{myBeanJSF.iter}%"/>
+            <!-- TODO : implement a progress bar 
+            <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: #{myBeanJSF.incr}%"/>
+            -->
+            <h:panelGroup layout="block" id="progress">
+                <mc:progressbar id="pbar1" value="#{myBeanJSF.incr}"/>
+                <p/>
+                <mc:progressbar id="pbar2" value="#{myBeanJSF.incr/2}" color="purple"/>
+                <p/>
+                <mc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" color="yellow"/>
+            </h:panelGroup>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
             <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{bundle.IncrValue}" p:autocomplete="off" required="true">
-                <f:ajax event="change" render="iter increrrormsg incrset text progressbar" listener="#{myBeanJSF.add}"/>
+                <f:ajax event="change" render="iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
             <p/>

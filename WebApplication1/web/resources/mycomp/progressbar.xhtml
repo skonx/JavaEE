@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Progress Bar</title>
+        <h:outputStylesheet library="css" name="default.css"/>
+    </h:head>
+    <h:body>
+        <cc:interface>
+            <cc:attribute name="value" default="0" required="true" type="java.lang.Long"/>
+            <cc:attribute name="color" default="#4CAF50" type="java.lang.String"/>
+        </cc:interface>
+        <cc:implementation>
+            <h:panelGroup layout="block" id="font" styleClass="progressfont">
+                <h:panelGroup layout="block" id="bar" styleClass="progressbar" p:style="
+                              width:#{cc.attrs.value}%;
+                              background-color:#{cc.attrs.color}">
+                    <c:choose>
+                        <c:when test="#{(cc.attrs.value ge 0) and (100 ge cc.attrs.value)}">
+                            <h:outputText id="label" styleClass="progresslabel" value="#{cc.attrs.value}%"/>
+                        </c:when>
+                        <c:otherwise>
+                            <h:outputText id="label" styleClass="progresslabel" value="LESS THAN 0"/>
+                        </c:otherwise>
+                    </c:choose>
+
+
+                </h:panelGroup>
+            </h:panelGroup>
+        </cc:implementation>
+    </h:body>
+</html>
+

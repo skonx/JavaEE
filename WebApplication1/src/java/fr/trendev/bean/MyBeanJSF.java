@@ -28,6 +28,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -77,6 +78,7 @@ public class MyBeanJSF implements Serializable {
 
     @MyMax(bound)
     @NotNull
+    @Min(0)
     private long incr;
 
     @NotNull
@@ -185,7 +187,7 @@ public class MyBeanJSF implements Serializable {
      */
     public void back() throws IOException {
         iter++;
-        incr = 0;
+        //incr = 0;
         ExternalContext ec = FacesContext.getCurrentInstance().
                 getExternalContext();
         logger.log(Level.INFO, "BACK LINK ");
