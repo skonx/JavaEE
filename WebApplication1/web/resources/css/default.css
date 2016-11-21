@@ -31,6 +31,7 @@ a, a:visited
 {
     color: black;
     margin-right: 10px;
+    text-decoration: none;
 }
 
 a:hover 
@@ -63,4 +64,8 @@ a:hover
     text-align: center;
     line-height: 30px;
     margin:inherit;
+}
+
+.lnk{
+    font-family: cursive;
 }
