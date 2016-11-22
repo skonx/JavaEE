@@ -66,6 +66,17 @@ a:hover
     margin:inherit;
 }
 
-.lnk{
+.lnkjsp{
     font-family: cursive;
+    background-color: lightcoral;
+}
+
+.lnkjsf{
+    font-family: cursive;
+    background-color: blueviolet;
+}
+
+.lnkrestapi{
+    font-family: cursive;
+    background-color: darkseagreen;
 }

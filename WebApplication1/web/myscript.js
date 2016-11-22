@@ -6,12 +6,11 @@ function display_elts(selector) {
 
     var qsa = document.querySelectorAll(selector);
     var c = qsa.length;
-    var s = selector.split('.')[1];
 
     if (!c) {
-        alert("No element with CSS class :  " + s + " !!!");
+        alert("No element with CSS class :  " + selector + " !!!");
     } else {
-        console.log("Will find all elements with CSS class : " + s);
+        console.log("Will find all elements with CSS class : " + selector);
         console.log(c + " element" + ((c > 1) ? "s" : ""));
 
         for (var i = 0; i < c; i++) {
@@ -20,5 +19,22 @@ function display_elts(selector) {
     }
 }
 
-display_elts(".lnk");
+var shuffle_links = function () {
+    var selector = 'a';
+    var links = document.querySelectorAll(selector);
+    var firstLink, parent, count;
 
+    display_elts(selector);
+
+    count = links.length;
+    if (count > 1) {
+        parent = links[0].parentNode;
+        firstLink = parent.removeChild(links[0]);
+        parent.appendChild(firstLink);
+    }
+
+    display_elts(selector);
+
+};
+
+var myVar = setInterval(shuffle_links, 3000);
