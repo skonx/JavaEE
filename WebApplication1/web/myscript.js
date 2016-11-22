@@ -39,7 +39,7 @@ var random_shuffle = function () {
          * Remove each element, put them in a tmp array... 
          */
         for (var i = 0; i < count; i++) {
-            var firstLink = parent.removeChild(links[i]);
+            var link = parent.removeChild(links[i]);
             //provide a number between 0 and (count-1).
             var index = Math.floor(((Math.random() * (count - 1)) + 1));
             //if the calculated position is not free, try to provide the next index.
@@ -48,9 +48,10 @@ var random_shuffle = function () {
                 index = (index + 1) % count;
                 console.log("new index = " + index);
             }
-            console.log("set " + firstLink.innerHTML + " in index " + index);
-            newlinks[index] = firstLink;
+            console.log("set " + link.innerHTML + " in index " + index);
+            newlinks[index] = link;
         }
+
         /*
          * ... And then, add them from the tmp array to the parent element.
          */
@@ -65,3 +66,16 @@ var random_shuffle = function () {
 };
 
 var myVar = setInterval(random_shuffle, 10000);
+
+var div = document.getElementById('div');
+var pos = document.getElementById('pos');
+var MSG = " - ; - "
+pos.innerHTML = MSG;
+
+div.addEventListener('mousemove', function (e) {
+    pos.innerHTML = "X = " + e.clientX + "px ; Y = " + e.clientY + "px";
+}, false);
+
+div.addEventListener('mouseout', function (e) {
+    pos.innerHTML = MSG;
+})
