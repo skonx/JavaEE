@@ -26,7 +26,7 @@ var random_shuffle = function () {
     var selector = 'a';
     var links = document.querySelectorAll(selector);
 
-    display_elts(selector);
+    //display_elts(selector);
 
     var count = links.length;
 
@@ -58,18 +58,18 @@ var random_shuffle = function () {
         for (var i = 0; i < count; i++)
             parent.appendChild(newlinks[i]);
 
-        display_elts(selector);
+        // display_elts(selector);
     }
 
 
 
 };
 
-var myVar = setInterval(random_shuffle, 3000);
+setInterval(random_shuffle, 3000);
 
 var div = document.getElementById('div');
 var pos = document.getElementById('pos');
-var MSG = " - ; - "
+var MSG = " - ; - ";
 pos.innerHTML = MSG;
 
 window.addEventListener('mousemove', function (e) {
@@ -78,4 +78,4 @@ window.addEventListener('mousemove', function (e) {
 
 window.addEventListener('mouseout', function (e) {
     pos.innerHTML = MSG;
-})
+}, false);
