@@ -72,10 +72,10 @@ var pos = document.getElementById('pos');
 var MSG = " - ; - "
 pos.innerHTML = MSG;
 
-div.addEventListener('mousemove', function (e) {
+window.addEventListener('mousemove', function (e) {
     pos.innerHTML = "X = " + e.clientX + "px ; Y = " + e.clientY + "px";
 }, false);
 
-div.addEventListener('mouseout', function (e) {
+window.addEventListener('mouseout', function (e) {
     pos.innerHTML = MSG;
 })
