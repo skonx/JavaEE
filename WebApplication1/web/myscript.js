@@ -65,7 +65,7 @@ var random_shuffle = function () {
 
 };
 
-var myVar = setInterval(random_shuffle, 10000);
+var myVar = setInterval(random_shuffle, 3000);
 
 var div = document.getElementById('div');
 var pos = document.getElementById('pos');

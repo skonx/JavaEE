@@ -11,7 +11,8 @@
         <h:outputStylesheet library="css" name="default.css"/>
     </h:head>
     <h:body>
-        <h:form onkeypress="return event.keyCode != 13;">
+
+        <h:form id="form1" onkeypress="return event.keyCode != 13;">
             <h:outputText value="#{bundle.Welcome} : #{myBeanJSF.sn}"/>
             <p/>
             <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
@@ -65,6 +66,13 @@
                 <f:ajax render="@form"/>
             </h:commandButton>
         </h:form>
+        <script>
+            setInterval(function () {
+                var incr = document.getElementById('form1:incr');
+                incr.value = Math.floor((Math.random() * 200) + 1);
+                incr.onchange();
+            }, 3000);
+        </script>
     </h:body>
 </html>
 
