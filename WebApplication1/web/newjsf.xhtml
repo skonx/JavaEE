@@ -15,9 +15,15 @@
             <!-- Hide the backend bean property for javascript purposes -->
             <h:inputHidden id="bound" value="#{myBeanJSF.bound}"/>
 
-            <h:outputText value="#{bundle.Welcome} : #{myBeanJSF.sn}"/>
-            <p/>
-            <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
+            <h:panelGrid columns="2" columnClasses="column-left, column-right">
+                <h:panelGroup layout="block">
+                    <h:outputText value="#{bundle.Welcome} : #{myBeanJSF.sn}"/>
+                    <p/>
+                    <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
+                </h:panelGroup>
+                <h:outputText id="counter" styleClass="counter"/>
+            </h:panelGrid>
+
             <p/>
             <!-- TODO : implement a progress bar 
             <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: #{myBeanJSF.incr}%"/>
@@ -67,6 +73,7 @@
             <h:commandButton action="#{myBeanJSF.reset}" value="#{bundle.Reset}">
                 <f:ajax render="@form"/>
             </h:commandButton>
+
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>
     </h:body>
