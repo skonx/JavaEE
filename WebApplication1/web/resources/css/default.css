@@ -84,10 +84,11 @@ a:hover
 .counter{
     border-style: solid;
     border-color: black;
+    border-radius: 5px;
     background-color: lightgray;
     font-family: courier ;
     font-size: 3em;
-    padding: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 5px;
 }
 
 .column-left{
@@ -95,7 +96,10 @@ a:hover
 }
 
 .column-right{
+    position: absolute;
     text-align: right;
-    width: 66%
+    right: 0px;
+    padding: 0px;
+    margin-right: 113px;
 }
 
