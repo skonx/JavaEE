@@ -82,9 +82,7 @@ a:hover
 }
 
 .counter{
-    border-style: solid;
-    border-color: black;
-    border-radius: 5px;
+    border: 2px black solid;
     background-color: lightgray;
     font-family: courier ;
     font-size: 3em;
