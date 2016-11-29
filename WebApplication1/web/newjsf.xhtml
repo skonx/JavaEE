@@ -21,7 +21,7 @@
                     <p/>
                     <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
                 </h:panelGroup>
-                <h:outputText id="counter" styleClass="counter"/>
+                <h:outputText id="counter" styleClass="counter" value="00"/>
             </h:panelGrid>
 
             <p/>
@@ -73,7 +73,6 @@
             <h:commandButton action="#{myBeanJSF.reset}" value="#{bundle.Reset}">
                 <f:ajax render="@form"/>
             </h:commandButton>
-
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>
     </h:body>

@@ -81,5 +81,5 @@ if (typeof sl === 'undefined') {
     alert("ERROR : 'sl' namespace in shuffle_links.js already exists !");
 }
 
-sl.delay = 1000;
+sl.delay = 3000;
 sl.start();

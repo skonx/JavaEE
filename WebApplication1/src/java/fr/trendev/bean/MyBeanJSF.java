@@ -223,6 +223,7 @@ public class MyBeanJSF implements Serializable {
     public void reset() {
         logger.log(Level.WARNING, "~~ Reset called ~~");
         incr = 0;
+        date = Date.from(Instant.now());
         /*date = null;
         getFulldate().setValue("");*/
     }
@@ -231,7 +232,6 @@ public class MyBeanJSF implements Serializable {
         logger.log(Level.WARNING, "showFullDateMessage() called !!!");
         fulldate.setValue(convertDate(date));
         fulldate.setRendered(true);
-        //fulldate.setInView(true);
     }
 
     private String convertDate(Date date) {
