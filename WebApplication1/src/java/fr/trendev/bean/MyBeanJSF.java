@@ -76,9 +76,9 @@ public class MyBeanJSF implements Serializable {
 
     private long iter;
 
-    @MyMax(bound)
     @NotNull
     @Min(0)
+    @MyMax(bound)
     private long incr;
 
     @NotNull
@@ -222,8 +222,10 @@ public class MyBeanJSF implements Serializable {
 
     public void reset() {
         logger.log(Level.WARNING, "~~ Reset called ~~");
-        incr = 0;
-        date = Date.from(Instant.now());
+        setIncr(0);
+        setDate(Date.from(Instant.now()));
+        fulldate.setValue(this.convertDate(date));
+
         /*date = null;
         getFulldate().setValue("");*/
     }

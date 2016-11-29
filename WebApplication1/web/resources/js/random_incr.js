@@ -48,7 +48,8 @@ var ri = {
 
 ri.delay = 10;
 ri.start();
-setTimeout(ri.stop, 30000);
 
-
-
+function error_handler(e) {
+    ri.stop();
+    alert(e.description);
+}
