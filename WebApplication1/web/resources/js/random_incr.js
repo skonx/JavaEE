@@ -51,5 +51,6 @@ ri.start();
 
 function error_handler(e) {
     ri.stop();
+    /*TODO : display the responseCode (chap 13.5 & 13.6 from Java EE 7 Tutorial */
     alert(e.description);
 }
