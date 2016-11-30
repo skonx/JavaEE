@@ -38,7 +38,7 @@
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
             <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{bundle.IncrValue}" p:autocomplete="off" required="true">
-                <f:ajax event="change" render="iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}" onerror="error_handler"/>
+                <f:ajax event="change" render="iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}" onerror="ri.error_handler"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
             <p/>
@@ -47,7 +47,7 @@
             <h:outputLabel value="#{bundle.EnterDate} : " for="date" />
             <input type="date" jsf:id="date" name="date" jsf:title="#{bundle.EnterDate}" jsf:value="#{myBeanJSF.date}" jsf:label="date" placeholder="#{bundle.DateLabel}" autocomplete="off" required="required">
                 <f:convertDateTime pattern="yyyy-MM-dd" />
-                <f:ajax event="change" render="fulldate datemessage" listener="#{myBeanJSF.showFullDateMessage}"/>
+                <f:ajax event="change" render="fulldate datemessage" listener="#{myBeanJSF.showFullDateMessage}" onerror="ri.error_handler"/>
             </input>
             <h:message for="date" id="datemessage" showDetail="true" style="color: red"/>
             <p/>
@@ -68,10 +68,10 @@
                 you should expect ajax and full requests conflicts and issues regarding 
                 the data integrity.
                 -->
-                <f:ajax execute="incr date" render="increrrormsg datemessage"/>
+                <f:ajax execute="incr date" render="increrrormsg datemessage" onerror="ri.error_handler"/>
             </h:commandLink>
             <h:commandButton action="#{myBeanJSF.reset}" value="#{bundle.Reset}">
-                <f:ajax render="@form"/>
+                <f:ajax render="@form" onerror="ri.error_handler"/>
             </h:commandButton>
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>

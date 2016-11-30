@@ -43,14 +43,32 @@ var ri = {
     stop: function () {
         console.log("Random Generator stopped");
         clearInterval(ri.timerID);
+    },
+
+    error_handler: function (e) {
+        var details = msg = '';
+
+        var status = "status : " + e.status;
+        var responseCode = "responseCode : " + e.responseCode;
+        var description = "description : " + e.description;
+        var errorMessage = "errorMessage : " + e.errorMessage;
+
+        var error_details = [status, responseCode, description, errorMessage];
+
+        ri.stop();
+
+        for (var i = 0; i < error_details.length; i++) {
+            details += (error_details[i] ? (error_details[i] + '\n') : '');
+        }
+
+        msg = "/!\\ ERROR : " + e.status + " - " + e.responseCode + " /!\\\n";
+        msg += "Get details?";
+
+        if (confirm(msg)) {
+            alert(details);
+        }
     }
 };
 
 ri.delay = 10;
 ri.start();
-
-function error_handler(e) {
-    ri.stop();
-    /*TODO : display the responseCode (chap 13.5 & 13.6 from Java EE 7 Tutorial */
-    alert(e.description);
-}
