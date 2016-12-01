@@ -25,7 +25,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author jsie
  */
-@WebFilter(servletNames = {"Faces Servlet"})
+@WebFilter(servletNames = {"Faces Servlet", "javax.ws.rs.core.Application",
+    "MyServletTest"})
 public class MyFilter implements Filter {
 
     @EJB

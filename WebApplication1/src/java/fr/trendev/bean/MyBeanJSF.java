@@ -165,12 +165,18 @@ public class MyBeanJSF implements Serializable {
 
         FacesContext fc = FacesContext.getCurrentInstance();
         if (fc != null) {
-            sn = fc.getExternalContext().getSessionId(true);
+
             HttpSession session = (HttpSession) fc.getExternalContext().
                     getSession(true);
+
+            sn = fc.getExternalContext().getSessionId(true);
+
             if (session instanceof HttpSession) {
                 logger.log(Level.INFO, "Session is a HttpSession : {0}",
                         session.getId());
+                int value = new Double(Math.floor(Math.random() * bound) + 1).
+                        intValue();
+                session.setAttribute(MyBeanJSF.class.getSimpleName(), value);
             }
 
         }
