@@ -3,13 +3,13 @@
  */
 
 var ri = {
-    //the default Random Generator delay 
+    //the default delay 
     delay: 3,
 
-    //the id of the started time internval
+    //the id of the started time interval
     timerID: 0,
 
-    //the lock will be automatically put when start() is called and removed when stop() is called
+    //the lock will be automatically set when start() is called and removed when stop() is called
     lock: false,
 
     /* The status of the two field form1:incr & form:date after a value has changed
@@ -34,7 +34,6 @@ var ri = {
                 ri.status[1] = flag;
                 break;
             default:
-                //should be a problem...
                 console.log(id + "is not a valid element !");
                 break;
         }
