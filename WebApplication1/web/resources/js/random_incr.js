@@ -1,10 +1,7 @@
 /* 
  * Author : Julien SIE
  */
-/**
- * 
- * TODO : stop the generator if the system is done
- */
+
 var ri = {
     //the default Random Generator delay 
     delay: 30,
@@ -91,7 +88,6 @@ var ri = {
                     var date = document.getElementById('form1:date');
 
                     incr.value = Math.floor((Math.random() * bound.value) + 1);
-                    //TODO : investigate on the behaviour of date.value = null
                     date.value = dates[incr.value % dates.length];
 
                     if (!date.value) {
