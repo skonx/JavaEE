@@ -4,7 +4,7 @@
 
 var ri = {
     //the default Random Generator delay 
-    delay: 30,
+    delay: 3,
 
     //the id of the started time internval
     timerID: 0,
