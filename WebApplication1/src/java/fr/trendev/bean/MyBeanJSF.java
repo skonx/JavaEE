@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -174,9 +175,16 @@ public class MyBeanJSF implements Serializable {
             if (session instanceof HttpSession) {
                 logger.log(Level.INFO, "Session is a HttpSession : {0}",
                         session.getId());
+
                 int value = new Double(Math.floor(Math.random() * bound) + 1).
                         intValue();
                 session.setAttribute(MyBeanJSF.class.getSimpleName(), value);
+
+                HttpServletRequest req = (HttpServletRequest) fc.
+                        getExternalContext().getRequest();
+                session.setAttribute("Remote_Address", req.getRemoteAddr());
+                session.setAttribute("Remote_Host", req.getRemoteHost());
+
             }
 
         }

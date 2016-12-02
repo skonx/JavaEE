@@ -45,7 +45,7 @@ if (typeof sl === 'undefined') {
                     while (newlinks[index]) {
                         index = (index + 1) % count;
                     }
-                    console.log("set " + link.innerHTML + " in index " + index);
+                    //console.log("set " + link.innerHTML + " in index " + index);
                     newlinks[index] = link;
                 }
 

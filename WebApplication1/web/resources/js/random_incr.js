@@ -6,68 +6,144 @@
  * TODO : stop the generator if the system is done
  */
 var ri = {
-    delay: 5,
+    //the default Random Generator delay 
+    delay: 30,
 
+    //the id of the started time internval
     timerID: 0,
-    /*
-     * Generate a random incremental value between 0 and myJSFBean.bound.
-     * Random date selection.
-     * 
-     */
 
+    //the lock will be automatically put when start() is called and removed when stop() is called
+    lock: false,
+
+    /* The status of the two field form1:incr & form:date after a value has changed
+     * When an ajax request is sent, status will be changed to false,
+     * meaning the client will wait a success reply from the server. 
+     * Otherwise, generator is stopped until value or manually changed.
+     * */
+    status: [true, true],
+
+    //test the display data are uptodate
+    isup2date: function () {
+        return ri.status[0] && ri.status[1];
+    },
+
+    //flag the status for the fields form1:incr or form1:date
+    setStatus: function (id, flag) {
+        switch (id) {
+            case 'form1:incr':
+                ri.status[0] = flag;
+                break;
+            case 'form1:date':
+                ri.status[1] = flag;
+                break;
+            default:
+                //should be a problem...
+                console.log(id + "is not a valid element !");
+                break;
+        }
+    },
+
+    //test if all data are refreshed and if there is no lock (no time interval started)
+    isReady: function () {
+        return ri.isup2date() && !ri.lock;
+    },
+
+    //init a pool with somes dates
     init: function () {
         var dates = ["1982-11-28", "1983-10-25", "2007-03-17", "2011-04-16", "2015-11-06"];
 
         var date = new Date();
         var today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-
         dates.push(today);
 
         return dates;
     },
 
+    /*
+     * Generate a random incremental value between 0 and myJSFBean.bound.
+     * Random date selection.
+     * 
+     */
     start: function () {
-        var d = ri.delay;
-        var dates = ri.init();
-        var counter = document.getElementById('form1:counter');
-
-        counter.innerHTML = d;
-
-        var random_generator = function () {
-
+        if (ri.isReady()) {
+            ri.lock = true;
+            var d = ri.delay;
+            var dates = ri.init();
             var counter = document.getElementById('form1:counter');
-            counter.innerHTML = --d;
 
-            if (d === 0) {
-                var incr = document.getElementById('form1:incr');
-                /*The hidden data in the Facelet...*/
-                var bound = document.getElementById('form1:bound');
+            counter.innerHTML = d;
 
-                var date = document.getElementById('form1:date');
+            var start_id = 'start_id_' + Math.floor((Math.random() * 10000000) + 1);
 
-                incr.value = Math.floor((Math.random() * bound.value) + 1);
-                date.value = dates[Math.floor((Math.random() * dates.length))];
+            console.warn("START [" + start_id + "]");
 
-                /*
-                 * Fire a change event and trigger the onChange() method provided with AJAX (the listener of the JSF component is a backend bean method.
-                 * */
-                incr.onchange();
-                date.onchange();
+            var random_generator = function () {
 
-                d = ri.delay;
-                counter.innerHTML = d;
-            }
-        };
+                counter.innerHTML = --d;
+                console.log(start_id + " , d=" + d);
 
-        ri.timerID = setInterval(random_generator, 1000);
+                if (d === 0) {
+                    var incr = document.getElementById('form1:incr');
+
+                    /*The hidden data in the Facelet...*/
+                    var bound = document.getElementById('form1:bound');
+
+                    var date = document.getElementById('form1:date');
+
+                    incr.value = Math.floor((Math.random() * bound.value) + 1);
+                    //TODO : investigate on the behaviour of date.value = null
+                    date.value = dates[incr.value % dates.length];
+
+                    if (!date.value) {
+                        console.error("date is null !!!");
+                        console.log("dates[" + incr.value % dates.length + "]");
+
+                        for (var i = 0; i < dates.length; i++) {
+                            console.log("dates[" + i + "] = " + dates[i]);
+                        }
+                    }
+
+                    /*
+                     * Fire a change event and trigger the onChange() method provided with AJAX (the listener of the JSF component is a backend bean method.
+                     * */
+                    incr.onchange();
+                    date.onchange();
+
+                    console.log(start_id + " incr = " + incr.value);
+                    console.log(start_id + " date = " + date.value);
+
+                    counter.innerHTML = '--';
+
+                    ri.stop(start_id);
+
+                }
+            };
+
+            ri.timerID = setInterval(random_generator, 1000);
+        }
+
     },
 
-    stop: function () {
-        console.log("Random Generator stopped");
+    /**
+     * Stop the running generator.
+     * Set the refresh status to false (waiting a refresh from AJAX or from the user).
+     * Unlock the generator.
+     * @param {type} id the id of the running generator
+     */
+    stop: function (id) {
+        console.warn("Random Generator [" + id + "] stopped");
         clearInterval(ri.timerID);
+        ri.status[0] = ri.status[1] = false;
+        ri.lock = false;
     },
 
+    /**
+     * Display an alert message if an error occurs. 
+     * @param {type} e the event generated by the AJAX request if an error occurs
+     * @returns {undefined}
+     */
     error_handler: function (e) {
+        var msg;
         var details = msg = '';
 
         var status = "status : " + e.status;
@@ -77,20 +153,33 @@ var ri = {
 
         var error_details = [status, responseCode, description, errorMessage];
 
-        ri.stop();
+        //only if something is running
+        if (ri.lock)
+            ri.stop('error_handler');
 
         for (var i = 0; i < error_details.length; i++) {
             details += (error_details[i] ? (error_details[i] + '\n') : '');
         }
 
-        msg = "/!\\ ERROR : " + e.status + " - " + e.responseCode + " /!\\\n";
+        msg = "/!\\ ERROR - SERVER CONNECTION LOST /!\\\n";
         msg += "Get details?";
 
         if (confirm(msg)) {
             alert(details);
         }
+    },
+
+    /**
+     * Help to monitor the AJAX request. If the status is 'success', the generator can be restarted.
+     * @param {type} e the event generated by the AJAX request
+     * @returns {undefined}
+     */
+    monitor_status: function (e) {
+        if (e.status === 'success') {
+            ri.setStatus(e.source.id, true);
+            ri.start();
+        }
     }
 };
 
-ri.delay = 10;
-ri.start();
+window.addEventListener('load', ri.start);

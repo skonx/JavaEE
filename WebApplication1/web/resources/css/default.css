@@ -10,7 +10,7 @@ and open the template in the editor.
 
 body
 {
-    background-color: lightskyblue; 
+    background-color: dimgrey; 
     border : 5px dotted lightgreen;
     border-radius: 10px;
 }
