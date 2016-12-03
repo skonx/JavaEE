@@ -17,14 +17,22 @@
         </cc:interface>
         <cc:implementation>
             <h:panelGroup layout="block" id="font" styleClass="progressfont">
-                <c:set var="value" value="#{(100 * cc.attrs.value)/cc.attrs.max}"/>
-                <c:set var="color" value="#{cc.attrs.color}"/>
-                <c:if test="#{value ge 0}">
+                <c:set var="w" value="#{(100 * cc.attrs.value)/cc.attrs.max}"/>
+                <c:set var="c" value="#{cc.attrs.color}"/>
+                <c:if test="#{w ge 0}">
                     <h:panelGroup layout="block" id="bar" styleClass="progressbar" p:style="
-                                  width:#{value}%;
-                                  background-color:#{color}">
-                        <h:outputText id="label" styleClass="progresslabel" value="#{value}%"/>
+                                  width:#{w}%;
+                                  background-color:#{c}">
+                        <h:outputText id="label" styleClass="progresslabel" value="#{w}%"/>
                     </h:panelGroup>
+                    <script>
+                        var bar = document.getElementById('#{cc.clientId}:bar');
+                        console.log(bar.id + " - Width = " + bar.style.width);//or use offsetWidth
+                        console.log('#{cc.clientId}');
+                        var mycomp = document.getElementById('#{cc.clientId}');
+                        if (mycomp)
+                            console.log(mycomp.max);
+                    </script>
                 </c:if>
             </h:panelGroup>
         </cc:implementation>

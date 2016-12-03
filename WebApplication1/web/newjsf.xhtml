@@ -26,14 +26,14 @@
 
             <p/>
             <!-- Default HTML5 progressbar 
-            <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: #{myBeanJSF.incr}%"/>
+            <progress jsf:id="progressbar" value="#{myBeanJSF.iter}" max="#{myBeanJSF.bound}" style="width: 100%"/>
             -->
             <h:panelGroup layout="block" id="progress">
                 <lc:progressbar id="pbar1" value="#{myBeanJSF.incr}" max="#{myBeanJSF.bound}"/>
                 <p/>
                 <lc:progressbar id="pbar2" value="#{myBeanJSF.incr/2}" max="#{myBeanJSF.bound}" color="purple"/>
                 <p/>
-                <lc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" max="#{myBeanJSF.bound}" color="yellow"/>
+                <lc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" max="#{myBeanJSF.bound}" color="orange"/>
             </h:panelGroup>
             <p/>
             <h:outputLabel value="#{bundle.IncrValue} : " for="incr"/>
@@ -75,6 +75,14 @@
             </h:commandButton>
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>
+        <script type="text/javascript">
+            var pbar1 = document.getElementById('form1:pbar1');
+            console.log("Try to locate pbar1 and access to its value...");
+            if (pbar1) {
+                console.log("pbar1 exists !");
+                console.log(pbar1);
+            }
+        </script>
     </h:body>
 </html>
 

@@ -4,13 +4,13 @@
 
 var ri = {
     //the default delay 
-    delay: 3,
+    delay: 10,
 
     //the id of the started time interval
     timerID: 0,
 
     //the lock will be automatically set when start() is called and removed when stop() is called
-    lock: false,
+    lock: true,
 
     /* The status of the two field form1:incr & form:date after a value has changed
      * When an ajax request is sent, status will be changed to false,
