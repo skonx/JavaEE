@@ -10,7 +10,7 @@ var ri = {
     timerID: 0,
 
     //the lock will be automatically set when start() is called and removed when stop() is called
-    lock: true,
+    lock: false,
 
     /* The status of the two field form1:incr & form:date after a value has changed
      * When an ajax request is sent, status will be changed to false,
@@ -103,6 +103,9 @@ var ri = {
                      * */
                     incr.onchange();
                     date.onchange();
+
+                    var pbar4 = document.getElementById('form1:pbar4:base');
+                    pbar4.setValue(incr.value);
 
                     console.log(start_id + " incr = " + incr.value);
                     console.log(start_id + " date = " + date.value);

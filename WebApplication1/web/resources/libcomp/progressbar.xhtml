@@ -25,23 +25,36 @@
                         <h:outputText id="label" styleClass="progresslabel" value="#{w}%"/>
                     </h:panelGroup>
                     <script>
-                        console.warn("inside the composite component #{cc.clientId}");
-                        var bar = document.getElementById('#{cc.clientId}:bar');
-                        var label = document.getElementById('#{cc.clientId}:label');
+                        //<![CDATA[
+                        (function () {
+                            var bar = document.getElementById('#{cc.clientId}:bar');
+                            var label = document.getElementById('#{cc.clientId}:label');
+                            var pbar = document.getElementById('#{cc.clientId}:base');
 
-                        console.log(bar.id + " - Width = " + bar.style.width);//or use offsetWidth
-                        console.log(label.id + " - Value = " + label.innerHTML);//or use offsetWidth
+                            pbar.value = #{cc.attrs.value};
+                            pbar.max = #{cc.attrs.max};
+                            pbar.color = '#{cc.attrs.color}';
 
-                        var pbar = document.getElementById('#{cc.clientId}:base');
-                        pbar.value = #{cc.attrs.value};
-                        pbar.max = #{cc.attrs.max};
-                        pbar.color = '#{cc.attrs.color}';
+                            pbar.setValue = function (val) {
+                                if (val < 0) {
+                                    pbar.value = 0;
+                                } else {
+                                    if (val > pbar.max) {
+                                        pbar.value = pbar.max;
+                                    } else {
+                                        pbar.value = val;
+                                    }
+                                }
 
-                        //TODO : create a javascript proxy
+                                label.innerHTML = bar.style.width = ((100 * pbar.value) / pbar.max) + '%';
+                            };
 
-                        /*pbar.setAttribute('value',#{cc.attrs.value});
-                         pbar.setAttribute('max',#{cc.attrs.max});
-                         pbar.setAttribute('color', '#{cc.attrs.color}');*/
+                            pbar.setColor = function (color) {
+                                bar.style.backgroundColor = color;
+                            };
+
+                        })();
+                        // ]]>
                     </script>
                 </c:if>
             </h:panelGroup>
