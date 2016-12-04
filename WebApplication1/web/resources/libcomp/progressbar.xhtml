@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:cc="http://java.sun.com/jsf/composite"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
@@ -16,22 +17,31 @@
             <cc:attribute name="color" default="#4CAF50" type="java.lang.String"/>
         </cc:interface>
         <cc:implementation>
-            <h:panelGroup layout="block" id="font" styleClass="progressfont">
+            <h:panelGroup layout="block" id="base" styleClass="progressfont">
                 <c:set var="w" value="#{(100 * cc.attrs.value)/cc.attrs.max}"/>
                 <c:set var="c" value="#{cc.attrs.color}"/>
                 <c:if test="#{w ge 0}">
-                    <h:panelGroup layout="block" id="bar" styleClass="progressbar" p:style="
-                                  width:#{w}%;
-                                  background-color:#{c}">
+                    <h:panelGroup layout="block" id="bar" styleClass="progressbar" p:style="width:#{w}%; background-color:#{c}">
                         <h:outputText id="label" styleClass="progresslabel" value="#{w}%"/>
                     </h:panelGroup>
                     <script>
+                        console.warn("inside the composite component #{cc.clientId}");
                         var bar = document.getElementById('#{cc.clientId}:bar');
+                        var label = document.getElementById('#{cc.clientId}:label');
+
                         console.log(bar.id + " - Width = " + bar.style.width);//or use offsetWidth
-                        console.log('#{cc.clientId}');
-                        var mycomp = document.getElementById('#{cc.clientId}');
-                        if (mycomp)
-                            console.log(mycomp.max);
+                        console.log(label.id + " - Value = " + label.innerHTML);//or use offsetWidth
+
+                        var pbar = document.getElementById('#{cc.clientId}:base');
+                        pbar.value = #{cc.attrs.value};
+                        pbar.max = #{cc.attrs.max};
+                        pbar.color = '#{cc.attrs.color}';
+
+                        //TODO : create a javascript proxy
+
+                        /*pbar.setAttribute('value',#{cc.attrs.value});
+                         pbar.setAttribute('max',#{cc.attrs.max});
+                         pbar.setAttribute('color', '#{cc.attrs.color}');*/
                     </script>
                 </c:if>
             </h:panelGroup>

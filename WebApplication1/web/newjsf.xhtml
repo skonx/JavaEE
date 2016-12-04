@@ -76,11 +76,21 @@
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>
         <script type="text/javascript">
-            var pbar1 = document.getElementById('form1:pbar1');
-            console.log("Try to locate pbar1 and access to its value...");
+            var pbar1 = document.getElementById('form1:pbar1:base');
+            console.log("Try to locate form1:pbar1:base and access to its value...");
             if (pbar1) {
-                console.log("pbar1 exists !");
-                console.log(pbar1);
+                console.log("form1:pbar1:base exists !");
+                console.log("pbar1.value = " + pbar1.value);
+                console.log("pbar1.max = " + pbar1.max);
+                console.log("pbar1.color = " + pbar1.color);
+
+                var attrs = pbar1.attributes;
+
+                Array.prototype.slice.call(attrs).forEach(function (item) {
+                    console.log(item.name + " : " + item.value);
+                });
+
+                pbar1.value = 300;
             }
         </script>
     </h:body>
