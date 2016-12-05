@@ -19,7 +19,7 @@
                 <h:panelGroup layout="block">
                     <h:outputText value="#{bundle.Welcome} : #{myBeanJSF.sn}"/>
                     <p/>
-                    <h:outputText id="iter" value="#{bundle.Iteration} : ##{myBeanJSF.iter}"/>
+                    <h:outputText id="iter" value="#{bundle.Iteration} + #{bundle.IncrValue} = ##{myBeanJSF.iter}"/>
                 </h:panelGroup>
                 <h:outputText id="counter" styleClass="counter" value="--"/>
             </h:panelGrid>
