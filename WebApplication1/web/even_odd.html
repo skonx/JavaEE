@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Evens & Odds</title>
+
+        <style>
+            .dropper {
+                margin: 50px 10px 10px 50px;
+                width: 400px;
+                height: 250px;
+                background-color: #555;
+                border: 1px solid #111;
+
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+
+                -moz-transition: all 200ms linear;
+                -webkit-transition: all 200ms linear;
+                -o-transition: all 200ms linear;
+                transition: all 200ms linear;
+            }
+
+            .drop_hover {
+                -moz-box-shadow: 0 0 30px rgba(0, 0, 0, 0.8) inset;
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.8) inset;
+            }
+
+            .draggable {
+                display: inline-block;
+                margin: 20px 10px 10px 20px;
+                padding-top: 20px;
+                width: 80px;
+                height: 60px;
+                color: #3D110F;
+                background-color: #822520;
+                border: 4px solid #3D110F;
+                text-align: center;
+                font-size: 2em;
+                cursor: move;
+
+                -moz-transition: all 200ms linear;
+                -webkit-transition: all 200ms linear;
+                -o-transition: all 200ms linear;
+                transition: all 200ms linear;
+
+                -moz-user-select: none;
+                -khtml-user-select: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            .moving{
+                background-color: lightgreen;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <hr/>
+        <p>Even</p>
+        <div id="dz1" class="dropper">
+            <div id="drag1" class="draggable">#1</div>
+            <div id="drag2" class="draggable">#2</div>
+            <div id="drag6" class="draggable">#6</div>
+        </div>
+        <hr/>
+        <p>Odd</p>
+        <div id="dz2" class="dropper">
+            <div id="drag3" class="draggable">#3</div>
+            <div id="drag4" class="draggable">#4</div>
+            <div id="drag5" class="draggable">#5</div>
+        </div>
+        ​ <hr/>
+        <script>
+            (function () {
+
+                var dndHandler = {
+
+                    draggedElement: null,
+
+                    applyDragEvents: function (element) {
+
+                        element.draggable = true;
+
+                        var dndHandler = this;
+
+                        element.addEventListener('dragstart', function (e) {
+                            dndHandler.draggedElement = e.target;
+                            e.dataTransfer.setData('text/plain', e.target.id);
+                        }, false);
+
+                        element.addEventListener('touchstart', function (e) {
+                            console.log('touchstart detected:' + e.target.id);
+
+                            if (!dndHandler.draggedElement) {
+                                dndHandler.draggedElement = document.getElementById(e.target.id);
+                                dndHandler.draggedElement.className = 'draggable moving';
+                            } else {
+                                dndHandler.draggedElement.className = 'draggable';
+                                dndHandler.draggedElement = document.getElementById(e.target.id);
+                                dndHandler.draggedElement.className = 'draggable moving';
+                            }
+
+                        }, false);
+
+                        element.addEventListener('touchcancel', function (e) {
+                            console.log('touchcancel detected:' + e.target.id);
+
+                            dndHandler.draggedElement = null;
+
+                        }, false);
+
+                    },
+
+                    applyDropEvents: function (dropper) {
+
+                        dropper.addEventListener('dragover', function (e) {
+                            e.preventDefault();
+                            var move = e.dataTransfer.getData('text/plain');
+                            var target = e.target.id;
+                            console.log(move + 'is over ' + target);
+                            this.className = 'dropper drop_hover';
+                        }, false);
+
+                        dropper.addEventListener('dragleave', function () {
+                            this.className = 'dropper';
+                        });
+
+                        var dndHandler = this;
+
+                        dropper.addEventListener('drop', function (e) {
+
+                            var target = e.target,
+                                    draggedElement = dndHandler.draggedElement,
+                                    clonedElement = draggedElement.cloneNode(true);
+
+                            while (target.className.indexOf('dropper') === -1) {
+                                target = target.parentNode;
+                            }
+
+                            target.className = 'dropper';
+                            clonedElement = target.appendChild(clonedElement);
+                            dndHandler.applyDragEvents(clonedElement);
+
+                            draggedElement.parentNode.removeChild(draggedElement); // Suppression de l'élément d'origine
+
+                        });
+
+                        dropper.addEventListener('touchend', function (e) {
+                            var target = e.target,
+                                    draggedElement = dndHandler.draggedElement;
+
+                            console.log('touchend detected:' + e.target.id);
+
+                            if (dndHandler.draggedElement && target.id !== draggedElement.id) {
+                                while (target.className.indexOf('dropper') === -1) {
+                                    target = target.parentNode;
+                                }
+
+                                if (target.id !== draggedElement.parentNode.id) {
+                                    target.className = 'dropper';
+
+                                    console.log("let's move " + draggedElement.id + " to " + target.id);
+                                    dndHandler.draggedElement.className = 'draggable';
+                                    target.appendChild(draggedElement);
+                                    dndHandler.draggedElement = null;
+                                } else {
+                                    console.log(draggedElement.id + " is already in " + target.id);
+                                }
+                            }
+                        }, false);
+
+                    }
+
+                };
+
+                var elements = document.querySelectorAll('.draggable'),
+                        elementsLen = elements.length;
+
+                for (var i = 0; i < elementsLen; i++) {
+                    dndHandler.applyDragEvents(elements[i]); // Application des paramètres nécessaires aux élément déplaçables
+                }
+
+                var droppers = document.querySelectorAll('.dropper'),
+                        droppersLen = droppers.length;
+
+                for (var i = 0; i < droppersLen; i++) {
+                    dndHandler.applyDropEvents(droppers[i]); // Application des événements nécessaires aux zones de drop
+                }
+
+            })();
+        </script>
+
+    </body>
+</html>

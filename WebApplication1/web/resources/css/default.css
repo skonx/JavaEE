@@ -81,6 +81,11 @@ a:hover
     background-color: darkseagreen;
 }
 
+.evens_odds{
+    font-family: cursive;
+    background-color: lightskyblue;
+}
+
 .counter{
     border: 2px black solid;
     background-color: lightgray;
