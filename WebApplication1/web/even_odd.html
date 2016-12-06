@@ -88,7 +88,7 @@
 
                         element.addEventListener('dragstart', function (e) {
                             dndHandler.draggedElement = e.target;
-                            e.dataTransfer.setData('text/plain', e.target.id);
+                            e.dataTransfer.setData('text', e.target.id);
                         }, false);
 
                         element.addEventListener('touchstart', function (e) {
@@ -118,7 +118,7 @@
 
                         dropper.addEventListener('dragover', function (e) {
                             e.preventDefault();
-                            var move = e.dataTransfer.getData('text/plain');
+                            var move = e.dataTransfer.getData('text');
                             var target = e.target.id;
                             console.log(move + 'is over ' + target);
                             this.className = 'dropper drop_hover';
@@ -131,7 +131,7 @@
                         var dndHandler = this;
 
                         dropper.addEventListener('drop', function (e) {
-
+                            e.preventDefault();
                             var target = e.target,
                                     draggedElement = dndHandler.draggedElement,
                                     clonedElement = draggedElement.cloneNode(true);
@@ -149,6 +149,7 @@
                         });
 
                         dropper.addEventListener('touchend', function (e) {
+                            e.preventDefault();
                             var target = e.target,
                                     draggedElement = dndHandler.draggedElement;
 
