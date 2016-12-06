@@ -24,6 +24,7 @@
                     <h:panelGroup layout="block" id="bar" styleClass="progressbar" p:style="width:#{w}%; background-color:#{c}">
                         <h:outputText id="label" styleClass="progresslabel" value="#{w}%"/>
                     </h:panelGroup>
+                      <!-- the JSF progressbar can be reused using JavaScript functions provided by the IIFE -->
                     <script>
                         //<![CDATA[
                         (function () {
@@ -34,7 +35,8 @@
                             pbar.value = #{cc.attrs.value};
                             pbar.max = #{cc.attrs.max};
                             pbar.color = '#{cc.attrs.color}';
-
+                              
+                            //change the progressbar's value
                             pbar.setValue = function (val) {
                                 if (val < 0) {
                                     pbar.value = 0;
@@ -49,6 +51,7 @@
                                 label.innerHTML = bar.style.width = ((100 * pbar.value) / pbar.max) + '%';
                             };
 
+                            //change the progressbar's color
                             pbar.setColor = function (color) {
                                 bar.style.backgroundColor = color;
                             };
