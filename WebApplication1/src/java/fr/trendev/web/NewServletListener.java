@@ -24,45 +24,48 @@ import javax.servlet.http.HttpSessionListener;
  */
 public class NewServletListener implements ServletContextListener,
         HttpSessionListener {
-    
+
     private static final Logger LOG = Logger.getLogger(NewServletListener.class.
             getName());
-    
+
     @EJB
     private ActiveSessionTracker tracker;
-    
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         LOG.log(Level.INFO, "contextInitialized: {0}", LocalDateTime.now().
                 toString());
     }
-    
+
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         LOG.log(Level.INFO, "contextDestroyed: {0}", LocalDateTime.now().
                 toString());
     }
-    
+
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        
+
         LOG.log(Level.INFO, "sessionCreated {0}: {1}", new Object[]{se.
             getSession().getId(), LocalDateTime.now().toString()});
         tracker.add(se.getSession());
     }
-    
+
+    /*
+     * TODO: check why a destroyed session is restarted without a sessionCreated call
+     * @param se 
+     */
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         LOG.log(Level.INFO, "sessionDestroyed {0}: {1}", new Object[]{se.
             getSession().getId(), LocalDateTime.now().toString()});
         HttpSession s = se.getSession();
         tracker.remove(s);
-        
+
         for (Enumeration<String> e = s.getAttributeNames(); e.hasMoreElements();) {
             String attribute = e.nextElement();
             System.out.println("Attribute [" + attribute + "] = " + s.
                     getAttribute(attribute));
         }
-        
     }
 }
