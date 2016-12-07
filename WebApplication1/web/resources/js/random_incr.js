@@ -4,7 +4,7 @@
 
 var ri = {
     //the default delay 
-    delay: 10,
+    delay: 30,
 
     //the id of the started time interval
     timerID: 0,
@@ -74,7 +74,8 @@ var ri = {
             console.warn("START [" + start_id + "]");
 
             var random_generator = function () {
-
+                //if a reset occurs, counter must be found...
+                counter = document.getElementById('form1:counter');
                 counter.innerHTML = --d;
                 console.log(start_id + " , d=" + d);
 
@@ -173,6 +174,7 @@ var ri = {
      * @returns {undefined}
      */
     monitor_status: function (e) {
+        console.log("ajax response : " + e.status + " for element " + e.source.id);
         if (e.status === 'success') {
             ri.setStatus(e.source.id, true);
             ri.start();

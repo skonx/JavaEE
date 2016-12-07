@@ -21,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIOutput;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -41,8 +40,6 @@ import javax.validation.constraints.NotNull;
 @SessionScoped
 public class MyBeanJSF implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     public static final long bound = 500;
 
     private final String WebMessages_BASENAME = "WebMessages";
@@ -55,19 +52,7 @@ public class MyBeanJSF implements Serializable {
     //private final String pattern = "EEEE dd MMMM uuuu HH:mm:ss - VV - zzzz - XXX";
     private final String pattern = "EEEE dd MMMM uuuu";
 
-    /**
-     * This field is used to render the hidden value "text" in the facelet. Text
-     * is rendered if the condition (iter > bound) is true. Another solution
-     * should be to render this item using the condition and the attribute
-     * render in the facelet.
-     */
-    private UIOutput text = null;
-
-    /**
-     * This field is used to render a hidden value "fulldate" in the facelet.
-     * The output will be the specified date using the cust. local parameter.
-     */
-    private UIOutput fulldate = null;
+    private String text;
 
     //@ManagedProperty(value = "#{param.sn}")
     /**
@@ -139,20 +124,12 @@ public class MyBeanJSF implements Serializable {
         return bound;
     }
 
-    public UIOutput getText() {
+    public String getText() {
         return text;
     }
 
-    public void setText(UIOutput text) {
+    public void setText(String text) {
         this.text = text;
-    }
-
-    public UIOutput getFulldate() {
-        return fulldate;
-    }
-
-    public void setFulldate(UIOutput fulldate) {
-        this.fulldate = fulldate;
     }
 
     /**
@@ -223,13 +200,11 @@ public class MyBeanJSF implements Serializable {
         logger.log(Level.INFO, "incr = {0}", incr);
         iter += incr;
 
-        if (text != null) {
-            ResourceBundle bundle = ResourceBundle.getBundle(
-                    WebMessages_BASENAME, this.getFacesContextLocale());
-            String value = bundle.getString(WebMessages_BUNDLE_CONGRAT) + " "
-                    + bound;
-            text.setValue((iter > bound) ? value : "");
-        }
+        ResourceBundle bundle = ResourceBundle.getBundle(
+                WebMessages_BASENAME, this.getFacesContextLocale());
+        String value = bundle.getString(WebMessages_BUNDLE_CONGRAT) + " "
+                + bound;
+        text = ((iter > bound) ? value : "");
 
         logger.log(Level.INFO, "And now, iter = {0}", iter);
     }
@@ -238,16 +213,6 @@ public class MyBeanJSF implements Serializable {
         logger.log(Level.WARNING, "~~ Reset called ~~");
         setIncr(0);
         setDate(Date.from(Instant.now()));
-        fulldate.setValue(this.convertDate(date));
-
-        /*date = null;
-        getFulldate().setValue("");*/
-    }
-
-    public void showFullDateMessage(AjaxBehaviorEvent event) {
-        logger.log(Level.WARNING, "showFullDateMessage() called !!!");
-        fulldate.setValue(convertDate(date));
-        fulldate.setRendered(true);
     }
 
     private String convertDate(Date date) {
