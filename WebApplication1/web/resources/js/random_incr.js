@@ -4,7 +4,7 @@
 
 var ri = {
     //the default delay 
-    delay: 30,
+    delay: 15,
 
     //the id of the started time interval
     timerID: 0,
@@ -34,7 +34,7 @@ var ri = {
                 ri.status[1] = flag;
                 break;
             default:
-                console.log(id + "is not a valid element !");
+                console.log(id + " is not a valid element !");
                 break;
         }
     },

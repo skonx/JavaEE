@@ -118,6 +118,8 @@ public class MyBeanJSF implements Serializable {
 
     public void setIncr(long incr) {
         this.incr = incr;
+        logger.log(Level.INFO, "Incremental value is now {0}", incr);
+
     }
 
     public long getBound() {
@@ -159,9 +161,10 @@ public class MyBeanJSF implements Serializable {
 
                 HttpServletRequest req = (HttpServletRequest) fc.
                         getExternalContext().getRequest();
+
+                //stores the remote address and the remote host into the session
                 session.setAttribute("Remote_Address", req.getRemoteAddr());
                 session.setAttribute("Remote_Host", req.getRemoteHost());
-
             }
 
         }
@@ -171,19 +174,21 @@ public class MyBeanJSF implements Serializable {
     }
 
     /**
-     * Called by the link action. Increments iter, reset incr to 0 and redirect
-     * the user to "index.html". Logs the back link call.
+     * Called by the link action. Increments iter and redirect the user to
+     * "index.html". Logs the back link call.
      *
+     * @return index
      * @throws IOException
      */
     public void back() throws IOException {
         iter++;
-        //incr = 0;
+
+        logger.log(Level.INFO, "BACK LINK ");
+
         ExternalContext ec = FacesContext.getCurrentInstance().
                 getExternalContext();
-        logger.log(Level.INFO, "BACK LINK ");
-        ec.
-                redirect(ec.getRequestContextPath());
+        ec.redirect(ec.getRequestContextPath());
+
     }
 
     /**

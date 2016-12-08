@@ -58,9 +58,7 @@
             <h:outputText id="text" value="#{myBeanJSF.text}" styleClass="outofbound"
                           rendered="true"/>
             <p/>
-            <h:commandLink action="#{myBeanJSF.back}" >
-                <h:outputText value="index.html"/>
-                <!--
+            <!--
                 If the user change the "incr" or "date" value and click on this link, 
                 validation is automatically performed by this action.
                 "increrrormsg" and "datemessage" must also be rendered otherwise, 
@@ -69,14 +67,15 @@
                 Avoid to use @form for render or execute, otherwise, 
                 you should expect ajax and full requests conflicts and issues regarding 
                 the data integrity.
-                -->
-                <f:ajax execute="incr date" render="increrrormsg datemessage" onerror="ri.error_handler"/>
+            -->
+            <h:commandLink id="back" action="#{myBeanJSF.back}" value="Index.xhtml">
+                <f:ajax execute="incr date" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
             </h:commandLink>
-            <h:commandButton action="#{myBeanJSF.reset}" value="#{bundle.Reset}">
-                <f:ajax render="@form" onerror="ri.error_handler"/>
+            <h:commandButton id="reset" action="#{myBeanJSF.reset}" value="#{bundle.Reset}" >
+                <f:ajax render="@form" onerror="ri.error_handler"  onevent="ri.monitor_status"/>
             </h:commandButton>
             <p/>
-            <lc:progressbar id="pbar4" value="0" max="#{myBeanJSF.bound}" color="red"/>
+            <lc:progressbar id="pbar4" value="#{myBeanJSF.bound}" max="#{myBeanJSF.bound}" color="red"/>
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>
     </h:body>
