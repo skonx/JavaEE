@@ -15,7 +15,6 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -99,10 +98,12 @@ public class MyBound {
     @Produces("text/plain")
     public String getAllActiveSessions() {
         StringBuilder sb = new StringBuilder();
-        for (HttpSession session : tracker.getList()) {
+
+        tracker.forEach(session -> {
             sb.append(session.getId()).append("\n");
-        }
-        if (tracker.getList().isEmpty()) {
+        });
+
+        if (tracker.isEmpty()) {
             sb.append("## NO ACTIVE SESSION ##");
         }
         return sb.toString();

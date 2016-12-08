@@ -7,6 +7,7 @@ package fr.trendev.bean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.servlet.http.HttpSession;
@@ -26,15 +27,23 @@ public class ActiveSessionTracker {
         list = new ArrayList<>(DEFAULT_SIZE);
     }
 
-    public List<HttpSession> getList() {
-        return list;
-    }
-
     public boolean add(HttpSession session) {
         return list.add(session);
     }
 
     public boolean remove(HttpSession session) {
         return list.remove(session);
+    }
+
+    public boolean contains(HttpSession session) {
+        return list.contains(session);
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public void forEach(Consumer<? super HttpSession> c) {
+        list.forEach(c);
     }
 }

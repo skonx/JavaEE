@@ -41,17 +41,21 @@ public class MyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        logger.log(Level.INFO, "A request has been filtered");
-        /*logger.log(Level.INFO, "Active sessions =>");
-        tracker.getList().forEach(s -> logger.log(Level.INFO, s.getId()));
-        logger.log(Level.INFO, "<= Active sessions");*/
+        logger.log(Level.INFO, "## A request has been filtered ##");
+        logger.log(Level.INFO, "Active sessions =>");
+        tracker.forEach(s -> logger.log(Level.INFO, s.getId()));
+        logger.log(Level.INFO, "<= Active sessions");
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
+        //catch an existing session bound with the request (or not)
         HttpSession session = req.getSession(false);
-        logger.log(Level.INFO, "Requested Session id = {0}", req.
-                getRequestedSessionId());
+        //catch the the session id of the request
+        String sid = req.
+                getRequestedSessionId();
+
+        logger.log(Level.INFO, "Requested Session id = {0}", sid);
 
         if (session == null) {
             logger.log(Level.WARNING,
@@ -63,8 +67,15 @@ public class MyFilter implements Filter {
                     session.getId());
             logger.log(Level.INFO, "{0} is active = {1}", new Object[]{session.
                 getId(),
-                tracker.getList().
-                contains(session)});
+                tracker.contains(session)});
+
+            //adds a re-created session (preserve session across redeployment) in the tracker
+            if (!tracker.contains(session)) {
+                logger.log(Level.WARNING,
+                        "Session id {0} should be active... adding it in the tracker",
+                        sid);
+                tracker.add(session);
+            }
         }
 
         chain.doFilter(request, response);
