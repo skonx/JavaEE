@@ -88,6 +88,13 @@ var ri = {
                     var date = document.getElementById('form1:date');
 
                     incr.value = Math.floor((Math.random() * bound.value) + 1);
+
+                    /*access to the angular scope and change the value*/
+                    var scope = angular.element(incr).scope();
+                    scope.$apply(function () {
+                        scope.incr = incr.value;
+                    });
+
                     date.value = dates[incr.value % dates.length];
 
                     if (!date.value) {
