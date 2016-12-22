@@ -35,6 +35,7 @@
                 <lc:progressbar id="pbar2" value="#{myBeanJSF.incr/2}" max="#{myBeanJSF.bound}" color="purple"/>
                 <p/>
                 <lc:progressbar id="pbar3" value="#{myBeanJSF.incr-10}" max="#{myBeanJSF.bound}" color="orange"/>
+
             </h:panelGroup>
             <p/>
             <h:outputLabel value="(JSF + AngularJS) #{bundle.IncrValue} : " for="incr"/>
@@ -74,8 +75,9 @@
             <h:commandLink id="back" action="#{myBeanJSF.back}" value="Index.xhtml">
                 <f:ajax execute="incr date" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
             </h:commandLink>
-            <h:commandButton id="reset" action="#{myBeanJSF.reset}" value="#{bundle.Reset}" >
-                <f:ajax render="@form" onerror="ri.error_handler"  onevent="ri.monitor_status"/>
+            <h:commandButton id="reset" action="#{myBeanJSF.reset}" value="#{bundle.Reset}" p:ng-click="reset()">
+                <!-- avoid to use @form otherwise AngularJS model will be altered -->
+                <f:ajax render="iter counter progress incr incrset date fulldate2 text increrrormsg datemessage" onerror="ri.error_handler"  onevent="ri.monitor_status"/>
             </h:commandButton>
             <p/>
             <lc:progressbar id="pbar4" value="#{myBeanJSF.bound}" max="#{myBeanJSF.bound}" color="red"/>

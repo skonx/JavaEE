@@ -4,7 +4,7 @@
 
 var ri = {
     //the default delay 
-    delay: 15,
+    delay: 20,
 
     //the id of the started time interval
     timerID: 0,
@@ -77,7 +77,7 @@ var ri = {
                 //if a reset occurs, counter must be found...
                 counter = document.getElementById('form1:counter');
                 counter.innerHTML = --d;
-                console.log(start_id + " , d=" + d);
+                //console.log(start_id + " , d=" + d);
 
                 if (d === 0) {
                     var incr = document.getElementById('form1:incr');
