@@ -5,7 +5,7 @@
 if (typeof sl === 'undefined') {
     var sl = {
 
-        delay: 2000,
+        delay: 5000,
 
         selector: 'a',
 

@@ -58,7 +58,6 @@ var ri = {
     /*
      * Generate a random incremental value between 0 and myJSFBean.bound.
      * Random date selection.
-     * 
      */
     start: function () {
         if (ri.isReady()) {

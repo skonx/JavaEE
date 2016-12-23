@@ -86,7 +86,7 @@ public class MyFilter implements Filter {
         /*if (req.getRequestURI().startsWith(req.getContextPath()
                 + ResourceHandler.RESOURCE_IDENTIFIER)) {
             resp.setHeader("Cache-Control",
-                    "private, max-age=31536000"); // HTTP 1.1.
+                    "private, max-age=31536000"); // HTTP 1.1. 
             //resp.setDateHeader("Expires", 0); // Proxies.
         }*/
         chain.doFilter(request, response);

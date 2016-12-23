@@ -1,7 +1,7 @@
 var app = angular.module("myWebApp1", []);
 
 app.controller("ValueCtrl", function ($scope) {
-    console.warn("## Controller ValueCtrl : loaded ##");
+    console.warn("# Controller ValueCtrl : loaded #");
 
     function check() {
         console.warn("Angular CHECK() - Value incr changed : " + $scope.incr);
