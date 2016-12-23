@@ -11,8 +11,8 @@
         <h:outputStylesheet library="css" name="default.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"/>
     </h:head>
-    <h:body p:ng-app="myWebApp1">
-        <h:form id="form1" onkeypress="return event.keyCode !== 13;" p:ng-controller="ValueCtrl">
+    <h:body>
+        <h:form id="form1" onkeypress="return event.keyCode !== 13;" p:ng-app="myWebApp1" p:ng-controller="ValueCtrl" p:ng-init="incr=#{myBeanJSF.incr}">
             <!-- Hide the backend bean property for javascript purposes -->
             <h:inputHidden id="bound" value="#{myBeanJSF.bound}"/>
 
