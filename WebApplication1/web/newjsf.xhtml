@@ -7,7 +7,7 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:lc="http://xmlns.jcp.org/jsf/composite/libcomp">
     <h:head>
-        <title>#{bundle.Iteration} ##{myBeanJSF.iter}</title>
+        <title jsf:id="title">#{bundle.Iteration} ##{myBeanJSF.iter}</title>
         <h:outputStylesheet library="css" name="default.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"/>
     </h:head>
@@ -40,7 +40,7 @@
             <p/>
             <h:outputLabel value="(JSF + AngularJS) #{bundle.IncrValue} : " for="incr"/>
             <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{bundle.IncrValue}" p:autocomplete="off" required="true" p:ng-model="incr" p:ng-change="check_onchange()">
-                <f:ajax event="change" render="iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}" onerror="ri.error_handler" onevent="ri.monitor_status"/>
+                <f:ajax event="change" render="title iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}" onerror="ri.error_handler" onevent="ri.monitor_status"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
             <p/>

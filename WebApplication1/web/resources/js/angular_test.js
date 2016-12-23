@@ -15,7 +15,7 @@ app.controller("ValueCtrl", function ($scope) {
     $scope.reset = function () {
         console.warn("Angular RESET() - Value incr  = " + $scope.incr);
         $scope.incr = 0;
-        console.warn("Angular RESET() - Value incr  = " + $scope.incr);
+        console.warn("Angular RESET() - Value incr  has been reset to " + $scope.incr);
     };
 
     $scope.$watch('incr', check);

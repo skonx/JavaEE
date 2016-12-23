@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.application.ResourceHandler;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -25,8 +26,9 @@ import javax.servlet.http.HttpSession;
  *
  * @author jsie
  */
-@WebFilter(servletNames = {"Faces Servlet", "javax.ws.rs.core.Application",
-    "MyServletTest"})
+/*servletNames = {"Faces Servlet", "javax.ws.rs.core.Application",
+    "MyServletTest"}*/
+@WebFilter("/*")
 public class MyFilter implements Filter {
 
     @EJB
@@ -76,6 +78,17 @@ public class MyFilter implements Filter {
                         sid);
                 tracker.add(session);
             }
+        }
+
+        logger.log(Level.INFO, "Requested URL = {0}", req.getRequestURL().
+                toString());
+
+        //JSF resources (JavaScript, CSS...) will be cached in the client browser
+        if (req.getRequestURI().startsWith(req.getContextPath()
+                + ResourceHandler.RESOURCE_IDENTIFIER)) {
+            resp.setHeader("Cache-Control",
+                    "public, max-age=31536000"); // HTTP 1.1.
+            //resp.setDateHeader("Expires", 0); // Proxies.
         }
 
         chain.doFilter(request, response);
