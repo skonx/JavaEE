@@ -80,7 +80,8 @@
                 <f:ajax render="iter counter progress incr incrset date fulldate2 text increrrormsg datemessage" onerror="ri.error_handler"  onevent="ri.monitor_status"/>
             </h:commandButton>
             <p/>
-            <lc:progressbar id="pbar4" value="#{myBeanJSF.bound}" max="#{myBeanJSF.bound}" color="red"/>
+            <!-- updated in random_incr.js -->
+            <lc:progressbar id="pbar4" value="#{myBeanJSF.incr}" max="#{myBeanJSF.bound}" color="red"/>
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>
         <h:outputScript library="js" name="angular_test.js"/>
