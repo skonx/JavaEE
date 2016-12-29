@@ -10,9 +10,10 @@
         <title jsf:id="title">#{bundle.Iteration} ##{myBeanJSF.iter}</title>
         <h:outputStylesheet library="css" name="default.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.js"/>
     </h:head>
     <h:body>
-        <h:form id="form1" onkeypress="return event.keyCode !== 13;" p:ng-app="myWebApp1" p:ng-controller="ValueCtrl" p:ng-init="incr=#{myBeanJSF.incr}">
+        <h:form id="form1" onkeypress="return event.keyCode !== 13;" p:ng-app="myWebApp1" p:ng-controller="ValueCtrl" p:ng-init="incr=#{myBeanJSF.incr}; bound=#{myBeanJSF.bound}">
             <!-- Hide the backend bean property for javascript purposes -->
             <h:inputHidden id="bound" value="#{myBeanJSF.bound}"/>
 
@@ -80,7 +81,7 @@
                 <f:ajax render="iter counter progress incr incrset date fulldate2 text increrrormsg datemessage" onerror="ri.error_handler"  onevent="ri.monitor_status"/>
             </h:commandButton>
             <p/>
-            <!-- updated in random_incr.js -->
+            <!-- updated in random_incr.js , color will be overriden in AngularJS script-->
             <lc:progressbar id="pbar4" value="#{myBeanJSF.incr}" max="#{myBeanJSF.bound}" color="red"/>
         </h:form>
         <h:outputScript library="js" name="random_incr.js"/>
