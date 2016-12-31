@@ -9,8 +9,8 @@
     <h:head>
         <title jsf:id="title">#{bundle.Iteration} ##{myBeanJSF.iter}</title>
         <h:outputStylesheet library="css" name="default.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.js"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.min.js"/>
     </h:head>
     <h:body>
         <h:form id="form1" onkeypress="return event.keyCode !== 13;" p:ng-app="myWebApp1" p:ng-controller="ValueCtrl" p:ng-init="incr=#{myBeanJSF.incr}; bound=#{myBeanJSF.bound}">
@@ -20,7 +20,7 @@
             <h:panelGrid id="intro" columns="2" columnClasses="column-left, column-right">
                 <h:panelGroup layout="block">
                     <h:outputText value="#{bundle.Welcome} : #{myBeanJSF.sn}"/>
-                    <p/>
+                    <br/>
                     <h:outputText id="iter" value="#{bundle.Iteration} + #{bundle.IncrValue} = ##{myBeanJSF.iter}"/>
                 </h:panelGroup>
                 <h:outputText id="counter" styleClass="counter" value="--"/>
@@ -44,9 +44,9 @@
                 <f:ajax event="change" render="title iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}" onerror="ri.error_handler" onevent="ri.monitor_status"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
-            <p/>
+            <br/>
             <h:outputText id="incr_angjs" value="(AngularJS) #{bundle.IncrValue} : {{incr}}"/>
-            <p/>
+            <br/>
             <h:outputText id="incrset" value="(JSF) #{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
             <h:outputLabel value="#{bundle.EnterDate} : " for="date" />
@@ -73,7 +73,7 @@
                 you should expect ajax and full requests conflicts and issues regarding 
                 the data integrity.
             -->
-            <h:commandLink id="back" action="#{myBeanJSF.back}" value="Index.xhtml">
+            <h:commandLink id="back" action="#{myBeanJSF.back}" value="#{bundle.Back}">
                 <f:ajax execute="incr date" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
             </h:commandLink>
             <h:commandButton id="reset" action="#{myBeanJSF.reset}" value="#{bundle.Reset}" p:ng-click="reset()">

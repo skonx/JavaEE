@@ -3,10 +3,12 @@ var app = angular.module("myWebApp1", ['ngAnimate']);
 app.controller("ValueCtrl", function ($scope) {
     console.warn("# Controller ValueCtrl : loaded #");
 
+    /* Called when $scope.incr is changed */
     function check() {
         console.warn("Angular CHECK() - Value incr changed : " + $scope.incr + ' and Bound is still ' + $scope.bound);
 
-        //the background-color of the fourth progress bar will be overriden and fade using the incr computed value
+        /* the background-color of the fourth progress bar will be overriden 
+         * and smoothly colored using the incr computed value*/
         var incrset = document.getElementById('form1:pbar4:bar');
 
         var red = Math.floor(($scope.incr * 255) / $scope.bound) % 256;
@@ -14,7 +16,9 @@ app.controller("ValueCtrl", function ($scope) {
 
     }
 
-    //won't be called if the value is changed from outside of the scope !
+    /* Called when $scope.incr is changed 
+     * BUT won't be called if the value is changed 
+     * from outside of the scope (using $apply for exemple) !!! */
     $scope.check_onchange = function () {
         console.warn("Angular CHECK_ONCHANGE() - Value incr changed : " + $scope.incr);
     };
@@ -33,6 +37,8 @@ app.controller("ValueCtrl", function ($scope) {
         if (elmt) {
             var elmt_top = elmt.getBoundingClientRect().top;
 
+            /* will check if the top of the scrolling window is in the 
+             * range of the top/bottom of the element. */
             if (((-elmt.offsetHeight) <= elmt_top) && (elmt_top <= 0))
                 console.log("You're scrolling ON " + elmt_name);
             else
@@ -44,10 +50,11 @@ app.controller("ValueCtrl", function ($scope) {
         }
     }
 
+    /* Will check for a specified set of elements 
+     * if the top of the scrolling window is over them or not*/
     window.addEventListener('scroll', function () {
-
-        var elmt_name = ['form1:intro', 'form1:pbar1:bar', 'form1:pbar2:bar', 'form1:pbar3:bar'];
-        elmt_name.forEach(check_scroll_position);
+        var elmts = ['form1:intro', 'form1:pbar1:bar', 'form1:pbar2:bar', 'form1:pbar3:bar'];
+        elmts.forEach(check_scroll_position);
     });
 
 });

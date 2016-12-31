@@ -106,11 +106,16 @@ var ri = {
                     }
 
                     /*
-                     * Fire a change event and trigger the onChange() method provided with AJAX (the listener of the JSF component is a backend bean method.
+                     * Fire a change event and trigger the onChange() method provided 
+                     * with AJAX (the listener of the JSF component is a backend bean method.
                      * */
                     incr.onchange();
                     date.onchange();
 
+                    /* Change the value of the fourth jsf progressbar. 
+                     * setValue() is a method provided during the JSF component rendering... 
+                     * Shoud be really smarter to use an Angular directive instead. 
+                     * But anyway, it's just for a test */
                     var pbar4 = document.getElementById('form1:pbar4:base');
                     pbar4.setValue(incr.value);
 
@@ -121,6 +126,12 @@ var ri = {
 
                     ri.stop(start_id);
 
+                }
+
+                /* It's an issue, so it's not necessary to iterate*/
+                if (d < 0) {
+                    counter.innerHTML = '--';
+                    ri.stop(start_id);
                 }
             };
 
