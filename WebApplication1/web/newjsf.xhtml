@@ -17,7 +17,7 @@
             <!-- Hide the backend bean property for javascript purposes -->
             <h:inputHidden id="bound" value="#{myBeanJSF.bound}"/>
 
-            <h:panelGrid columns="2" columnClasses="column-left, column-right">
+            <h:panelGrid id="intro" columns="2" columnClasses="column-left, column-right">
                 <h:panelGroup layout="block">
                     <h:outputText value="#{bundle.Welcome} : #{myBeanJSF.sn}"/>
                     <p/>

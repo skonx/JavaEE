@@ -26,4 +26,28 @@ app.controller("ValueCtrl", function ($scope) {
     };
 
     $scope.$watch('incr', check);
+
+    function check_scroll_position(elmt_name) {
+        var elmt = document.getElementById(elmt_name);
+
+        if (elmt) {
+            var elmt_top = elmt.getBoundingClientRect().top;
+
+            if (((-elmt.offsetHeight) <= elmt_top) && (elmt_top <= 0))
+                console.log("You're scrolling ON " + elmt_name);
+            else
+                console.log("You're scrolling OUT of " + elmt_name);
+
+            /*console.log("SCROLLING ; top of " + elmt_name + ": " + elmt_top);
+             console.log("SCROLLING ; elmt.offsetHeight = " + elmt.offsetHeight);
+             console.log("SCROLLING; window.scrollY = " + window.scrollY);*/
+        }
+    }
+
+    window.addEventListener('scroll', function () {
+
+        var elmt_name = ['form1:intro', 'form1:pbar1:bar', 'form1:pbar2:bar', 'form1:pbar3:bar'];
+        elmt_name.forEach(check_scroll_position);
+    });
+
 });
