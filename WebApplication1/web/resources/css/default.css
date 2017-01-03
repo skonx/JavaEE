@@ -84,6 +84,11 @@ a:hover
     background-color: darkseagreen;
 }
 
+.lnkpict{
+    font-family: cursive;
+    background-color: orange;
+}
+
 .evens_odds{
     font-family: cursive;
     background-color: lightskyblue;

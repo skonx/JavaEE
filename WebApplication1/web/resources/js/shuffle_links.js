@@ -5,7 +5,7 @@
 if (typeof sl === 'undefined') {
     var sl = {
 
-        delay: 5000,
+        delay: 10000,
 
         selector: 'a',
 
@@ -81,5 +81,4 @@ if (typeof sl === 'undefined') {
     alert("ERROR : 'sl' namespace in shuffle_links.js already exists !");
 }
 
-sl.delay = 3000;
 sl.start();
