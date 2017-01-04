@@ -6,6 +6,7 @@
 package fr.trendev.web;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
@@ -13,13 +14,17 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -45,6 +50,7 @@ public class ImageResource {
             getProperty(
                     "user.home"), "Documents");
 
+    //private final static java.nio.file.Path TRG_FOLDER = 
     /**
      * A set of extension supported and controlled by this REST Web Service
      */
@@ -110,6 +116,29 @@ public class ImageResource {
                     getMessage()).build();
         }
 
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response savePicture(InputStream is,
+            @HeaderParam("Content-Type") String ct) {
+        logger.log(Level.INFO, "REST Web Service : POST request");
+        try {
+            //should be not the expected value
+            logger.log(Level.INFO, "Content-Type : {0}", ct);
+
+            //just pump the stream
+            byte[] buffer = new byte[2048];
+            while (is.read(buffer) != -1) {
+                //do nothing, just pump...
+            }
+
+            //save the stream (request content) into a temporary file
+            //Files.copy(is, SRC_FOLDER.resolve("tmp.txt"),StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            Response.serverError().entity(ex.getMessage()).build();
+        }
+        return Response.ok().build();
     }
 
 }
