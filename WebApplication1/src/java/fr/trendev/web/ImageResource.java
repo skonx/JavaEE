@@ -64,9 +64,7 @@ public class ImageResource {
     @Produces({"image/jpeg", "image/png"})
     public Response getPicture(@PathParam("name") String filename,
             @PathParam("ext") String ext,
-            @Context Request request)
-            throws
-            IOException {
+            @Context Request request) {
 
         //check if the extension is known and supported for this method
         if (!Arrays.asList(exts).contains(ext)) {
@@ -80,30 +78,38 @@ public class ImageResource {
         java.nio.file.Path dest = SRC_FOLDER.resolve(filename);
 
         if (!Files.exists(dest)) {
-            throw new WebApplicationException(Status.NOT_FOUND);
+            return Response.status(Status.NOT_FOUND).build();
         }
 
-        CacheControl cc = new CacheControl();
-        cc.setPrivate(true);
+        try {
+            CacheControl cc = new CacheControl();
+            cc.setPrivate(true);
 
-        Instant instant = Files.getLastModifiedTime(dest).toInstant();
-        Date lastModifiedTime = Date.from(instant);
+            Instant instant = Files.getLastModifiedTime(dest).toInstant();
+            Date lastModifiedTime = Date.from(instant);
 
-        Response.ResponseBuilder builder = request.evaluatePreconditions(
-                lastModifiedTime);
+            Response.ResponseBuilder builder = request.evaluatePreconditions(
+                    lastModifiedTime);
 
-        if (builder == null) {
-            logger.log(Level.INFO, "{0} has changed or has never been cached",
-                    filename);
-            builder = Response.ok(Files.
-                    newInputStream(dest), "image/" + ext);
-            builder.lastModified(lastModifiedTime);
+            if (builder == null) {
+                logger.log(Level.INFO,
+                        "{0} has changed or has never been cached",
+                        filename);
+                //create a response with the inputstream and the picture type
+                builder = Response.ok(Files.
+                        newInputStream(dest), "image/" + ext);
+                builder.lastModified(lastModifiedTime);
+            }
+
+            builder.cacheControl(cc);
+
+            return builder.build();
+
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.
+                    getMessage()).build();
         }
 
-        //create a response with the inputstream and the picture type
-        builder.cacheControl(cc);
-
-        return builder.build();
     }
 
 }
