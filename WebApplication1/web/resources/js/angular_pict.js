@@ -1,7 +1,7 @@
 var app = angular.module("pictTest", []);
 
 app.controller("ImgSrcCtrl", function ($scope) {
-    $scope.pict = 'photo-profil-2016.jpg';
+    $scope.pict = 'f8d5a1b7-e30a-4765-bc9e-5e3bf63ef04f.jpg';
     var path = "http://localhost:8080/WebApplication1/webresources/images/";
 
     /**

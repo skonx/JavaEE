@@ -24,7 +24,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -91,14 +90,14 @@ public class ImageResource {
         if (!Arrays.asList(exts).contains(ext)) {
             logger.log(Level.WARNING,
                     ".{0} is not a supported extension for a picture", ext);
-            throw new WebApplicationException(Status.NOT_FOUND);
+            return Response.status(Status.NOT_FOUND).build();
         }
 
         //open a path to the required file
         filename = filename.concat(".").concat(ext);
-        java.nio.file.Path dest = SRC_FOLDER.resolve(filename);
+        java.nio.file.Path file = VAULT_FOLDER.resolve(filename);
 
-        if (!Files.exists(dest)) {
+        if (!Files.exists(file)) {
             logger.log(Level.WARNING, "File \"{0}\" cannot be found!", filename);
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -107,7 +106,7 @@ public class ImageResource {
             CacheControl cc = new CacheControl();
             cc.setPrivate(true);
 
-            Instant instant = Files.getLastModifiedTime(dest).toInstant();
+            Instant instant = Files.getLastModifiedTime(file).toInstant();
             Date lastModifiedTime = Date.from(instant);
 
             Response.ResponseBuilder builder = request.evaluatePreconditions(
@@ -119,7 +118,7 @@ public class ImageResource {
                         filename);
                 //create a response with the inputstream and the picture type
                 builder = Response.ok(Files.
-                        newInputStream(dest), "image/" + ext);
+                        newInputStream(file), "image/" + ext);
                 builder.lastModified(lastModifiedTime);
             }
 
@@ -131,7 +130,6 @@ public class ImageResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.
                     getMessage()).build();
         }
-
     }
 
     @POST
@@ -206,5 +204,4 @@ public class ImageResource {
         return UUID.randomUUID().toString() + "."
                 + (ct.equals("image/jpeg") ? "jpg" : "png");
     }
-
 }
