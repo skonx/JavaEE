@@ -1,13 +1,13 @@
 var app = angular.module("pictTest", []);
 
 app.controller("ImgSrcCtrl", function ($scope) {
-    $scope.pict = 'f8d5a1b7-e30a-4765-bc9e-5e3bf63ef04f.jpg';
+    $scope.pict = '';
     var path = "http://localhost:8080/WebApplication1/webresources/images/";
 
     /**
      * By default, the picture will be cached on the client side.
      */
-    $scope.picturl = path + $scope.pict;
+    //$scope.picturl = path + $scope.pict;
 
     /**
      * 
@@ -15,7 +15,8 @@ app.controller("ImgSrcCtrl", function ($scope) {
      * the picture will be cached on the client side
      */
     $scope.setUrl = function () {
-        $scope.picturl = path + $scope.pict;
+        if ($scope.pict)
+            $scope.picturl = path + $scope.pict;
     };
 
     var fileInput = document.querySelector('#file');
@@ -52,9 +53,11 @@ app.controller("ImgSrcCtrl", function ($scope) {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status < 400)
+                if (xhr.status < 400) {
                     alert('Upload is over ! ');
-                else {
+                    console.log("xhr.responseText = " + xhr.responseText);
+                    $scope.pict = xhr.responseText;
+                } else {
                     var errmsg = '[ Error ] Upload failed\n';
                     errmsg += 'Status : ' + xhr.status + ' ' + xhr.statusText;
                     alert(errmsg);

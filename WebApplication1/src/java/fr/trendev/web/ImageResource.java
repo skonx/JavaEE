@@ -48,17 +48,14 @@ public class ImageResource {
     private static final Logger logger =
             Logger.getLogger(ImageResource.class.getCanonicalName());
 
+    private final static String VAULT_NAME = "vault";
+
     /**
      * The path to the source folder containing the pictures
      */
     private final static java.nio.file.Path SRC_FOLDER = Paths.get(System.
             getProperty(
-                    "user.home"), "Documents");
-
-    private final static String VAULT_NAME = "vault";
-
-    private final static java.nio.file.Path VAULT_FOLDER = SRC_FOLDER.resolve(
-            VAULT_NAME);
+                    "user.home"), "Documents", VAULT_NAME);
 
     private final static java.nio.file.Path TMP_FOLDER = Paths.get(System.
             getProperty(
@@ -95,7 +92,7 @@ public class ImageResource {
 
         //open a path to the required file
         filename = filename.concat(".").concat(ext);
-        java.nio.file.Path file = VAULT_FOLDER.resolve(filename);
+        java.nio.file.Path file = SRC_FOLDER.resolve(filename);
 
         if (!Files.exists(file)) {
             logger.log(Level.WARNING, "File \"{0}\" cannot be found!", filename);
@@ -161,11 +158,11 @@ public class ImageResource {
                 filename,
                 size});
 
-            if (!Files.exists(VAULT_FOLDER)) {
-                Files.createDirectory(VAULT_FOLDER);
+            if (!Files.exists(SRC_FOLDER)) {
+                Files.createDirectory(SRC_FOLDER);
             }
 
-            Files.move(file, VAULT_FOLDER.resolve(file.getFileName()),
+            Files.move(file, SRC_FOLDER.resolve(file.getFileName()),
                     StandardCopyOption.REPLACE_EXISTING);
 
         } catch (IOException ex1) {
@@ -201,6 +198,7 @@ public class ImageResource {
     }
 
     private static String generateRandomName(String ct) {
+
         return UUID.randomUUID().toString() + "."
                 + (ct.equals("image/jpeg") ? "jpg" : "png");
     }
