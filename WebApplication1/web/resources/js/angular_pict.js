@@ -3,6 +3,7 @@ var app = angular.module("pictTest", []);
 app.controller("ImgSrcCtrl", function ($scope) {
     $scope.pict = '';
     var path = "http://localhost:8080/WebApplication1/webresources/images/";
+    $scope.uploading = false;
 
     /**
      * By default, the picture will be cached on the client side.
@@ -21,7 +22,6 @@ app.controller("ImgSrcCtrl", function ($scope) {
 
     var fileInput = document.querySelector('#file');
     var progress = document.querySelector('#progress');
-    $scope.uploading = false;
 
     fileInput.addEventListener('change', function () {
 
