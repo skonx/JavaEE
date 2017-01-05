@@ -1,6 +1,7 @@
 var app = angular.module("pictTest", []);
 
 app.controller("ImgSrcCtrl", function ($scope) {
+    $scope.uploading = false;
     $scope.pict = '';
     var path = "http://localhost:8080/WebApplication1/webresources/images/";
 
@@ -12,7 +13,6 @@ app.controller("ImgSrcCtrl", function ($scope) {
     $scope.setUrl = function () {
         if ($scope.pict)
             $scope.picturl = path + $scope.pict;
-        console.log("URL updated and $scope.pict = [" + $scope.pict + "]");
     };
 });
 
@@ -20,15 +20,12 @@ app.directive('trdvUploader', [function () {
         return {
             restrict: 'E',
             transclude: true,
-            scope: {
-                pict: '=picture',
-                fn: '&callbackFn'
-            },
+            scope: false,
             templateUrl: 'resources/template/uploader.html',
             link: function (scope, element, attrs, controller, transcludeFn) {
-                scope.uploading = false;
-                scope.pict = '8e22e2e1-e52b-4e02-a630-45a5c0e03d79.png';
-                scope.fn();
+                scope.uploading = true;
+                scope.pict = '488d1709-3394-4de0-8c65-7521d796001d.jpg';
+                scope.setUrl();
             }
         };
     }]);
