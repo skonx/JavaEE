@@ -64,9 +64,9 @@ app.controller("ImgSrcCtrl", function ($scope) {
             }
         };
 
-        var form = new FormData();
-        form.append('file', fileInput.files[0]);
+        /*var form = new FormData();
+         form.append('file', fileInput.files[0]);*/
 
-        xhr.send(form);
+        xhr.send(fileInput.files[0]);
     });
 });

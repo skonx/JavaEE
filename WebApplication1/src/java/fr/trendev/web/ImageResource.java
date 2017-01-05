@@ -7,11 +7,14 @@ package fr.trendev.web;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
@@ -24,10 +27,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * REST Web Service : Load a picture from the Documents folder of the user
@@ -37,11 +40,14 @@ import javax.ws.rs.core.Response.Status;
 @Path("images")
 public class ImageResource {
 
+    @Context
+    UriInfo info;
+
     /**
      * Default logger
      */
-    private static final Logger logger
-            = Logger.getLogger(ImageResource.class.getCanonicalName());
+    private static final Logger logger =
+            Logger.getLogger(ImageResource.class.getCanonicalName());
 
     /**
      * The path to the source folder containing the pictures
@@ -49,6 +55,15 @@ public class ImageResource {
     private final static java.nio.file.Path SRC_FOLDER = Paths.get(System.
             getProperty(
                     "user.home"), "Documents");
+
+    private final static String VAULT_NAME = "vault";
+
+    private final static java.nio.file.Path VAULT_FOLDER = SRC_FOLDER.resolve(
+            VAULT_NAME);
+
+    private final static java.nio.file.Path TMP_FOLDER = Paths.get(System.
+            getProperty(
+                    "user.home"), "Deposit_tmp");
 
     //private final static java.nio.file.Path TRG_FOLDER = 
     /**
@@ -84,6 +99,7 @@ public class ImageResource {
         java.nio.file.Path dest = SRC_FOLDER.resolve(filename);
 
         if (!Files.exists(dest)) {
+            logger.log(Level.WARNING, "File \"{0}\" cannot be found!", filename);
             return Response.status(Status.NOT_FOUND).build();
         }
 
@@ -119,26 +135,76 @@ public class ImageResource {
     }
 
     @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response savePicture(InputStream is,
-            @HeaderParam("Content-Type") String ct) {
-        logger.log(Level.INFO, "REST Web Service : POST request");
+    @Consumes({"image/jpeg", "image/png"})
+    public Response savePicture(@HeaderParam("Content-Type") String ct,
+            @HeaderParam("Content-Length") long length,
+            InputStream is) {
+        logger.log(Level.INFO, "REST Web Service {0}: POST request",
+                ImageResource.class.getCanonicalName());
+
+        String filename = generateRandomName(ct);
+
         try {
             //should be not the expected value
             logger.log(Level.INFO, "Content-Type : {0}", ct);
+            logger.log(Level.INFO, "Content-Length : {0}", length);
 
-            //just pump the stream
-            byte[] buffer = new byte[2048];
-            while (is.read(buffer) != -1) {
-                //do nothing, just pump...
+            if (!Files.exists(TMP_FOLDER)) {
+                Files.createDirectory(TMP_FOLDER);
             }
 
             //save the stream (request content) into a temporary file
-            //Files.copy(is, SRC_FOLDER.resolve("tmp.txt"),StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            Response.serverError().entity(ex.getMessage()).build();
+            java.nio.file.Path file = TMP_FOLDER.resolve(filename);
+
+            long size = Files.copy(is, file,
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            logger.log(Level.INFO, "Size of {0} = {1} Bytes", new Object[]{
+                filename,
+                size});
+
+            if (!Files.exists(VAULT_FOLDER)) {
+                Files.createDirectory(VAULT_FOLDER);
+            }
+
+            Files.move(file, VAULT_FOLDER.resolve(file.getFileName()),
+                    StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException ex1) {
+            try {
+                is.close();
+            } catch (IOException ex2) {
+                logger.log(Level.SEVERE,
+                        "Error closing the inputstream in the REST Web Service {0}:\n{1}",
+                        new Object[]{ImageResource.class.getCanonicalName(),
+                            ex2.getMessage()});
+            } finally {
+                Response.serverError().entity(ex1.getMessage()).build();
+            }
         }
-        return Response.ok().build();
+
+        return Response.status(Status.CREATED).entity(filename).location(URI.
+                create(info.getPath() + "/"
+                        + VAULT_NAME + "/"
+                        + filename)).build();
+    }
+
+    private static long pumpStream(InputStream is) throws IOException {
+        byte[] buffer = new byte[2048];
+
+        int count = 0;
+        int b;
+
+        while ((b = is.read(buffer)) != -1) {
+            count += b;
+        }
+
+        return count;
+    }
+
+    private static String generateRandomName(String ct) {
+        return UUID.randomUUID().toString() + "."
+                + (ct.equals("image/jpeg") ? "jpg" : "png");
     }
 
 }
