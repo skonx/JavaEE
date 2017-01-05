@@ -15,11 +15,7 @@ and open the template in the editor.
     <body ng-app="pictTest">
         <a href="index.html">Back</a>
         <div ng-controller="ImgSrcCtrl">
-            <div id="upload">
-                <label>Picture to upload : </label>
-                <input id="file" type="file"/>
-                <progress id="progress" ng-show="uploading"></progress>
-            </div>
+            <trdv-uploader picture="pict" callback-fn="setUrl()"></trdv-uploader>
             <div id="download">
                 <label>Picture to Download:</label>
                 <input type="text" ng-model="pict" ng-blur="setUrl()">
