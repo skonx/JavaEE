@@ -1,9 +1,9 @@
 {
     "elements": {
-        "trdv-uploader": {
+        "tdv-uploader": {
             "attributes": {
-                "picture": {},
-                "callback-fn": {}
+                "path": {},
+                "seturl": {}
             }
         }
     },

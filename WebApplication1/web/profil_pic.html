@@ -15,10 +15,10 @@ and open the template in the editor.
     <body ng-app="pictTest">
         <a href="index.html">Back</a>
         <div ng-controller="ImgSrcCtrl">
-            <trdv-uploader picture="pict" callback-fn="setUrl()"></trdv-uploader>
+            <tdv-uploader path="path" seturl="setUrl(pict)"></tdv-uploader>
             <div id="download">
                 <label>Picture to Download:</label>
-                <input type="text" ng-model="pict" ng-blur="setUrl()">
+                <input type="text" ng-model="pict" ng-blur="setUrl(pict)">
                 <p>Downloaded picture : {{pict}}</p>
                 <img ng-src="{{picturl}}" alt="{{pict}}"/>
             </div>

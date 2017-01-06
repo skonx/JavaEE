@@ -1,31 +1,61 @@
 var app = angular.module("pictTest", []);
 
 app.controller("ImgSrcCtrl", function ($scope) {
-    $scope.uploading = false;
     $scope.pict = '';
-    var path = "http://localhost:8080/WebApplication1/webresources/images/";
+    $scope.path = 'webresources/images/';
+    $scope.picturl = '';
 
-    /**
-     * 
-     * If the path include the query parameter cache, 
-     * the picture will be cached on the client side
-     */
-    $scope.setUrl = function () {
-        if ($scope.pict)
-            $scope.picturl = path + $scope.pict;
+    $scope.setUrl = function (pict) {
+        $scope.pict = pict;
+        $scope.picturl = $scope.path + $scope.pict;
     };
 });
 
-app.directive('trdvUploader', [function () {
+app.directive('tdvUploader', ['$http', function ($http) {
         return {
             restrict: 'E',
             transclude: true,
-            scope: false,
+            scope: {
+                path: '=',
+                seturl: '&'
+            },
             templateUrl: 'resources/template/uploader.html',
-            link: function (scope, element, attrs, controller, transcludeFn) {
-                scope.uploading = true;
-                scope.pict = '488d1709-3394-4de0-8c65-7521d796001d.jpg';
-                scope.setUrl();
+            //link: function (scope, element, attrs, controller, transcludeFn)
+            link: function (scope, element) {
+                scope.uploading = false;
+
+                scope.switch_uploading = function () {
+                    scope.uploading = !scope.uploading;
+                };
+
+                element.on('change', function () {
+                    scope.$apply(function () {
+                        scope.switch_uploading();
+                    });
+
+                    var fileInput = document.querySelector('#file');
+                    var progress = document.querySelector('#progress');
+
+                    $http({
+                        method: 'POST',
+                        url: scope.path,
+                        headers: {//remove the default headers (application/json...)
+                            'Content-Type': undefined
+                        },
+                        data: fileInput.files[0]
+                    }).then(
+                            function (response) {
+                                scope.switch_uploading();
+                                scope.seturl({pict: response.data});
+                            },
+                            function (response) {
+                                scope.switch_uploading();
+                                var errmsg = '[ Error ] Upload failed\n';
+                                errmsg += 'Status : ' + response.status + ' ' + response.statusText;
+                                alert(errmsg);
+                            }
+                    );
+                });
             }
         };
     }]);
