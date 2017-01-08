@@ -42,6 +42,12 @@ app.directive('tdvUploader', ['$http', function ($http) {
                         headers: {//remove the default headers (application/json...)
                             'Content-Type': undefined
                         },
+                        uploadEventHandlers: {
+                                    progress: function(e) {
+                                        progress.value = e.loaded;
+                                        progress.max = e.total;
+                                    }
+                        },
                         data: fileInput.files[0]
                     }).then(
                             function (response) {
