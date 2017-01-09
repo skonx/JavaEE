@@ -36,32 +36,57 @@ app.directive('tdvUploader', ['$http', function ($http) {
                     var fileInput = document.querySelector('#file');
                     var progressbar = document.querySelector('#progress');
 
-                    $http({
-                        method: 'POST',
-                        url: scope.path,
-                        headers: {//remove the default headers (application/json...)
-                            'Content-Type': undefined
-                        },
-                        //update progress bar status
-                        uploadEventHandlers: {
-                            progress: function (e) {
-                                progressbar.value = e.loaded;
-                                progressbar.max = e.total;
-                            }
-                        },
-                        data: fileInput.files[0]
-                    }).then(
-                            function (response) {
-                                scope.switch_uploading();
-                                scope.seturl({pict: response.data});
+                    var total = p = 0;
+
+                    //compute the total size 
+                    for (var i = 0; i < fileInput.files.length; i++) {
+                        total += fileInput.files[i].size;
+                    }
+
+                    progressbar.max = total;
+
+                    for (var i = 0; i < fileInput.files.length; i++) {
+                        filename = fileInput.files[i].name;
+
+                        $http({
+                            method: 'POST',
+                            url: scope.path,
+                            headers: {//remove the default headers (application/json...)
+                                'Content-Type': undefined
                             },
-                            function (response) {
-                                scope.switch_uploading();
-                                var errmsg = '[ Error ] Upload failed\n';
-                                errmsg += 'Status : ' + response.status + ' ' + response.statusText;
-                                alert(errmsg);
-                            }
-                    );
+                            //update progress bar status
+                            uploadEventHandlers: {
+                                progress: (function (index) {
+                                    return function (e) {
+
+                                        console.log("[" + fileInput.files[index].name + "] - progress : " + ((e.loaded * 100) / e.total) + " % ");
+                                        //p += (e.total - e.loaded);
+
+                                        if (e.loaded === e.total) {
+                                            p += e.total;
+                                        }
+
+                                        progressbar.value = e.loaded + p;
+
+                                        //if all POST are done, hide the progress bar
+                                        if (p === total)
+                                            scope.switch_uploading();
+                                    };
+                                })(i)
+                            },
+                            data: fileInput.files[i]
+                        }).then(
+                                function (response) {
+                                    scope.seturl({pict: response.data});
+                                },
+                                function (response) {
+                                    scope.switch_uploading();
+                                    var errmsg = '[ Error ] Upload failed : ' + fileInput.files[i].name + '\n';
+                                    errmsg += 'Status : ' + response.status + ' ' + response.statusText;
+                                    alert(errmsg);
+                                }
+                        );
+                    }
                 });
             }
         };
