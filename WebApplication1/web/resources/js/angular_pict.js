@@ -11,75 +11,106 @@ app.controller("ImgSrcCtrl", function ($scope) {
     };
 });
 
-app.directive('tdvUploader', ['$http', function ($http) {
+app.directive('tdvUploader', ['$http', '$interval', function ($http, $interval) {
         return {
             restrict: 'E',
             transclude: true,
+            controller: function ($scope) {
+                $scope.uploading = false;
+
+                $scope.switch_uploading = function () {
+                    $scope.uploading = !$scope.uploading;
+                };
+
+                /*compute the total size and init the progress_status array*/
+                $scope.init_status = function (fileInput, progress_status) {
+                    var total = 0;
+                    for (var i = 0; i < fileInput.files.length; i++) {
+                        total += fileInput.files[i].size;
+                        progress_status[i] = {
+                            load: 0, /*delta between the previous and current event*/
+                            loaded: 0, /*previous e.loaded value*/
+                            total: fileInput.files[i].size,
+                            name: fileInput.files[i].name
+                        };
+                    }
+                    return total;/*total amount of data to POST*/
+                };
+
+            },
             scope: {
-                path: '=',
-                seturl: '&'
+                path: '=', /*server url*/
+                seturl: '&'/*the url update function*/
             },
             templateUrl: 'resources/template/uploader.html',
             //link: function (scope, element, attrs, controller, transcludeFn)
             link: function (scope, element) {
-                scope.uploading = false;
-
-                scope.switch_uploading = function () {
-                    scope.uploading = !scope.uploading;
-                };
 
                 element.on('change', function () {
-                    scope.$apply(function () {
-                        scope.switch_uploading();
-                    });
+                    scope.switch_uploading();
 
                     var fileInput = document.querySelector('#file');
                     var progressbar = document.querySelector('#progress');
 
-                    var total = p = 0;
+                    /*Init the status properties*/
+                    var overall_progress = 0;
+                    var progress_status = [];
+                    var total = scope.init_status(fileInput, progress_status);
 
-                    //compute the total size 
-                    for (var i = 0; i < fileInput.files.length; i++) {
-                        total += fileInput.files[i].size;
-                    }
-
+                    /*Set the max value of the progress bar*/
+                    console.log('total=' + total);
                     progressbar.max = total;
+                    progressbar.value = 0;
 
+                    var refresh_progressbar = function () {
+                        console.log('progressbar REFRESH');
+                        progressbar.value = overall_progress;
+                    };
+
+                    /*Refresh the progressbar every 200ms*/
+                    var interval = $interval(refresh_progressbar, 200);
+
+                    /*Asynchronous POST of each file */
                     for (var i = 0; i < fileInput.files.length; i++) {
-                        filename = fileInput.files[i].name;
-
+                        //should be moved in  dedicated service...
                         $http({
                             method: 'POST',
                             url: scope.path,
-                            headers: {//remove the default headers (application/json...)
+                            headers: {
+                                /*remove the default headers (application/json...)*/
                                 'Content-Type': undefined
                             },
-                            //update progress bar status
+                            /*update progress bar status*/
                             uploadEventHandlers: {
                                 progress: (function (index) {
                                     return function (e) {
 
-                                        console.log("[" + fileInput.files[index].name + "] - progress : " + ((e.loaded * 100) / e.total) + " % ");
-                                        //p += (e.total - e.loaded);
-
-                                        if (e.loaded === e.total) {
-                                            p += e.total;
-                                        }
-
-                                        progressbar.value = e.loaded + p;
+                                        //console.log("[" + progress_status[index].name + "] - progress : " + ((e.loaded * 100) / e.total) + " % ");
+                                        /*Compute the delta*/
+                                        progress_status[index].load = e.loaded - progress_status[index].loaded;
+                                        /*Save the last progression*/
+                                        progress_status[index].loaded = e.loaded;
+                                        /*Update the overall progression with the delta*/
+                                        overall_progress += progress_status[index].load;
 
                                         //if all POST are done, hide the progress bar
-                                        if (p === total)
-                                            scope.switch_uploading();
+                                        if (overall_progress === total) {
+                                            scope.switch_uploading();//hide the progressbar
+                                            $interval.cancel(interval);//stop the recurrent timer
+                                        }
                                     };
-                                })(i)
+                                })(i)/*Closure to protect i value*/
                             },
                             data: fileInput.files[i]
                         }).then(
                                 function (response) {
-                                    scope.seturl({pict: response.data});
+                                    /* Set the URL if there is a single file to POST. 
+                                     * Otherwise, lost GET requests should be expected... 
+                                     * ... and broken pipes on the server*/
+                                    if (fileInput.files.length === 1)
+                                        scope.seturl({pict: response.data});
                                 },
-                                function (response) {
+                                function (response) {/*Error callback*/
                                     scope.switch_uploading();
                                     var errmsg = '[ Error ] Upload failed : ' + fileInput.files[i].name + '\n';
                                     errmsg += 'Status : ' + response.status + ' ' + response.statusText;
@@ -92,6 +123,7 @@ app.directive('tdvUploader', ['$http', function ($http) {
         };
     }]);
 
+/*javascript code*/
 /*var fileInput = document.querySelector('#file');
  var progress = document.querySelector('#progress');
  
