@@ -34,7 +34,7 @@ app.directive('tdvUploader', ['$http', function ($http) {
                     });
 
                     var fileInput = document.querySelector('#file');
-                    var progress = document.querySelector('#progress');
+                    var progressbar = document.querySelector('#progress');
 
                     $http({
                         method: 'POST',
@@ -42,11 +42,12 @@ app.directive('tdvUploader', ['$http', function ($http) {
                         headers: {//remove the default headers (application/json...)
                             'Content-Type': undefined
                         },
+                        //update progress bar status
                         uploadEventHandlers: {
-                                    progress: function(e) {
-                                        progress.value = e.loaded;
-                                        progress.max = e.total;
-                                    }
+                            progress: function (e) {
+                                progressbar.value = e.loaded;
+                                progressbar.max = e.total;
+                            }
                         },
                         data: fileInput.files[0]
                     }).then(

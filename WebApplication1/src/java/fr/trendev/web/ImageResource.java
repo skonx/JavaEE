@@ -55,7 +55,7 @@ public class ImageResource {
      */
     private final static java.nio.file.Path SRC_FOLDER = Paths.get(System.
             getProperty(
-                    "user.home"), "Documents", VAULT_NAME);
+                    "user.home"), /*"Documents",*/ VAULT_NAME);
 
     private final static java.nio.file.Path TMP_FOLDER = Paths.get(System.
             getProperty(
