@@ -9,6 +9,7 @@
         "tdv-preview": {
             "attributes": {
                 "path": {},
+                "service": {},
                 "seturl": {}
             }
         }

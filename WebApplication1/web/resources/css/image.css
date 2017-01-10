@@ -10,26 +10,51 @@ and open the template in the editor.
 
 div{
     background-color: lightgrey; 
-    width: 50%;
 }
 
 #upload{
     border : 2px solid lightgreen;
-    width: 100%;
 }
 
 #download{
     border : 2px solid lightsalmon;
-    width: 100%;
+    flex: 1;
 }
 
 #preview{
-    border : 2px solid lightblue;
-    width: 100%;
+    border : 2px solid darkorchid;
+    width: 50%;
+    height: 500px;
 }
 
 img{
     max-height: 150px;
     max-width: 150px;
+    image-orientation: from-image;
+}
+
+#imgprev{
+    max-height: 350px;
+    max-width: 350px;
+}
+
+#preview_header{
+    background-color: lightsteelblue;
+}
+
+#preview_content{
+    overflow: scroll;
+    max-height: 400px;
+}
+
+#container{
+    display: flex;
+    align-items: stretch;
+}
+
+#fn{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
 

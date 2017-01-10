@@ -145,6 +145,9 @@ public class ImageResource {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPicturesList() {
+
+        logger.log(Level.INFO, "Providing the pictures list");
+
         if (!Files.exists(SRC_FOLDER)) {
             logger.log(Level.WARNING, "The source folder cannot be found!!!");
             return Response.status(Status.NOT_FOUND).build();
@@ -164,7 +167,7 @@ public class ImageResource {
                     add(e.getFileName().toString()));
         } catch (IOException ex) {
             logger.log(Level.SEVERE,
-                    "Error occured while listing the pictures folder : !!!\n{0}",
+                    "Error occured while listing the pictures folder {0}: !!!",
                     ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.
                     getMessage()).build();
@@ -173,7 +176,7 @@ public class ImageResource {
         JsonObjectBuilder value = factory.createObjectBuilder()
                 .add("list", list);
 
-        return Response.status(Status.FOUND).entity(value.build()).build();
+        return Response.ok(value.build()).build();
     }
 
     /**

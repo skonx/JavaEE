@@ -15,15 +15,19 @@ and open the template in the editor.
     </head>
     <body ng-app="pictTest">
         <a href="index.html">Back</a>
-        <div ng-controller="ImgSrcCtrl">
-            <tdv-uploader path="path" seturl="setUrl(pict)"></tdv-uploader>
-            <div id="download">
-                <label>Picture to Download:</label>
-                <input type="text" ng-model="pict" ng-blur="setUrl(pict)">
-                <p>Downloaded picture : {{pict}}</p>
-                <img ng-src="{{picturl}}" alt="{{pict}}"/>
+        <div id="container" ng-controller="ImgSrcCtrl">
+            <div id="fn">
+                <tdv-uploader path="path" seturl="setUrl(pict)"></tdv-uploader>
+                <div id="download">
+                    <label>Picture to Download:</label>
+                    <input type="text" ng-model="pict" ng-blur="setUrl(pict)">
+                    <p>Downloaded picture : {{pict}}</p>
+                    <img id="imgprev" ng-src="{{picturl}}" alt="{{pict}}"/>
+                </div>
             </div>
-            <tdv-preview path="path" seturl="setUrl(pict)"></tdv-preview>
+            <div id="preview">
+                <tdv-preview path="path" service="list" seturl="setUrl(pict)"></tdv-preview>
+            </div>
         </div>
     </body>
 </html>
