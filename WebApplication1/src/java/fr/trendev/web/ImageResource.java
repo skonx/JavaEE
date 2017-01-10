@@ -128,6 +128,8 @@ public class ImageResource {
                     getMessage()).build();
         }
     }
+    
+    //TODO : JAX-RS getPicturesList
 
     @POST
     @Consumes({"image/jpeg", "image/png"})
