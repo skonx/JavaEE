@@ -8,6 +8,7 @@ package fr.trendev.web;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -17,6 +18,10 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -26,6 +31,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -128,31 +134,46 @@ public class ImageResource {
         }
     }
 
-    //TODO : JAX-RS getPicturesList
+    /**
+     * Provides a list with the names of the stored pictures
+     *
+     * @return if successful, returns a JSON object including the list with the
+     * names of the pictures
+     *
+     */
     @GET
     @Path("list")
-    @Produces("text/html")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getPicturesList() {
         if (!Files.exists(SRC_FOLDER)) {
             logger.log(Level.WARNING, "The source folder cannot be found!!!");
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        StringBuilder sb = new StringBuilder();
+        JsonBuilderFactory factory = Json.createBuilderFactory(null);
+
+        JsonArrayBuilder list = factory.createArrayBuilder();//Json.createArrayBuilder();
+
+        DirectoryStream.Filter<java.nio.file.Path> filter = e -> (e.
+                getFileName().toString().endsWith(".jpg")
+                || e.getFileName().
+                        toString().endsWith(".png"));
 
         try {
-            sb.append(Files.list(SRC_FOLDER).count());
+            Files.newDirectoryStream(SRC_FOLDER, filter).forEach(e -> list.
+                    add(e.getFileName().toString()));
         } catch (IOException ex) {
-            Logger.getLogger(ImageResource.class.getName()).
-                    log(Level.SEVERE,
-                            "Error occured during picture list export : {0}",
-                            ex.getMessage());
+            logger.log(Level.SEVERE,
+                    "Error occured while listing the pictures folder : !!!\n{0}",
+                    ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.
                     getMessage()).build();
-
         }
 
-        return Response.status(Status.FOUND).entity(sb.toString()).build();
+        JsonObjectBuilder value = factory.createObjectBuilder()
+                .add("list", list);
+
+        return Response.status(Status.FOUND).entity(value.build()).build();
     }
 
     /**
