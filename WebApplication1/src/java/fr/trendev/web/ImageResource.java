@@ -8,6 +8,7 @@ package fr.trendev.web;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -17,6 +18,10 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -26,6 +31,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -68,13 +74,12 @@ public class ImageResource {
     private final static String[] exts = {"jpeg", "jpg", "png"};
 
     /**
-     * Provide a source stream to a specified picture.
+     * Provides a source stream to a specified picture.
      *
      * @param filename the picture to display.
      * @param ext the extension of the picture.
      * @param request the HTTP request
      * @return A HTTP response with an InputStream and the picture type.
-     * @throws IOException if something goes wrong reading the file.
      */
     @GET
     @Path("{name}.{ext}")
@@ -83,14 +88,14 @@ public class ImageResource {
             @PathParam("ext") String ext,
             @Context Request request) {
 
-        //check if the extension is known and supported for this method
+        //checks if the extension is known and supported for this method
         if (!Arrays.asList(exts).contains(ext)) {
             logger.log(Level.WARNING,
                     ".{0} is not a supported extension for a picture", ext);
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        //open a path to the required file
+        //opens a path to the required file
         filename = filename.concat(".").concat(ext);
         java.nio.file.Path file = SRC_FOLDER.resolve(filename);
 
@@ -113,7 +118,7 @@ public class ImageResource {
                 logger.log(Level.INFO,
                         "{0} has changed or has never been cached",
                         filename);
-                //create a response with the inputstream and the picture type
+                //creates a response with the inputstream and the picture type
                 builder = Response.ok(Files.
                         newInputStream(file), "image/" + ext);
                 builder.lastModified(lastModifiedTime);
@@ -129,6 +134,57 @@ public class ImageResource {
         }
     }
 
+    /**
+     * Provides a list with the names of the stored pictures
+     *
+     * @return if successful, returns a JSON object including the list with the
+     * names of the pictures
+     *
+     */
+    @GET
+    @Path("list")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPicturesList() {
+        if (!Files.exists(SRC_FOLDER)) {
+            logger.log(Level.WARNING, "The source folder cannot be found!!!");
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
+        JsonBuilderFactory factory = Json.createBuilderFactory(null);
+
+        JsonArrayBuilder list = factory.createArrayBuilder();//Json.createArrayBuilder();
+
+        DirectoryStream.Filter<java.nio.file.Path> filter = e -> (e.
+                getFileName().toString().endsWith(".jpg")
+                || e.getFileName().
+                        toString().endsWith(".png"));
+
+        try {
+            Files.newDirectoryStream(SRC_FOLDER, filter).forEach(e -> list.
+                    add(e.getFileName().toString()));
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE,
+                    "Error occured while listing the pictures folder : !!!\n{0}",
+                    ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.
+                    getMessage()).build();
+        }
+
+        JsonObjectBuilder value = factory.createObjectBuilder()
+                .add("list", list);
+
+        return Response.status(Status.FOUND).entity(value.build()).build();
+    }
+
+    /**
+     * Stores the provided picture in a tmp folder and then moves it to a vault
+     *
+     * @param ct the Content-Type of the HTTP POST Request, must be "image/jpeg"
+     * or "image/png"
+     * @param length the document's size
+     * @param is an inputstream provided by the document
+     * @return if successful, a response with the name of the new created file
+     */
     @POST
     @Consumes({"image/jpeg", "image/png"})
     public Response savePicture(@HeaderParam("Content-Type") String ct,
@@ -148,7 +204,7 @@ public class ImageResource {
                 Files.createDirectory(TMP_FOLDER);
             }
 
-            //save the stream (request content) into a temporary file
+            /*saves the stream (request content) into a temporary file*/
             java.nio.file.Path file = TMP_FOLDER.resolve(filename);
 
             long size = Files.copy(is, file,
@@ -162,6 +218,7 @@ public class ImageResource {
                 Files.createDirectory(SRC_FOLDER);
             }
 
+            /*moves the file to its vault*/
             Files.move(file, SRC_FOLDER.resolve(file.getFileName()),
                     StandardCopyOption.REPLACE_EXISTING);
 
@@ -184,6 +241,13 @@ public class ImageResource {
                         + filename)).build();
     }
 
+    /**
+     * Reads the bytes of an input stream
+     *
+     * @param is an input stream to pump
+     * @return the length of the input stream
+     * @throws IOException if an error occurs while reading in the input stream
+     */
     private static long pumpStream(InputStream is) throws IOException {
         byte[] buffer = new byte[2048];
 
@@ -197,6 +261,13 @@ public class ImageResource {
         return count;
     }
 
+    /**
+     * Generates a random name for the file, based on UUID.randomUUID(). Only
+     * supports jpg/png extensions.
+     *
+     * @param ct the Content-Type of the HTTP POST request
+     * @return
+     */
     private static String generateRandomName(String ct) {
 
         return UUID.randomUUID().toString() + "."

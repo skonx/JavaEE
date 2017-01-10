@@ -12,12 +12,24 @@ div{
     background-color: lightgrey; 
     width: 50%;
 }
+
 #upload{
     border : 2px solid lightgreen;
     width: 100%;
 }
+
 #download{
     border : 2px solid lightsalmon;
     width: 100%;
+}
+
+#preview{
+    border : 2px solid lightblue;
+    width: 100%;
+}
+
+img{
+    max-height: 150px;
+    max-width: 150px;
 }
 
