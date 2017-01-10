@@ -123,6 +123,24 @@ app.directive('tdvUploader', ['$http', '$interval', function ($http, $interval) 
         };
     }]);
 
+app.directive('tdvPreview', ['$http', '$interval', function ($http, $interval) {
+        return {
+            restrict: 'E',
+            transclude: true,
+            controller: function ($scope) {
+
+            },
+            scope: {
+                path: '=', /*server url*/
+                seturl: '&'/*the url update function*/
+            },
+            templateUrl: 'resources/template/preview.html',
+            //link: function (scope, element, attrs, controller, transcludeFn)
+            link: function (scope, element) {
+
+            }
+        };
+    }]);
 /*javascript code*/
 /*var fileInput = document.querySelector('#file');
  var progress = document.querySelector('#progress');
