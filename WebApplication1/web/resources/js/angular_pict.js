@@ -137,7 +137,8 @@ app.directive('tdvPreview', ['$http', '$interval', function ($http, $interval) {
             templateUrl: 'resources/template/preview.html',
             //link: function (scope, element, attrs, controller, transcludeFn)
             link: function (scope, element) {
-
+                var input = {"list": ["0876d8b2-2d28-40bc-8f7f-f7854851aa6a.jpg", "08eec9c2-2561-470c-a79e-fe3e6d1889ea.jpg", "0a05fb76-3ff0-4775-8504-cd359b14e2b2.jpg", "1c0b2202-562e-436f-8b0a-8cb8c19f7bc5.jpg", "1e1e3892-1d41-4772-9e54-93ca69b68216.jpg", "441430c1-0d8b-4ea1-910e-2df5390d92d1.jpg", "49653527-4cb6-441c-be85-f65ff53284ef.jpg", "51839831-c4cc-49c7-b95f-48c480ebfec9.jpg", "5c2d5cc2-9c84-4af6-8543-55ca623ef19a.jpg", "5cf40897-e28d-4484-9368-b63715ac5ef5.jpg", "652d0dd8-5e66-43f2-87dd-5c52849552d3.png", "681a0e19-1dc2-4e62-8d2a-1ca74b58f98e.jpg", "6a51b2ab-adb1-4280-ba1d-23eeb8adc2d5.jpg", "6ca779cd-169f-46e8-973f-eb5ff8c428df.jpg", "8490ee36-31e0-4dd3-87b9-c545b52155b1.jpg", "9535d7fd-67c4-4018-9d36-7c306660cbae.jpg", "9ccfdf08-c580-47e9-bc6b-b5116a9d2d13.jpg", "a306a14e-f211-4828-8b4a-d78675d667be.jpg", "a83652a8-642b-47fd-91fb-71d2f195078f.jpg", "a8a331a9-f3b4-41a3-84ef-5679ade21f72.jpg", "aa5ff488-73cb-4875-8c3b-712d978c5af8.jpg", "b098dcaf-cbad-455f-9ae5-49fc523bceba.jpg", "c02d9812-a4d0-47bd-a276-5be57bf31954.jpg", "c2ba0348-aed9-4772-8674-d6ca563c0274.jpg", "c3a5e575-f3b4-4c8b-897f-351f90688cf4.jpg", "c8f725d0-8d37-450a-a52d-ada9237b813c.jpg", "d321644f-1e68-4008-8942-c2b5e9b95175.jpg", "d81b2694-10f6-4cb5-97e5-c7b1449853ba.jpg", "dbb45499-9828-4509-b00f-983c05dce2ae.jpg", "df82b5df-b83c-44a1-8d14-f46ca99dc1d3.jpg", "e97256a8-cb36-4b15-9c3a-dc88370fdddd.jpg", "fa3bb917-b512-48a9-bec7-d49de1e9748b.jpg", "fb36ddcb-07d2-484c-ab3a-2b1527257072.jpg", "fc3d6e15-bb81-4a2a-94a3-ce56eb116a35.jpg", "fdda8521-0b5a-456f-9802-47f3a7d1c88c.jpg"]};
+                scope.pictures = input.list;
             }
         };
     }]);

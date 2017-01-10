@@ -1,4 +1,11 @@
 <div id='preview'>
     <button type="button" id="refresh" ng-click="refresh">Refresh</button>
     <p>Pictures List:</p>
+    <ul>
+        <li ng-repeat="p in pictures">
+            <a href="{{path}}{{p}}">
+                <img ng-src="{{path}}{{p}}" alt="{{p}}"/>
+            </a>
+        </li>
+    </ul>
 </div>
