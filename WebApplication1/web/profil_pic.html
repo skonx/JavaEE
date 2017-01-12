@@ -17,7 +17,12 @@ and open the template in the editor.
         <a href="index.html">Back</a>
         <div id="container" ng-controller="ImgSrcCtrl">
             <div id="fn">
-                <tdv-uploader path="path" seturl="setUrl(pict)"></tdv-uploader>
+                <div id='upload'>
+                    <tdv-uploader path="path" small="{{small}}" seturl="setUrl(pict)"></tdv-uploader>
+                    <br/>
+                    <input type="checkbox" id="small" ng-model='small'>
+                    <label for="small">Check to save a smaller picture</label>
+                </div>
                 <div id="download">
                     <label>Picture to Download:</label>
                     <input type="text" ng-model="pict" ng-blur="setUrl(pict)">

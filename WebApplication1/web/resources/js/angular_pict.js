@@ -4,6 +4,7 @@ app.controller("ImgSrcCtrl", function ($scope) {
     $scope.pict = '';
     $scope.path = 'webresources/images/';
     $scope.picturl = '';
+    $scope.small = false;
 
     $scope.setUrl = function (pict) {
         $scope.pict = pict;
@@ -45,6 +46,7 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
             },
             scope: {
                 path: '=', /*server url*/
+                small: '@',
                 seturl: '&'/*the url update function*/
             },
             templateUrl: 'resources/template/uploader.html',
@@ -80,7 +82,7 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
 
                         $http({
                             method: 'POST',
-                            url: scope.path,
+                            url: scope.path + '?small=' + scope.small,
                             headers: {
                                 /*remove the default headers (application/json...)*/
                                 'Content-Type': undefined

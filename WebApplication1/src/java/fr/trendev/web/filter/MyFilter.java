@@ -16,7 +16,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,14 +26,14 @@ import javax.servlet.http.HttpSession;
  */
 /*servletNames = {"Faces Servlet", "javax.ws.rs.core.Application",
     "MyServletTest"}*/
-@WebFilter("/*")
+//@WebFilter(urlPatterns = {"/*"}, asyncSupported = true)
 public class MyFilter implements Filter {
 
     @EJB
     ActiveSessionTracker tracker;
 
-    public static final Logger logger
-            = Logger.getLogger(MyFilter.class.getCanonicalName());
+    public static final Logger logger =
+            Logger.getLogger(MyFilter.class.getCanonicalName());
 
     public MyFilter() {
     }
