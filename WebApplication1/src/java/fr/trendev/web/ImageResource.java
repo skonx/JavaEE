@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.imageio.ImageIO;
 import javax.json.Json;
@@ -201,7 +202,7 @@ public class ImageResource {
      * @param is an input stream provided by the document
      */
     @POST
-    //@Asynchronous
+    @Asynchronous
     @Consumes({"image/jpeg", "image/png"})
     public void savePicture(@Suspended final AsyncResponse ar, @HeaderParam(
             "Content-Type") String ct,
