@@ -44,7 +44,7 @@ import javax.ws.rs.core.UriInfo;
  */
 @Path("images")
 public class ImageResource {
-
+    
     @Context
     UriInfo info;
 
@@ -53,7 +53,7 @@ public class ImageResource {
      */
     private static final Logger logger =
             Logger.getLogger(ImageResource.class.getCanonicalName());
-
+    
     private final static String VAULT_NAME = "vault";
 
     /**
@@ -62,7 +62,7 @@ public class ImageResource {
     private final static java.nio.file.Path SRC_FOLDER = Paths.get(System.
             getProperty(
                     "user.home"), /*"Documents",*/ VAULT_NAME);
-
+    
     private final static java.nio.file.Path TMP_FOLDER = Paths.get(System.
             getProperty(
                     "user.home"), "Deposit_tmp");
@@ -98,22 +98,22 @@ public class ImageResource {
         //opens a path to the required file
         filename = filename.concat(".").concat(ext);
         java.nio.file.Path file = SRC_FOLDER.resolve(filename);
-
+        
         if (!Files.exists(file)) {
             logger.log(Level.WARNING, "File \"{0}\" cannot be found!", filename);
             return Response.status(Status.NOT_FOUND).build();
         }
-
+        
         try {
             CacheControl cc = new CacheControl();
             cc.setPrivate(true);
-
+            
             Instant instant = Files.getLastModifiedTime(file).toInstant();
             Date lastModifiedTime = Date.from(instant);
-
+            
             Response.ResponseBuilder builder = request.evaluatePreconditions(
                     lastModifiedTime);
-
+            
             if (builder == null) {
                 logger.log(Level.INFO,
                         "{0} has changed or has never been cached",
@@ -123,11 +123,11 @@ public class ImageResource {
                         newInputStream(file), "image/" + ext);
                 builder.lastModified(lastModifiedTime);
             }
-
+            
             builder.cacheControl(cc);
-
+            
             return builder.build();
-
+            
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.
                     getMessage()).build();
@@ -145,23 +145,23 @@ public class ImageResource {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPicturesList() {
-
+        
         logger.log(Level.INFO, "Providing the pictures list");
-
+        
         if (!Files.exists(SRC_FOLDER)) {
             logger.log(Level.WARNING, "The source folder cannot be found!!!");
             return Response.status(Status.NOT_FOUND).build();
         }
-
+        
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
-
+        
         JsonArrayBuilder list = factory.createArrayBuilder();//Json.createArrayBuilder();
 
         DirectoryStream.Filter<java.nio.file.Path> filter = e -> (e.
                 getFileName().toString().endsWith(".jpg")
                 || e.getFileName().
                         toString().endsWith(".png"));
-
+        
         try {
             Files.newDirectoryStream(SRC_FOLDER, filter).forEach(e -> list.
                     add(e.getFileName().toString()));
@@ -172,10 +172,10 @@ public class ImageResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.
                     getMessage()).build();
         }
-
+        
         JsonObjectBuilder value = factory.createObjectBuilder()
                 .add("list", list);
-
+        
         return Response.ok(value.build()).build();
     }
 
@@ -195,28 +195,29 @@ public class ImageResource {
             InputStream is) {
         logger.log(Level.INFO, "REST Web Service {0}: POST request",
                 ImageResource.class.getCanonicalName());
-
-        String filename = generateRandomName(ct);
-
+        
+        Response response;
+        
         try {
+            String filename = generateRandomName(ct);
             //should be not the expected value
             logger.log(Level.INFO, "Content-Type : {0}", ct);
             logger.log(Level.INFO, "Content-Length : {0}", length);
-
+            
             if (!Files.exists(TMP_FOLDER)) {
                 Files.createDirectory(TMP_FOLDER);
             }
 
             /*saves the stream (request content) into a temporary file*/
             java.nio.file.Path file = TMP_FOLDER.resolve(filename);
-
+            
             long size = Files.copy(is, file,
                     StandardCopyOption.REPLACE_EXISTING);
-
+            
             logger.log(Level.INFO, "Size of {0} = {1} Bytes", new Object[]{
                 filename,
                 size});
-
+            
             if (!Files.exists(SRC_FOLDER)) {
                 Files.createDirectory(SRC_FOLDER);
             }
@@ -224,8 +225,14 @@ public class ImageResource {
             /*moves the file to its vault*/
             Files.move(file, SRC_FOLDER.resolve(file.getFileName()),
                     StandardCopyOption.REPLACE_EXISTING);
-
-        } catch (IOException ex1) {
+            
+            response = Response.status(Status.CREATED).entity(filename).
+                    location(URI.
+                            create(info.getPath() + "/"
+                                    + VAULT_NAME + "/"
+                                    + filename)).build();
+            
+        } catch (IOException | IllegalArgumentException ex1) {
             try {
                 is.close();
             } catch (IOException ex2) {
@@ -234,14 +241,14 @@ public class ImageResource {
                         new Object[]{ImageResource.class.getCanonicalName(),
                             ex2.getMessage()});
             } finally {
-                Response.serverError().entity(ex1.getMessage()).build();
+                logger.log(Level.SEVERE, "Error during picture saving : {0}",
+                        ex1.getMessage());
+                response = Response.serverError().entity(ex1.getMessage()).
+                        build();
             }
         }
-
-        return Response.status(Status.CREATED).entity(filename).location(URI.
-                create(info.getPath() + "/"
-                        + VAULT_NAME + "/"
-                        + filename)).build();
+        
+        return response;
     }
 
     /**
@@ -253,14 +260,14 @@ public class ImageResource {
      */
     private static long pumpStream(InputStream is) throws IOException {
         byte[] buffer = new byte[2048];
-
+        
         int count = 0;
         int b;
-
+        
         while ((b = is.read(buffer)) != -1) {
             count += b;
         }
-
+        
         return count;
     }
 
@@ -271,9 +278,15 @@ public class ImageResource {
      * @param ct the Content-Type of the HTTP POST request
      * @return
      */
-    private static String generateRandomName(String ct) {
-
+    private static String generateRandomName(String ct) throws
+            IllegalArgumentException {
+        
+        if (ct == null) {
+            throw new IllegalArgumentException(
+                    "Content-Type can not be null or blank");
+        }
+        
         return UUID.randomUUID().toString() + "."
-                + (ct.equals("image/jpeg") ? "jpg" : "png");
+                + (("image/jpeg").equals(ct) ? "jpg" : "png");
     }
 }

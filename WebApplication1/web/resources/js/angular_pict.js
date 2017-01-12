@@ -11,7 +11,12 @@ app.controller("ImgSrcCtrl", function ($scope) {
     };
 });
 
-app.directive('tdvUploader', ['$http', '$interval', function ($http, $interval) {
+app.factory('servicesFactory', function () {
+    return{
+    };
+});
+
+app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function ($http, $interval, servicesFactory) {
         return {
             restrict: 'E',
             transclude: true,
@@ -72,7 +77,7 @@ app.directive('tdvUploader', ['$http', '$interval', function ($http, $interval) 
 
                     /*Asynchronous POST of each file */
                     for (var i = 0; i < fileInput.files.length; i++) {
-                        //should be moved in  dedicated service...
+
                         $http({
                             method: 'POST',
                             url: scope.path,
@@ -107,23 +112,27 @@ app.directive('tdvUploader', ['$http', '$interval', function ($http, $interval) 
                                     /* Set the URL if there is a single file to POST. 
                                      * Otherwise, lost GET requests should be expected... 
                                      * ... and broken pipes on the server*/
-                                    if (fileInput.files.length === 1)
+                                    if ((fileInput.files.length === 1) && response.data) {
                                         scope.seturl({pict: response.data});
+                                    }
                                 },
-                                function (response) {/*Error callback*/
-                                    scope.switch_uploading();
-                                    var errmsg = '[ Error ] Upload failed : ' + fileInput.files[i].name + '\n';
-                                    errmsg += 'Status : ' + response.status + ' ' + response.statusText;
-                                    alert(errmsg);
-                                }
-                        );
+                                function (index) {
+                                    return function (response) {/*Error callback*/
+                                        scope.switch_uploading();
+                                        $interval.cancel(interval);//stop the recurrent timer
+                                        var errmsg = '[ Error ] Upload failed : ' + fileInput.files[index].name + '\n';
+                                        errmsg += 'Status : ' + response.status + ' ' + response.statusText;
+                                        alert(errmsg);
+                                    };
+                                }(i)
+                                );
                     }
                 });
             }
         };
     }]);
 
-app.directive('tdvPreview', ['$http', '$interval', function ($http, $interval) {
+app.directive('tdvPreview', ['$http', function ($http) {
         return {
             restrict: 'E',
             transclude: true,
@@ -133,7 +142,7 @@ app.directive('tdvPreview', ['$http', '$interval', function ($http, $interval) {
                 seturl: '&'/*the url update function*/
             },
             //link: function (scope, element, attrs, controller, transcludeFn)
-            link: function (scope, element) {
+            link: function (scope) {
                 var path = scope.path + scope.service;
 
                 /*Gets the list of the pictures stored in the vault*/
