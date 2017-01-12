@@ -16,6 +16,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpSession;
  */
 /*servletNames = {"Faces Servlet", "javax.ws.rs.core.Application",
     "MyServletTest"}*/
-//@WebFilter(urlPatterns = {"/*"}, asyncSupported = true)
+@WebFilter(urlPatterns = {"/*"}, asyncSupported = true)
 public class MyFilter implements Filter {
 
     @EJB
