@@ -1,3 +1,6 @@
+<input type="checkbox" id="small" ng-model='small'>
+<label for="small">Check to save a smaller picture</label>
+<br/>
 <label for='file'>Picture to upload (JPEG/PNG): </label>
-<input id='file' type='file' multiple accept="image/png,image/jpeg"/>
+<input id='file' type='file' ng-model='file' onchange='angular.element(this).scope().upload()' multiple accept='image/png,image/jpeg' />
 <progress id='progress' ng-show='uploading'></progress>

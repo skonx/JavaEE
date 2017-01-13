@@ -4,16 +4,31 @@ app.controller("ImgSrcCtrl", function ($scope) {
     $scope.pict = '';
     $scope.path = 'webresources/images/';
     $scope.picturl = '';
-    $scope.small = false;
 
     $scope.setUrl = function (pict) {
-        $scope.pict = pict;
-        $scope.picturl = $scope.path + $scope.pict;
+        if (pict) {
+            $scope.pict = pict;
+            $scope.picturl = $scope.path + $scope.pict;
+        }
     };
 });
 
 app.factory('servicesFactory', function () {
     return{
+        /*compute the total size and init the progress_status array*/
+        init_status: function (fileInput, progress_status) {
+            var total = 0;
+            for (var i = 0; i < fileInput.files.length; i++) {
+                total += fileInput.files[i].size;
+                progress_status[i] = {
+                    load: 0, /*delta between the previous and current event*/
+                    loaded: 0, /*previous e.loaded value*/
+                    total: fileInput.files[i].size,
+                    name: fileInput.files[i].name
+                };
+            }
+            return total;/*total amount of data to POST*/
+        }
     };
 });
 
@@ -23,37 +38,28 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
             transclude: true,
             controller: function ($scope) {
                 $scope.uploading = false;
+                $scope.small = true;
 
                 $scope.switch_uploading = function () {
                     $scope.uploading = !$scope.uploading;
+                    console.log('turn ' + ($scope.uploading ? 'on' : 'off') + ' uploading indicator : ');
                 };
-
-                /*compute the total size and init the progress_status array*/
-                $scope.init_status = function (fileInput, progress_status) {
-                    var total = 0;
-                    for (var i = 0; i < fileInput.files.length; i++) {
-                        total += fileInput.files[i].size;
-                        progress_status[i] = {
-                            load: 0, /*delta between the previous and current event*/
-                            loaded: 0, /*previous e.loaded value*/
-                            total: fileInput.files[i].size,
-                            name: fileInput.files[i].name
-                        };
-                    }
-                    return total;/*total amount of data to POST*/
-                };
-
             },
             scope: {
                 path: '=', /*server url*/
-                small: '@',
                 seturl: '&'/*the url update function*/
             },
             templateUrl: 'resources/template/uploader.html',
             //link: function (scope, element, attrs, controller, transcludeFn)
-            link: function (scope, element) {
+            link: function (scope) {
 
-                element.on('change', function () {
+                /* It's also possible to use element.on('change',function...) 
+                 * but all changes in the directive component will trigger the function.
+                 * 
+                 * Keep in mind that ng-change requires ng-model and doesn't work 
+                 * with input type=file, use onchange javascript method instead.
+                 * */
+                scope.upload = function () {
                     scope.switch_uploading();
 
                     var fileInput = document.querySelector('#file');
@@ -62,7 +68,8 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
                     /*Init the status properties*/
                     var overall_progress = 0;
                     var progress_status = [];
-                    var total = scope.init_status(fileInput, progress_status);
+
+                    var total = servicesFactory.init_status(fileInput, progress_status);
 
                     /*Set the max value of the progress bar*/
                     console.log('total=' + total);
@@ -92,7 +99,7 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
                                 progress: (function (index) {
                                     return function (e) {
 
-                                        //console.log("[" + progress_status[index].name + "] - progress : " + ((e.loaded * 100) / e.total) + " % ");
+                                        console.log("[" + progress_status[index].name + "] - progress : " + ((e.loaded * 100) / e.total) + " % ");
                                         /*Compute the delta*/
                                         progress_status[index].load = e.loaded - progress_status[index].loaded;
                                         /*Save the last progression*/
@@ -129,7 +136,7 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
                                 }(i)
                                 );
                     }
-                });
+                };
             }
         };
     }]);
@@ -170,7 +177,8 @@ app.directive('tdvPreview', ['$http', function ($http) {
         };
     }
 ]);
-/*javascript code*/
+
+/* base code - javascript */
 /*var fileInput = document.querySelector('#file');
  var progress = document.querySelector('#progress');
  
