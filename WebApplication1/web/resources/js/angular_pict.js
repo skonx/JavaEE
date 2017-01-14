@@ -2,7 +2,9 @@ var app = angular.module('pictTest', []);
 
 app.controller('ImgSrcCtrl', ['$scope', function ($scope) {
         $scope.pict = '';
+        /* Path to the JAX-RS services*/
         $scope.path = 'webresources/images/';
+        /* Linked to the preview image src.*/
         $scope.picturl = '';
 
         /*
