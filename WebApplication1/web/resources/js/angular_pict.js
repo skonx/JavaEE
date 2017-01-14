@@ -1,57 +1,65 @@
-var app = angular.module("pictTest", []);
+var app = angular.module('pictTest', []);
 
-app.controller("ImgSrcCtrl", function ($scope) {
-    $scope.pict = '';
-    $scope.path = 'webresources/images/';
-    $scope.picturl = '';
+app.controller('ImgSrcCtrl', ['$scope', function ($scope) {
+        $scope.pict = '';
+        $scope.path = 'webresources/images/';
+        $scope.picturl = '';
 
-    $scope.setUrl = function (pict) {
-        if (pict) {
-            $scope.pict = pict;
-            $scope.picturl = $scope.path + $scope.pict;
-            $scope.save();
-        }
-    };
-
-    var key = 'saved';
-    var saved = localStorage.getItem(key);
-
-    if (!saved)
-        $scope.queue = [];
-    else
-        $scope.queue = JSON.parse(saved);
-
-    var persist_queue = function () {
-        localStorage.setItem(key, JSON.stringify($scope.queue));
-    };
-
-    $scope.elements = function () {
-        return $scope.queue.length;
-    };
-
-    $scope.save = function () {
-        var pict = {
-            name: $scope.pict
+        /*
+         * Set the img.src url and then save a entry in the localStorage.
+         * DataURL should be stored in the localStorage but its capacity is limited.
+         * Caching pictures, specially big pictures is more attractive.
+         * */
+        $scope.setUrl = function (pict) {
+            if (pict) {
+                $scope.pict = pict;
+                $scope.picturl = $scope.path + $scope.pict;
+                $scope.save();
+            }
         };
 
-        $scope.queue.push(pict);
-        persist_queue();
-    };
+        /*The cache entry in the localStorage*/
+        var key = 'saved';
+        var saved = localStorage.getItem(key);
 
-    $scope.load = function () {
-        if ($scope.queue.length >= 1) {
-            var pict = $scope.queue.pop();
-            $scope.pict = pict.name;
-            $scope.picturl = $scope.path + $scope.pict;
+        if (!saved)
+            $scope.queue = [];
+        else
+            $scope.queue = JSON.parse(saved);
+
+        var persist_queue = function () {
+            localStorage.setItem(key, JSON.stringify($scope.queue));
+        };
+
+        $scope.elements = function () {
+            return $scope.queue.length;
+        };
+
+        $scope.save = function () {
+            var pict = {
+                name: $scope.pict
+            };
+
+            $scope.queue.push(pict);
             persist_queue();
-        }
-    };
+        };
 
-    $scope.clear = function () {
-        $scope.queue = [];
-        localStorage.removeItem(key);
-    };
-});
+        $scope.load = function () {
+            if ($scope.queue.length >= 1) {
+                var pict = $scope.queue.pop();
+                $scope.pict = pict.name;
+                $scope.picturl = $scope.path + $scope.pict;
+                persist_queue();
+            }
+        };
+
+        $scope.clear = function () {
+            $scope.queue = [];
+            localStorage.removeItem(key);
+        };
+    }
+]);
+
 app.factory('servicesFactory', function () {
     return{
         /*compute the total size and init the progress_status array*/
@@ -168,7 +176,9 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
                 };
             }
         };
-    }]);
+    }
+]);
+
 app.directive('tdvPreview', ['$http', function ($http) {
         return {
             restrict: 'E',
