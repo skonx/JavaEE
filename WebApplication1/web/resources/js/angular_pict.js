@@ -1,17 +1,18 @@
 var app = angular.module('pictTest', []);
 
 app.controller('ImgSrcCtrl', ['$scope', function ($scope) {
+        /* The file name of the picture stored on the server.*/
         $scope.pict = '';
         /* Path to the JAX-RS services*/
         $scope.path = 'webresources/images/';
-        /* Linked to the preview image src.*/
+        /* Linked to the preview image src
+         * When picturl is changed, preview img is reloaded.*/
         $scope.picturl = '';
 
         /*
          * Set the img.src url and then save a entry in the localStorage.
          * DataURL should be stored in the localStorage but its capacity is limited.
-         * Caching pictures, specially big pictures is more attractive.
-         * */
+         * Caching pictures, specially big pictures is more attractive.*/
         $scope.setUrl = function (pict) {
             if (pict) {
                 $scope.pict = pict;
@@ -20,23 +21,22 @@ app.controller('ImgSrcCtrl', ['$scope', function ($scope) {
             }
         };
 
-        /*The cache entry in the localStorage*/
+        /* The cache entry in the localStorage*/
         var key = 'saved';
         var saved = localStorage.getItem(key);
 
-        if (!saved)
+        /* Init the queue*/
+        if (!saved)//no entry in localStorage
             $scope.queue = [];
         else
             $scope.queue = JSON.parse(saved);
 
+        /* Store the queue in localStorage*/
         var persist_queue = function () {
             localStorage.setItem(key, JSON.stringify($scope.queue));
         };
 
-        $scope.elements = function () {
-            return $scope.queue.length;
-        };
-
+        /* Save an entry in the queue and the current queue in localStorage.*/
         $scope.save = function () {
             var pict = {
                 name: $scope.pict
@@ -46,6 +46,8 @@ app.controller('ImgSrcCtrl', ['$scope', function ($scope) {
             persist_queue();
         };
 
+        /* Load an entry from the queue, reload the preview picture 
+         * and save the current queue in the localStorage*/
         $scope.load = function () {
             if ($scope.queue.length >= 1) {
                 var pict = $scope.queue.pop();
@@ -54,14 +56,15 @@ app.controller('ImgSrcCtrl', ['$scope', function ($scope) {
                 persist_queue();
             }
         };
-
+        /* Destroy the entries in localStorage and empty the queue*/
         $scope.clear = function () {
-            $scope.queue = [];
             localStorage.removeItem(key);
+            $scope.queue = [];
         };
     }
 ]);
 
+/* Provides different services for this app*/
 app.factory('servicesFactory', function () {
     return{
         /*compute the total size and init the progress_status array*/
@@ -80,21 +83,27 @@ app.factory('servicesFactory', function () {
         }
     };
 });
+
+/* The tdv-uploader directive*/
 app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function ($http, $interval, servicesFactory) {
         return {
             restrict: 'E',
             transclude: true,
             controller: function ($scope) {
+                /* indicates if an uploading is in progress or not*/
                 $scope.uploading = false;
+                /*flag : reduce the size of the stored picture on the server*/
                 $scope.small = true;
+                /*turn on/off the uploading indicator*/
                 $scope.switch_uploading = function () {
                     $scope.uploading = !$scope.uploading;
                     console.log('turn ' + ($scope.uploading ? 'on' : 'off') + ' uploading indicator : ');
                 };
             },
             scope: {
-                path: '=', /*server url*/
-                seturl: '&'/*the url update function*/
+                path: '=', /*JAX-RS server url*/
+                seturl: '&'/*the url update function, used to refresh the preview picture
+                 * and persist entries in localStorage*/
             },
             templateUrl: 'resources/template/uploader.html',
             //link: function (scope, element, attrs, controller, transcludeFn)
@@ -172,7 +181,7 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
                                         errmsg += 'Status : ' + response.status + ' ' + response.statusText;
                                         alert(errmsg);
                                     };
-                                }(i)
+                                }(i)/*Closure to protect i value*/
                                 );
                     }
                 };
@@ -181,14 +190,17 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
     }
 ]);
 
+/* The tdv-preview directive*/
 app.directive('tdvPreview', ['$http', function ($http) {
         return {
             restrict: 'E',
             transclude: true,
             scope: {
-                path: '=', /*server url*/
-                service: '@',
-                seturl: '&'/*the url update function*/
+                path: '=', /*JAX-RS server url*/
+                service: '@', /* A specific service on the JAX-RS server, 
+                 * should be list for exemple*/
+                seturl: '&'/*the url update function, used to refresh the preview picture
+                 * and persist entries in localStorage*/
             },
             //link: function (scope, element, attrs, controller, transcludeFn)
             link: function (scope) {
@@ -202,6 +214,8 @@ app.directive('tdvPreview', ['$http', function ($http) {
                             function (response) {
                                 /*success callback*/
                                 scope.pictures = response.data.list;
+                                /*used to display how many pictures 
+                                 * are stored on the server*/
                                 scope.total = response.data.list.length;
                             },
                             function (response) {
