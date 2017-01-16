@@ -97,7 +97,7 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
                 /*turn on/off the uploading indicator*/
                 $scope.switch_uploading = function () {
                     $scope.uploading = !$scope.uploading;
-                    console.log('turn ' + ($scope.uploading ? 'on' : 'off') + ' uploading indicator : ');
+                    console.log('turn ' + ($scope.uploading ? 'on' : 'off') + ' uploading indicator.');
                 };
             },
             scope: {
@@ -175,7 +175,7 @@ app.directive('tdvUploader', ['$http', '$interval', 'servicesFactory', function 
                                 },
                                 function (index) {
                                     return function (response) {/*Error callback*/
-                                        scope.switch_uploading();
+                                        scope.uploading = false;
                                         $interval.cancel(interval); //stop the recurrent timer
                                         var errmsg = '[ Error ] Upload failed : ' + fileInput.files[index].name + '\n';
                                         errmsg += 'Status : ' + response.status + ' ' + response.statusText;

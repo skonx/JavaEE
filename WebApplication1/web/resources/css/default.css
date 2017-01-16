@@ -114,3 +114,37 @@ a:hover
     margin-right: 113px;
 }
 
+@media all and (max-device-width: 480px)
+{
+    div, form
+    {
+        margin: 10px 25px 25px 10px;
+        color: white;
+        text-align: justify;
+
+        /*display: flex;
+        justify-content: center;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;*/
+
+    }
+
+    .counter{
+        border: 2px black solid;
+        background-color: lightgray;
+        font-family: courier ;
+        font-size: 1.5em;
+        padding: 5px 5px 5px 5px;
+    }
+
+    .column-right{
+        position: absolute;
+        text-align: right;
+        right: 0px;
+        padding: 0px;
+        margin-right: 20px;
+    }
+}
+
+

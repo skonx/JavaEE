@@ -237,6 +237,7 @@ public class ImageResource {
                 /*saves the stream (request content) into a temporary file*/
                 java.nio.file.Path file = TMP_FOLDER.resolve(filename);
 
+                /*Reduces the picture*/
                 if (small) {
                     logger.log(Level.INFO, "Process reduce image size...");
 
@@ -247,13 +248,17 @@ public class ImageResource {
                     int width = 150;
                     int height = 150;
                     // creates output image
+                    /*If the inputImage type is unknow, will fix it to TYPE_INT_ARGB*/
                     BufferedImage outputImage = new BufferedImage(width,
-                            height, inputImage.getType());
+                            height, inputImage.getType()
+                            == BufferedImage.TYPE_CUSTOM ? BufferedImage.TYPE_INT_ARGB : inputImage.
+                                            getType());
 
                     // scales the input image to the output image
                     Graphics2D g2d = outputImage.createGraphics();
                     g2d.drawImage(inputImage, 0, 0, width, height, null);
                     g2d.dispose();
+
                     ImageIO.write(outputImage, ct.split("/")[1],
                             file.toFile());
 
@@ -264,7 +269,7 @@ public class ImageResource {
                                 toString()});
                     logger.log(Level.INFO, "Reduce Image : OK");
                 } else {
-
+                    /*Stores the original picture*/
                     logger.log(Level.INFO, "Copy the stream in : {0}", filename);
                     long size = Files.copy(is, file,
                             StandardCopyOption.REPLACE_EXISTING);

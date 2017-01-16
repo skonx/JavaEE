@@ -58,3 +58,22 @@ img{
     width: 50%;
 }
 
+@media all and (max-device-width: 480px)
+{
+    img{
+        max-height: 75px;
+        max-width: 75px;
+        image-orientation: from-image;
+    }
+
+    #imgprev{
+        max-height: 150px;
+        max-width: 150px;
+    }
+
+    #preview_content{
+        overflow: scroll;
+        max-height: 300px;
+    }
+}
+
