@@ -148,7 +148,7 @@ public class ImageResource {
                             new Object[]{size, filename});
                 };
 
-                builder = Response.ok(stream, "image/" + ext);
+                builder = Response.ok(stream, "image/*" /*+ ext*/);
 
                 builder.lastModified(lastModifiedTime);
             }
