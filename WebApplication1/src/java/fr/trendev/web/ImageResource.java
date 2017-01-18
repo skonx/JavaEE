@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -45,6 +46,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -89,7 +91,7 @@ public class ImageResource {
     /**
      * Provides a source stream to a specified picture.
      *
-     * @param filename the picture to display.
+     * @param name the picture file name to display.
      * @param ext the extension of the picture.
      * @param request the HTTP request
      * @return A HTTP response with an InputStream and the picture type.
@@ -97,7 +99,7 @@ public class ImageResource {
     @GET
     @Path("{name}.{ext}")
     @Produces({"image/jpeg", "image/png"})
-    public Response getPicture(@PathParam("name") String filename,
+    public Response getPicture(@PathParam("name") String name,
             @PathParam("ext") String ext,
             @Context Request request) {
 
@@ -109,7 +111,7 @@ public class ImageResource {
         }
 
         //opens a path to the required file
-        filename = filename.concat(".").concat(ext);
+        String filename = name.concat(".").concat(ext);
         java.nio.file.Path file = SRC_FOLDER.resolve(filename);
 
         if (!Files.exists(file)) {
@@ -131,9 +133,23 @@ public class ImageResource {
                 logger.log(Level.INFO,
                         "{0} has changed or has never been cached",
                         filename);
+
                 //creates a response with the inputstream and the picture type
-                builder = Response.ok(Files.
-                        newInputStream(file), "image/" + ext);
+                /*builder = Response.ok(Files.
+                        newInputStream(file), "image/" + ext);*/
+                //Creates a streaming output and copy the file to it
+                StreamingOutput stream = (OutputStream output) -> {
+                    logger.log(Level.INFO,
+                            "Copying file {0} in the streaming output...",
+                            filename);
+                    Files.copy(file, output);
+                    logger.log(Level.INFO,
+                            "Copying file {0} in the streaming output : [OK]",
+                            filename);
+                };
+
+                builder = Response.ok(stream, "image/" + ext);
+
                 builder.lastModified(lastModifiedTime);
             }
 
