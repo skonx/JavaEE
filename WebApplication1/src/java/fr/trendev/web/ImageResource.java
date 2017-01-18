@@ -142,10 +142,10 @@ public class ImageResource {
                     logger.log(Level.INFO,
                             "Copying file {0} in the streaming output...",
                             filename);
-                    Files.copy(file, output);
+                    long size = Files.copy(file, output);
                     logger.log(Level.INFO,
-                            "Copying file {0} in the streaming output : [OK]",
-                            filename);
+                            "Copying {0} Bytes of file {1} in the streaming output : [OK]",
+                            new Object[]{size, filename});
                 };
 
                 builder = Response.ok(stream, "image/" + ext);
