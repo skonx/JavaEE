@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.trendev.web;
+package fr.trendev.web.restapi;
 
 import fr.trendev.bean.ActiveSessionTracker;
 import fr.trendev.bean.MyBeanJSF;
