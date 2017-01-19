@@ -9,12 +9,12 @@ and open the template in the editor.
         <title>Video streaming</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="resources/css/default.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div>
             <h2>Video Streaming</h2>
             <video id='video' width="320" height="240" controls>
-                <source src="webresources/videos/IMG_6540.m4v">
                 Your browser does not support the video tag.
             </video>
         </div>
@@ -23,16 +23,20 @@ and open the template in the editor.
             var video = document.getElementById("video");
             window.addEventListener("load", function () {
                 //video.loop = true;
-                video.muted = true;
-                video.preload = "auto";
+                //video.muted = true;
+                video.src = "webresources/videos";
+                video.type = "video/x-m4v";
+                //video.preload = "auto";
 
                 video.addEventListener("ended", function () {
                     if (video.duration !== video.played.end(0)) {
-                        var r = confirm("did you thing you can hack that shit?");
+                        var r = confirm("Did you thing you can hack that shit?");
                         if (r)
-                            alert("of course you can, nothing is protected right now :)))");
+                            alert("Of course you can, actually nothing is protected :)))");
                     } else
-                        alert("thanks for watching ; )");
+                        alert("Thanks for watching ; )");
+                    //alert("video.duration=" + video.duration
+                    //+"\nvideo.played.end(0)=" + video.played.end(0));
                 });
 
                 //video.play();
