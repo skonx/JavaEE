@@ -5,6 +5,7 @@
  */
 package fr.trendev.web.restapi;
 
+import fr.trendev.bean.ActiveSessionTracker;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -15,13 +16,15 @@ import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.enterprise.concurrent.ManagedExecutorService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
@@ -31,6 +34,9 @@ public class VideoResource {
 
     @Context
     UriInfo info;
+
+    @EJB
+    ActiveSessionTracker tracker;
 
     @Resource(name = "java:comp/DefaultManagedExecutorService")
     ManagedExecutorService executor;
@@ -42,16 +48,33 @@ public class VideoResource {
             getProperty(
                     "user.home"), "Movies");
 
-    private final static int BUFFER_SIZE = 1024;//65536;
+    private final static int BUFFER_SIZE = 65536;//2048;
+
+    private static long getProgress(final HttpSession session) {
+        return (long) session.getAttribute("PROGRESS");
+    }
+
+    private static void setProgress(final HttpSession session, long progress) {
+        session.setAttribute("PROGRESS", progress);
+    }
 
     @GET
     @Produces({"video/x-m4v", "video/mp4"})
     public Response getVideoStream(@HeaderParam(
             "Range") String range,
-            @Context Request request) throws IOException {
+            @Context HttpServletRequest request) throws IOException {
 
-        //opens a path to the required file
-        String filename = "IMG_6540.m4v";
+        HttpSession session = request.getSession(false);
+
+//opens a path to the required file
+        String filename = "IMG_6346.m4v";
+
+        if (!tracker.contains(session)) {
+            logger.log(Level.WARNING, "Error : Not allowed to get file {0}",
+                    filename);
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
         java.nio.file.Path file = SRC_FOLDER.resolve(filename);
 
         logger.log(Level.INFO, "Requested Range: {0}", range);
@@ -107,6 +130,12 @@ public class VideoResource {
                         output.write(buffer.array(), 0,
                                 count);
                         unread -= b;
+
+                        if ((getProgress(session) < start + read)
+                                && (start <= getProgress(session))) {
+                            setProgress(session, start + read);
+                        }
+
                         logger.log(Level.INFO,
                                 "File {0} - STREAMING : {1} / {2} Bytes ",
                                 new Object[]{
@@ -118,10 +147,11 @@ public class VideoResource {
                             "Providing Range {0}-{1} of file {2} : [OK]",
                             new Object[]{
                                 start, end, filename});
-                    if ((start + read) == size) {
+                    if ((start + read) == size && getProgress(session) == size) {
                         logger.log(Level.INFO,
-                                "Providing file {0} : [COMPLETED]",
-                                filename);
+                                "Providing file {0} : [ COMPLETE ]",
+                                new Object[]{filename});
+                        setProgress(session, 0);
                     }
 
                 } catch (IOException ex) {

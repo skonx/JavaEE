@@ -45,9 +45,13 @@ public class NewServletListener implements ServletContextListener,
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-
-        LOG.log(Level.INFO, "sessionCreated {0}: {1}", new Object[]{se.
-            getSession().getId(), LocalDateTime.now().toString()});
+        long progress = 0l;
+        LOG.log(Level.INFO,
+                "sessionCreated {0} and \"PROGRESS\" attribute for VIDEO STREAMING is {2}: {1}",
+                new Object[]{se.
+                            getSession().getId(), LocalDateTime.now().toString(),
+                    progress});
+        se.getSession().setAttribute("PROGRESS", progress);
         tracker.add(se.getSession());
     }
 
