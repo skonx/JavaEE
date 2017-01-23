@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <h:head>
+        <title>Video streaming</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputStylesheet library="css" name="default.css"/>
+    </h:head>
+    <h:body>
+        <h:panelGroup id="text" layout="block">
+            <h:outputText value="Video Streaming - "></h:outputText>
+            <h:outputLink value="index.html">Back</h:outputLink>
+            <h:panelGroup id="videoblock" layout="block">
+                <video jsf:id='video' width="320" height="400" controls="true">
+                    Your browser does not support the video tag.
+                </video>
+            </h:panelGroup>  
+        </h:panelGroup>
+        <h:outputScript library="js" name="video_init.js"/>
+    </h:body>
+</html>
+
