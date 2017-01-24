@@ -112,6 +112,10 @@ public class MyBound {
 
         logger.log(Level.INFO, "Providing the sessions list");
 
+        if (tracker.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonArrayBuilder trackerList = factory.createArrayBuilder();
 
