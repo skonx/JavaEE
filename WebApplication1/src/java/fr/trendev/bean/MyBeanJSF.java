@@ -70,8 +70,8 @@ public class MyBeanJSF implements Serializable {
     @NotNull
     private Date date;
 
-    public static final Logger logger
-            = Logger.getLogger(MyBeanJSF.class.getCanonicalName());
+    public static final Logger logger =
+            Logger.getLogger(MyBeanJSF.class.getCanonicalName());
 
     /**
      * Creates a new instance of MyBeanJSF
@@ -169,8 +169,9 @@ public class MyBeanJSF implements Serializable {
 
         }
 
-        logger.log(Level.WARNING, "NEW INIT {0}: {1}", new String[]{sn,
-            LocalDateTime.now().toString()});
+        logger.log(Level.WARNING, "MyBeanJSF.init()  : NEW INIT {0}",
+                new String[]{
+                    LocalDateTime.now().toString()});
     }
 
     /**
