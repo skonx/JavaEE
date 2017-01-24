@@ -136,7 +136,7 @@ public class VideoResource {
                             setProgress(session, start + read);
                         }
 
-                        logger.log(Level.INFO,
+                        logger.log(Level.FINE,
                                 "File {0} - STREAMING : {1} / {2} Bytes ",
                                 new Object[]{
                                     filename, start + read, end + 1});

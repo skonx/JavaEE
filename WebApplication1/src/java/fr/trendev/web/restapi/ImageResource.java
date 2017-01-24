@@ -222,6 +222,8 @@ public class ImageResource {
      * or "image/png"
      * @param length the document's size
      * @param is an input stream provided by the document
+     * @param small indicates if the picture must be reduced or not (default is
+     * true)
      */
     @POST
     @Asynchronous

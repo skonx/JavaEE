@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.Singleton;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSession;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpSessionListener;
  *
  * @author jsie
  */
+@Singleton
 public class NewServletListener implements ServletContextListener,
         HttpSessionListener {
 
