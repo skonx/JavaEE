@@ -70,7 +70,7 @@ public class VideoResource {
         String filename = "IMG_6346.m4v";
 
         if (!tracker.contains(session)) {
-            logger.log(Level.WARNING, "Error : Not allowed to get file {0}",
+            logger.log(Level.WARNING, "Error : UNAUTHORIZED access to file {0}",
                     filename);
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -92,17 +92,30 @@ public class VideoResource {
         }
 
         try {
-
             String rg = range.split("=")[1];
+
             long start = Integer.parseInt(rg.split("-")[0]);
+
             long size = file.toFile().length();
+            /* end will be the file size if no bound is provided*/
             long end = (rg.split("-").length == 2) ? Long.parseLong(rg.split(
                     "-")[1]) : size - 1;
+
+            if (end < start || end > size - 1) {
+                logger.log(Level.WARNING,
+                        "{0} is not a valid range for file {1}, should be from 0 to {2}",
+                        new Object[]{
+                            range,
+                            filename,
+                            size - 1});
+                return Response.status(
+                        Response.Status.REQUESTED_RANGE_NOT_SATISFIABLE).build();
+            }
 
             logger.log(Level.INFO, "Sending range {0}-{1} of file {2}",
                     new Object[]{
                         start, end, filename});
-
+            /*configure the streaming output before to put it inside the response*/
             StreamingOutput stream = (OutputStream output) -> {
                 logger.log(Level.INFO,
                         "Opening streaming output and providing range {0}-{1} of file {2} ...",
@@ -137,9 +150,10 @@ public class VideoResource {
                         }
 
                         logger.log(Level.FINE,
-                                "File {0} - STREAMING : {1} / {2} Bytes ",
+                                "File {0} - STREAMING : {1} / {2} Bytes | PROGRESS = {3}",
                                 new Object[]{
-                                    filename, start + read, end + 1});
+                                    filename, start + read, end + 1,
+                                    getProgress(session)});
                         buffer.clear();
                     }
 
@@ -174,9 +188,15 @@ public class VideoResource {
                     header("Content-Type", "video/x-m4v")*/;
 
             return builder.build();
+        } catch (NumberFormatException e) {
+            logger.log(Level.WARNING,
+                    "A bound in {0} is not a valid number", range);
+            return Response.status(
+                    Response.Status.REQUESTED_RANGE_NOT_SATISFIABLE).build();
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Error providing {0} : {1}", new Object[]{
-                filename, e.getMessage()});
+            logger.log(Level.WARNING, "Error providing {0} : {1}",
+                    new Object[]{
+                        filename, e});
             return Response.serverError().build();
         }
     }
