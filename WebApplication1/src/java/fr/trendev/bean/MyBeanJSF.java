@@ -54,6 +54,8 @@ public class MyBeanJSF implements Serializable {
 
     private String text;
 
+    private String textarea;
+
     //@ManagedProperty(value = "#{param.sn}")
     /**
      * Session's Name
@@ -132,6 +134,15 @@ public class MyBeanJSF implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getTextarea() {
+        return textarea;
+    }
+
+    public void setTextarea(String textarea) {
+        logger.log(Level.INFO, textarea);
+        this.textarea = textarea;
     }
 
     /**

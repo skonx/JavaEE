@@ -64,6 +64,8 @@
             <h:outputText id="text" value="#{myBeanJSF.text}" styleClass="outofbound"
                           rendered="true"/>
             <p/>
+            <h:inputTextarea id="textarea" value="#{myBeanJSF.textarea}" rows="5" cols="150" />
+            <p/>
             <!--
                 If the user change the "incr" or "date" value and click on this link, 
                 validation is automatically performed by this action.
@@ -75,7 +77,7 @@
                 the data integrity.
             -->
             <h:commandLink id="back" action="#{myBeanJSF.back}" value="#{bundle.Back}">
-                <f:ajax execute="incr date" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
+                <f:ajax execute="incr date textarea" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
             </h:commandLink>
             <h:commandButton id="reset" action="#{myBeanJSF.reset}" value="#{bundle.Reset}" p:ng-click="reset()">
                 <!-- avoid to use @form otherwise AngularJS model will be altered -->
