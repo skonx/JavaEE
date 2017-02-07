@@ -6,7 +6,7 @@
         <property name="portNumber" value="3306"/>
         <property name="databaseName" value="elevage"/>
         <property name="User" value="sdz"/>
-        <property name="Password" value="qsec0fr@3"/>
+        <property name="Password" value="*********"/>
         <property name="URL" value="jdbc:mysql://localhost:3306/elevage?zeroDateTimeBehavior=convertToNull"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
