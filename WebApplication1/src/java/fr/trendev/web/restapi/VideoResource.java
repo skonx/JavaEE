@@ -13,12 +13,13 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.enterprise.concurrent.ManagedExecutorService;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -37,9 +38,6 @@ public class VideoResource {
 
     @EJB
     ActiveSessionTracker tracker;
-
-    @Resource(name = "java:comp/DefaultManagedExecutorService")
-    ManagedExecutorService executor;
 
     private static final Logger logger =
             Logger.getLogger(VideoResource.class.getCanonicalName());
@@ -62,17 +60,35 @@ public class VideoResource {
     @Produces({"video/x-m4v", "video/mp4"})
     public Response getVideoStream(@HeaderParam(
             "Range") String range,
-            @Context HttpServletRequest request) throws IOException {
+            @Context HttpServletRequest request,
+            @Context HttpServletResponse response) throws IOException {
+
+        String filename = "IMG_6346.m4v";
+
+        try {
+            if (request.authenticate(response)) {
+                logger.log(Level.INFO, "AUTHENTICATION : [ OK ] {0} {1} {2}",
+                        new Object[]{request.isUserInRole("TutorialUser"),
+                            request.getRemoteUser(), request.getUserPrincipal()});
+            } else {
+                logger.log(Level.INFO, "AUTHENTICATION : [ FAILED ]");
+            }
+        } catch (ServletException ex) {
+            logger.log(Level.WARNING, "Error : Invalid AUTHENTICATION");
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
 
         HttpSession session = request.getSession(false);
 
-//opens a path to the required file
-        String filename = "IMG_6346.m4v";
-
         if (!tracker.contains(session)) {
-            logger.log(Level.WARNING, "Error : UNAUTHORIZED access to file {0}",
-                    filename);
+            logger.log(Level.WARNING,
+                    "Error : UNAUTHORIZED access to file {0}, INVALID SESSION ID {1}",
+                    new Object[]{filename, Objects.nonNull(session) ? session.
+                        getId() : "[NULL]"});
             return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            logger.log(Level.INFO, "AUTHORIZED access to file {0}",
+                    filename);
         }
 
         java.nio.file.Path file = SRC_FOLDER.resolve(filename);
