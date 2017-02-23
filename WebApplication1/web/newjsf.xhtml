@@ -10,8 +10,8 @@
         <title jsf:id="title">#{bundle.Iteration} ##{myBeanJSF.iter}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet library="css" name="default.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.min.js"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-animate.min.js"/>
     </h:head>
     <h:body>
         <h:form id="form1" onkeypress="return event.keyCode !== 13;" p:ng-app="myWebApp1" p:ng-controller="ValueCtrl" p:ng-init="incr=#{myBeanJSF.incr}; bound=#{myBeanJSF.bound}">
