@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.EJBAccessException;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -101,7 +102,8 @@ public class MyBound {
 
     /**
      * Provides the list of the active Http Session references in the custom
-     * tracker
+     * tracker. If no user is authenticated and no session are valid, will
+     * return an UNAUTHORIZED HTTP message
      *
      * @return a JSON object including the list of the active sessions
      */
@@ -112,8 +114,12 @@ public class MyBound {
 
         logger.log(Level.INFO, "Providing the sessions list");
 
-        if (tracker.isEmpty()) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+        try {
+            if (tracker.isEmpty()) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+        } catch (EJBAccessException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         JsonBuilderFactory factory = Json.createBuilderFactory(null);

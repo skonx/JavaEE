@@ -8,6 +8,8 @@ package fr.trendev.bean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.servlet.http.HttpSession;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpSession;
  */
 @Startup
 @Singleton
+@DeclareRoles("WebApp1User")
 public class ActiveSessionTracker {
 
     private final static int DEFAULT_SIZE = 10;
@@ -39,6 +42,13 @@ public class ActiveSessionTracker {
         return list.contains(session);
     }
 
+    /**
+     * Test if the active session tracker is empty or not. Requirement : a
+     * principal must be authenticated and the associated session must be valid
+     *
+     * @return true if the tracker is empty, false otherwise
+     */
+    @RolesAllowed("WebApp1User")
     public boolean isEmpty() {
         return list.isEmpty();
     }
