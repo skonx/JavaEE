@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.EJBAccessException;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -114,12 +113,8 @@ public class MyBound {
 
         logger.log(Level.INFO, "Providing the sessions list");
 
-        try {
-            if (tracker.isEmpty()) {
-                return Response.status(Response.Status.NO_CONTENT).build();
-            }
-        } catch (EJBAccessException e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+        if (tracker.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
 
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
