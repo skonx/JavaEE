@@ -55,4 +55,24 @@
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/index.html</location>
     </error-page>
+    <security-constraint>
+        <display-name>RestAPI_Constraint1</display-name>
+        <web-resource-collection>
+            <web-resource-name>*</web-resource-name>
+            <description/>
+            <url-pattern>/webresources/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>WebApp1User</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>file</realm-name>
+    </login-config>
+    <security-role>
+        <description/>
+        <role-name>WebApp1User</role-name>
+    </security-role>
 </web-app>

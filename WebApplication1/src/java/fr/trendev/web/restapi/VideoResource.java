@@ -17,9 +17,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -60,12 +58,13 @@ public class VideoResource {
     @Produces({"video/x-m4v", "video/mp4"})
     public Response getVideoStream(@HeaderParam(
             "Range") String range,
-            @Context HttpServletRequest request,
-            @Context HttpServletResponse response) throws IOException {
+            @Context HttpServletRequest request/*,
+            @Context HttpServletResponse response*/) throws IOException {
 
         String filename = "IMG_6346.m4v";
 
-        try {
+        //Programmatic security check
+        /*try {
             if (request.authenticate(response)) {
                 logger.log(Level.INFO, "AUTHENTICATION : [ OK ] {0} {1} {2}",
                         new Object[]{request.isUserInRole("TutorialUser"),
@@ -76,8 +75,7 @@ public class VideoResource {
         } catch (ServletException ex) {
             logger.log(Level.WARNING, "Error : Invalid AUTHENTICATION");
             return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-
+        }*/
         HttpSession session = request.getSession(false);
 
         if (!tracker.contains(session)) {
