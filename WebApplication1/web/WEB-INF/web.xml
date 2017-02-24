@@ -46,7 +46,7 @@
         <url-pattern>/webresources/*</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>2</session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
@@ -56,16 +56,43 @@
         <location>/index.html</location>
     </error-page>
     <security-constraint>
-        <display-name>RestAPI_Constraint1</display-name>
+        <display-name>secured_images_restapi</display-name>
         <web-resource-collection>
-            <web-resource-name>images</web-resource-name>
+            <web-resource-name>pictures</web-resource-name>
             <description/>
             <url-pattern>/webresources/images/*</url-pattern>
         </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>WebApp1User</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>secured_video_restapi</display-name>
         <web-resource-collection>
             <web-resource-name>videos</web-resource-name>
             <description/>
             <url-pattern>/webresources/videos</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>WebApp1User</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>unsecured_pictures_list</display-name>
+        <web-resource-collection>
+            <web-resource-name>list</web-resource-name>
+            <description/>
+            <url-pattern>/webresources/images/list</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
