@@ -13,6 +13,7 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Cross Origin Request Sharing Filter
  *
  * @author jsie
  */
