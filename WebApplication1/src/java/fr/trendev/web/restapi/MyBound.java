@@ -120,8 +120,8 @@ public class MyBound {
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonArrayBuilder trackerList = factory.createArrayBuilder();
 
-        tracker.forEach(session -> trackerList.add(
-                factory.createObjectBuilder().add("sessionId", session.getId())
+        tracker.forEach((id, session) -> trackerList.add(
+                factory.createObjectBuilder().add("sessionId", id)
                         .add("creationTime", session.getCreationTime())));
 
         JsonObjectBuilder jsonlist = factory.createObjectBuilder()

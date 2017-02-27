@@ -44,7 +44,8 @@ public class MyFilter implements Filter {
             FilterChain chain) throws IOException, ServletException {
         logger.log(Level.INFO, "## A request has been filtered ##");
         logger.log(Level.INFO, "Active sessions =>");
-        tracker.forEach(s -> logger.log(Level.INFO, s.getId()));
+        tracker.forEach((id, s) -> logger.
+                log(Level.INFO, "id={0}, session={}", new Object[]{id, s}));
         logger.log(Level.INFO, "<= Active sessions");
 
         HttpServletRequest req = (HttpServletRequest) request;

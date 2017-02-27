@@ -5,9 +5,11 @@
  */
 package fr.trendev.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+import java.util.function.BiConsumer;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.servlet.http.HttpSession;
@@ -20,30 +22,38 @@ import javax.servlet.http.HttpSession;
 @Singleton
 public class ActiveSessionTracker {
 
-    private final static int DEFAULT_SIZE = 10;
-    private final List<HttpSession> list;
+    private final Map<String, HttpSession> ast;
 
     public ActiveSessionTracker() {
-        list = new ArrayList<>(DEFAULT_SIZE);
+        ast = Collections.synchronizedMap(new TreeMap<>());
     }
 
     public boolean add(HttpSession session) {
-        return list.add(session);
+        if (Objects.isNull(session)) {
+            return false;
+        }
+        return ast.put(session.getId(), session) == session;
     }
 
     public boolean remove(HttpSession session) {
-        return list.remove(session);
+        if (Objects.isNull(session)) {
+            return false;
+        }
+        return ast.remove(session.getId()) == session;
     }
 
     public boolean contains(HttpSession session) {
-        return list.contains(session);
+        if (Objects.isNull(session)) {
+            return false;
+        }
+        return ast.containsKey(session.getId());
     }
 
     public boolean isEmpty() {
-        return list.isEmpty();
+        return ast.isEmpty();
     }
 
-    public void forEach(Consumer<? super HttpSession> c) {
-        list.forEach(c);
+    public void forEach(BiConsumer<? super String, ? super HttpSession> c) {
+        ast.forEach(c);
     }
 }
