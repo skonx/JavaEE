@@ -45,7 +45,7 @@ public class MyFilter implements Filter {
         logger.log(Level.INFO, "## A request has been filtered ##");
         logger.log(Level.INFO, "Active sessions =>");
         tracker.forEach((id, s) -> logger.
-                log(Level.INFO, "id={0}, session={}", new Object[]{id, s}));
+                log(Level.INFO, "id={0}, session={1}", new Object[]{id, s}));
         logger.log(Level.INFO, "<= Active sessions");
 
         HttpServletRequest req = (HttpServletRequest) request;
