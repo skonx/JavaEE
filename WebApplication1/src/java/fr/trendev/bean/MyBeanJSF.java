@@ -21,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -192,14 +191,15 @@ public class MyBeanJSF implements Serializable {
      * @return index
      * @throws IOException
      */
-    public void back() throws IOException {
+    public String back() throws IOException {
         iter++;
 
         logger.log(Level.INFO, "BACK LINK ");
 
-        ExternalContext ec = FacesContext.getCurrentInstance().
+        /*ExternalContext ec = FacesContext.getCurrentInstance().
                 getExternalContext();
-        ec.redirect(ec.getRequestContextPath());
+        ec.redirect(ec.getRequestContextPath());*/
+        return "index.html?faces-redirect=true";
 
     }
 
