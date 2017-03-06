@@ -185,8 +185,8 @@ public class MyBeanJSF implements Serializable {
     }
 
     /**
-     * Called by the link action. Increments iter and redirect the user to
-     * "index.html". Logs the back link call.
+     * Increments iter and redirect the user to "index.html". Logs the back link
+     * call.
      *
      * @return index
      * @throws IOException
