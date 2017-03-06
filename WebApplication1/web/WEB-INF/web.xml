@@ -67,10 +67,6 @@
             <description/>
             <role-name>WebApp1User</role-name>
         </auth-constraint>
-        <user-data-constraint>
-            <description/>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
     </security-constraint>
     <security-constraint>
         <display-name>secured_video_restapi</display-name>
@@ -83,10 +79,6 @@
             <description/>
             <role-name>WebApp1User</role-name>
         </auth-constraint>
-        <user-data-constraint>
-            <description/>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
     </security-constraint>
     <security-constraint>
         <display-name>unsecured_pictures_list</display-name>

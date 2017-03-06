@@ -76,14 +76,10 @@
                 you should expect ajax and full requests conflicts and issues regarding 
                 the data integrity.
             -->
-            <!-- 
-                TODO: comment redirect method
-                TODO: use an ajax listener
-                TODO: specify ?redirect(…) for the outcome
-            -->
-            <h:commandLink id="back" action="#{myBeanJSF.back}" value="#{bundle.Back}">
-                <f:ajax execute="incr date textarea" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
-            </h:commandLink>
+            <h:outputLink id="back" value="#{myBeanJSF.back()}">
+                <f:ajax event="click" execute="incr date textarea" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
+                #{bundle.Back}
+            </h:outputLink>
             <h:commandButton id="reset" action="#{myBeanJSF.reset}" value="#{bundle.Reset}" p:ng-click="reset()">
                 <!-- avoid to use @form otherwise AngularJS model will be altered -->
                 <f:ajax render="iter counter progress incr incrset date fulldate2 text increrrormsg datemessage" onerror="ri.error_handler"  onevent="ri.monitor_status"/>
