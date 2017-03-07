@@ -200,7 +200,6 @@ public class MyBeanJSF implements Serializable {
                 getExternalContext();
         ec.redirect(ec.getRequestContextPath());*/
         return "index.html?faces-redirect=true";
-
     }
 
     /**

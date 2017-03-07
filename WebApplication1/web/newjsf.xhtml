@@ -42,7 +42,7 @@
             <p/>
             <h:outputLabel value="(JSF + AngularJS) #{bundle.IncrValue} : " for="incr"/>
             <h:inputText id="incr" value="#{myBeanJSF.incr}" label="#{bundle.IncrValue}" p:autocomplete="off" required="true" p:ng-model="incr" p:ng-change="check_onchange()">
-                <f:ajax event="change" render="title iter increrrormsg incrset text progress" listener="#{myBeanJSF.add}" onerror="ri.error_handler" onevent="ri.monitor_status"/>
+                <f:ajax event="change" render="title iter increrrormsg incrset text progress back" listener="#{myBeanJSF.add}" onerror="ri.error_handler" onevent="ri.monitor_status"/>
             </h:inputText>
             <h:message for="incr" id="increrrormsg" showDetail="true" style="color: red"/>
             <br/>
@@ -53,7 +53,7 @@
             <h:outputLabel value="#{bundle.EnterDate} : " for="date" />
             <input type="date" jsf:id="date" name="date" jsf:title="#{bundle.EnterDate}" jsf:value="#{myBeanJSF.date}" jsf:label="date" placeholder="#{bundle.DateLabel}" autocomplete="off" required="required">
                 <f:convertDateTime pattern="yyyy-MM-dd" />
-                <f:ajax event="change" render="fulldate2 datemessage" onerror="ri.error_handler" onevent="ri.monitor_status"/>
+                <f:ajax event="change" render="fulldate2 datemessage back" onerror="ri.error_handler" onevent="ri.monitor_status"/>
             </input>
             <h:message for="date" id="datemessage" showDetail="true" style="color: red"/>
             <p/>
@@ -64,26 +64,17 @@
             <h:outputText id="text" value="#{myBeanJSF.text}" styleClass="outofbound"
                           rendered="true"/>
             <p/>
-            <h:inputTextarea id="textarea" value="#{myBeanJSF.textarea}" rows="5" cols="150" />
+            <h:inputTextarea id="textarea" value="#{myBeanJSF.textarea}" rows="5" cols="150">
+                <f:ajax event="blur"/>
+            </h:inputTextarea>
             <p/>
-            <!--
-                If the user change the "incr" or "date" value and click on this link, 
-                validation is automatically performed by this action.
-                "increrrormsg" and "datemessage" must also be rendered otherwise, 
-                at the very first time, if the user clicks on this link without having changed "date",
-                no error message will be displayed.
-                Avoid to use @form for render or execute, otherwise, 
-                you should expect ajax and full requests conflicts and issues regarding 
-                the data integrity.
-            -->
-            <h:outputLink id="back" value="#{myBeanJSF.back()}">
-                <f:ajax event="click" execute="incr date textarea" render="increrrormsg datemessage"  onevent="ri.monitor_status" onerror="ri.error_handler"/>
-                #{bundle.Back}
-            </h:outputLink>
             <h:commandButton id="reset" action="#{myBeanJSF.reset}" value="#{bundle.Reset}" p:ng-click="reset()">
                 <!-- avoid to use @form otherwise AngularJS model will be altered -->
                 <f:ajax render="iter counter progress incr incrset date fulldate2 text increrrormsg datemessage" onerror="ri.error_handler"  onevent="ri.monitor_status"/>
             </h:commandButton>
+            <h:panelGroup id="back">
+                <h:outputLink id="back_link" value="#{myBeanJSF.back()}" rendered="#{not facesContext.validationFailed}">#{bundle.Back}</h:outputLink>
+            </h:panelGroup>
             <p/>
             <!-- updated in random_incr.js , color will be overriden in AngularJS script-->
             <lc:progressbar id="pbar4" value="#{myBeanJSF.incr}" max="#{myBeanJSF.bound}" color="red"/>

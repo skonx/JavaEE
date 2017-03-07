@@ -86,6 +86,8 @@ var ri = {
 
                     var date = document.getElementById('form1:date');
 
+                    var textarea = document.getElementById('form1:textarea');
+
                     incr.value = Math.floor((Math.random() * bound.value) + 1);
 
                     /*access to the angular scope and change the value*/
@@ -111,6 +113,9 @@ var ri = {
                      * */
                     incr.onchange();
                     date.onchange();
+
+                    textarea.value += (incr.value + " ");
+                    textarea.onblur();
 
                     /* Change the value of the fourth jsf progressbar. 
                      * setValue() is a method provided during the JSF component rendering... 
