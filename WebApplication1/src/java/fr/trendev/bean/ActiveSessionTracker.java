@@ -32,7 +32,7 @@ public class ActiveSessionTracker {
         if (Objects.isNull(session)) {
             return false;
         }
-        return ast.put(session.getId(), session) == session;
+        return Objects.isNull(ast.put(session.getId(), session));
     }
 
     public boolean remove(HttpSession session) {
@@ -40,6 +40,10 @@ public class ActiveSessionTracker {
             return false;
         }
         return ast.remove(session.getId()) == session;
+    }
+
+    public boolean remove(String id) {
+        return ast.remove(id) != null;
     }
 
     public boolean contains(HttpSession session) {
@@ -56,4 +60,5 @@ public class ActiveSessionTracker {
     public void forEach(BiConsumer<? super String, ? super HttpSession> c) {
         ast.forEach(c);
     }
+
 }

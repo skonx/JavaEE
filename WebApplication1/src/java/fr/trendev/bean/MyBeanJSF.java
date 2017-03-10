@@ -157,9 +157,9 @@ public class MyBeanJSF implements Serializable {
         if (fc != null) {
 
             HttpSession session = (HttpSession) fc.getExternalContext().
-                    getSession(true);
+                    getSession(false);
 
-            sn = fc.getExternalContext().getSessionId(true);
+            sn = fc.getExternalContext().getSessionId(false);
 
             if (session instanceof HttpSession) {
                 logger.log(Level.INFO, "Session is a HttpSession : {0}",

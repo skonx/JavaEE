@@ -6,14 +6,11 @@
 package fr.trendev.web.restapi;
 
 import fr.trendev.bean.ActiveSessionTracker;
-import fr.trendev.bean.MyBeanJSF;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonBuilderFactory;
@@ -37,10 +34,6 @@ public class MyBound {
     public static final Logger logger =
             Logger.getLogger(MyBound.class.getCanonicalName());
 
-    //myBeanJSF is a CDI, should be injected using @Inject
-    @Inject
-    private MyBeanJSF myBeanJSF;
-
     @Context
     private HttpServletRequest req;
 
@@ -50,53 +43,7 @@ public class MyBound {
 
     @PostConstruct
     public void init() {
-        if (myBeanJSF.getSn() == null) {
-            myBeanJSF.setSn(req.getSession(true).getId());
-            logger.log(Level.INFO, "SESSION ID = {0}", myBeanJSF.getSn());
-        }
-    }
-
-    @GET
-    @Path("bound")
-    @Produces("text/plain")
-    public long getBound() {
-        return myBeanJSF.getBound();
-    }
-
-    @GET
-    @Path("iter")
-    @Produces("text/plain")
-    public long getIter() {
-        return myBeanJSF.getIter();
-    }
-
-    @GET
-    @Path("incr")
-    @Produces("text/plain")
-    public long getIncr() {
-        return myBeanJSF.getIncr();
-    }
-
-    @GET
-    @Path("test")
-    @Produces("text/plain")
-    public String testSessionID() {
-
-        boolean result;
-
-        if (Objects.nonNull(myBeanJSF.getSn()) && Objects.nonNull(req.
-                getSession(true)) && Objects.nonNull(req.getSession(true).
-                getId())) {
-            result = myBeanJSF.getSn().equals(req.getSession(true).getId());
-        } else {
-            result = false;
-        }
-
-        String message = "TEST = " + result;
-        message += ("\nmyBeanJSF.getSn() = " + myBeanJSF.getSn());
-        message += ("\nreq.getSession(true).getId() = " + req.getSession(true).
-                getId());
-        return message;
+        logger.log(Level.INFO, "RESTAPI MyBound created");
     }
 
     /**
@@ -120,9 +67,17 @@ public class MyBound {
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonArrayBuilder trackerList = factory.createArrayBuilder();
 
-        tracker.forEach((id, session) -> trackerList.add(
-                factory.createObjectBuilder().add("sessionId", id)
-                        .add("creationTime", session.getCreationTime())));
+        tracker.forEach((id, session) -> {
+            try {
+                trackerList.add(
+                        factory.createObjectBuilder().add("sessionId", id)
+                                .add("creationTime", session.getCreationTime()));
+            } catch (IllegalStateException e) {
+                logger.log(Level.WARNING,
+                        "## session {0} invalidated but still in the tracker ## - REMOVED [{1}]",
+                        new Object[]{id, tracker.remove(session) ? "YES" : "NO"});
+            }
+        });
 
         JsonObjectBuilder jsonlist = factory.createObjectBuilder()
                 .add("trackerList", trackerList);

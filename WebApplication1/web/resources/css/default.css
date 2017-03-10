@@ -94,6 +94,10 @@ a:hover
     background-color: lightyellow;
 }
 
+.lnklogout{
+    background-color: lightgrey;
+}
+
 .evens_odds{
     font-family: cursive;
     background-color: lightskyblue;

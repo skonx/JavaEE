@@ -15,6 +15,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionIdListener;
 import javax.servlet.http.HttpSessionListener;
 
 /**
@@ -23,30 +24,31 @@ import javax.servlet.http.HttpSessionListener;
  * @author jsie
  */
 public class NewServletListener implements ServletContextListener,
-        HttpSessionListener {
+        HttpSessionListener, HttpSessionIdListener {
 
-    private static final Logger LOG = Logger.getLogger(NewServletListener.class.
-            getName());
+    private static final Logger logger = Logger.getLogger(
+            NewServletListener.class.
+                    getName());
 
     @EJB
     private ActiveSessionTracker tracker;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        LOG.log(Level.INFO, "contextInitialized: {0}", LocalDateTime.now().
+        logger.log(Level.INFO, "contextInitialized: {0}", LocalDateTime.now().
                 toString());
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        LOG.log(Level.INFO, "contextDestroyed: {0}", LocalDateTime.now().
+        logger.log(Level.INFO, "contextDestroyed: {0}", LocalDateTime.now().
                 toString());
     }
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         long progress = 0l;
-        LOG.log(Level.INFO,
+        logger.log(Level.INFO,
                 "sessionCreated {0} and \"PROGRESS\" attribute for VIDEO STREAMING is {2}: {1}",
                 new Object[]{se.
                             getSession().getId(), LocalDateTime.now().toString(),
@@ -56,20 +58,38 @@ public class NewServletListener implements ServletContextListener,
     }
 
     /*
-     * TODO: check why a destroyed session is restarted without a sessionCreated call
      * @param se 
      */
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        LOG.log(Level.INFO, "sessionDestroyed {0}: {1}", new Object[]{se.
+        logger.log(Level.INFO, "sessionDestroyed {0}: {1}", new Object[]{se.
             getSession().getId(), LocalDateTime.now().toString()});
         HttpSession s = se.getSession();
-        tracker.remove(s);
+        logger.log(Level.INFO, "Session id={0} has {1}been removed",
+                new Object[]{
+                    s.getId(), tracker.remove(s) ? "" : "not "});
 
         for (Enumeration<String> e = s.getAttributeNames(); e.hasMoreElements();) {
             String attribute = e.nextElement();
             System.out.println("Attribute [" + attribute + "] = " + s.
                     getAttribute(attribute));
         }
+    }
+
+    @Override
+    public void sessionIdChanged(HttpSessionEvent se, String oldSessionId) {
+        logger.log(Level.WARNING,
+                "ID CHANGED : Session with id {0} has changed and is now {1}",
+                new Object[]{oldSessionId, se.getSession().getId()});
+
+        logger.log(Level.WARNING, "{0} has {1}been removed", new Object[]{
+            oldSessionId, tracker.remove(oldSessionId) ? "" : "not "});
+
+        logger.log(Level.WARNING,
+                "{0} has {1}been added in the tracker instead of {2}",
+                new Object[]{
+                    se.getSession().getId(),
+                    tracker.add(se.getSession()) ? "" : "not ", oldSessionId});
+
     }
 }

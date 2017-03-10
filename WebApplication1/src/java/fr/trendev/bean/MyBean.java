@@ -5,11 +5,13 @@
  */
 package fr.trendev.bean;
 
+import java.io.Serializable;
+
 /**
  *
  * @author jsie
  */
-public class MyBean {
+public class MyBean implements Serializable {
 
     private int iter;
     private String svname;
