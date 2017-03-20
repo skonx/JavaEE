@@ -32,6 +32,10 @@ public class MyBeanJSF2 {
     }
 
     public void logout() {
+
+        /*ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.invalidateSession();
+        return "/index.xhtml?faces-redirect=true";*/
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) fc.getExternalContext().getSession(
                 false);
@@ -51,5 +55,10 @@ public class MyBeanJSF2 {
                                 ex);
             }
         }
+    }
+
+    public boolean isLoggedIn() {
+        return FacesContext.getCurrentInstance().getExternalContext()
+                .isUserInRole("WebApp1User");
     }
 }
