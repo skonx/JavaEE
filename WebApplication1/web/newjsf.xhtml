@@ -51,14 +51,14 @@
             <h:outputText id="incrset" value="(JSF) #{bundle.IncrValue} = #{myBeanJSF.incr}"/>
             <p/>
             <h:outputLabel value="#{bundle.EnterDate} : " for="date" />
-            <input type="date" jsf:id="date" name="date" jsf:title="#{bundle.EnterDate}" jsf:value="#{myBeanJSF.date}" jsf:label="date" placeholder="#{bundle.DateLabel}" autocomplete="off" required="required">
+            <input type="date" jsf:id="date" name="date" jsf:title="#{bundle.EnterDate}" jsf:value="#{myBeanJSF.date.time}" jsf:label="date" placeholder="#{bundle.DateLabel}" autocomplete="off" required="required">
                 <f:convertDateTime pattern="yyyy-MM-dd" />
                 <f:ajax event="change" render="fulldate2 datemessage back" onerror="ri.error_handler" onevent="ri.monitor_status"/>
             </input>
             <h:message for="date" id="datemessage" showDetail="true" style="color: red"/>
             <p/>
-            <h:outputText id="fulldate2" value="#{myBeanJSF.date}">
-                <f:convertDateTime type="date" dateStyle="full" />
+            <h:outputText id="fulldate2" value="#{myBeanJSF.date.time}">
+                <f:convertDateTime type="date" dateStyle="full" /><!-- type="both" -->
             </h:outputText>
             <p/>
             <h:outputText id="text" value="#{myBeanJSF.text}" styleClass="outofbound"

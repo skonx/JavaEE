@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -69,7 +70,7 @@ public class MyBeanJSF implements Serializable {
     private long incr;
 
     @NotNull
-    private Date date;
+    private Calendar date;
 
     public static final Logger logger =
             Logger.getLogger(MyBeanJSF.class.getCanonicalName());
@@ -80,7 +81,7 @@ public class MyBeanJSF implements Serializable {
     public MyBeanJSF() {
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
@@ -89,11 +90,10 @@ public class MyBeanJSF implements Serializable {
      *
      * @param date the date specified in the form
      */
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
 
-        logger.log(Level.INFO, "Date field is : {0}", this.
-                convertDate(date));
+        //logger.log(Level.INFO, "Date field is : {0}", this.convertDate(date));
     }
 
     public String getSn() {
@@ -228,7 +228,7 @@ public class MyBeanJSF implements Serializable {
     public void reset() {
         logger.log(Level.WARNING, "~~ Reset called ~~");
         setIncr(0);
-        setDate(Date.from(Instant.now()));
+        setDate(Calendar.getInstance());//Date.from(Instant.now()));
     }
 
     private String convertDate(Date date) {
