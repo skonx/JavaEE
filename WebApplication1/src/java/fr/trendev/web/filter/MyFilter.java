@@ -33,7 +33,7 @@ public class MyFilter implements Filter {
     @EJB
     ActiveSessionTracker tracker;
 
-    public static final Logger logger =
+    public static final Logger LOG =
             Logger.getLogger(MyFilter.class.getCanonicalName());
 
     public MyFilter() {
@@ -42,11 +42,11 @@ public class MyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        logger.log(Level.INFO, "## A request has been filtered ##");
-        logger.log(Level.INFO, "Active sessions =>");
-        tracker.forEach((id, s) -> logger.
+        LOG.log(Level.INFO, "## A request has been filtered ##");
+        LOG.log(Level.INFO, "Active sessions =>");
+        tracker.forEach((id, s) -> LOG.
                 log(Level.INFO, "id={0}, session={1}", new Object[]{id, s}));
-        logger.log(Level.INFO, "<= Active sessions");
+        LOG.log(Level.INFO, "<= Active sessions");
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
@@ -57,30 +57,36 @@ public class MyFilter implements Filter {
         String sid = req.
                 getRequestedSessionId();
 
-        logger.log(Level.INFO, "Requested Session id = {0}", sid);
+        LOG.log(Level.INFO, "Requested Session id = {0}", sid);
 
         if (session == null) {
-            logger.log(Level.WARNING,
+            LOG.log(Level.WARNING,
                     "Filter : request not bound with a session");
         } else {
-            logger.log(Level.INFO, "Session id of the request = {0}", session.
+            LOG.log(Level.INFO, "Session id of the request = {0}", session.
                     getId());
-            logger.log(Level.INFO, "Check if {0} is an active session...",
+            LOG.log(Level.INFO, "Check if {0} is an active session...",
                     session.getId());
-            logger.log(Level.INFO, "{0} is active = {1}", new Object[]{session.
+            LOG.log(Level.INFO, "{0} is active = {1}", new Object[]{session.
                 getId(),
                 tracker.contains(session)});
 
+            LOG.log(Level.INFO,
+                    "FILTER ==> UserPrincipal = [{0}] ; AuthType={1} ; RemoteUser = [{2}]",
+                    new Object[]{req.
+                                getUserPrincipal().getName(), req.getAuthType(),
+                        req.getRemoteUser()});
+
             //adds a re-created session (preserve session across redeployment) in the tracker
             if (!tracker.contains(session)) {
-                logger.log(Level.WARNING,
+                LOG.log(Level.WARNING,
                         "Session id {0} should be active... adding it in the tracker",
                         sid);
                 tracker.add(session);
             }
         }
 
-        logger.log(Level.INFO, "Requested URL = {0}", req.getRequestURL().
+        LOG.log(Level.INFO, "Requested URL = {0}", req.getRequestURL().
                 toString());
 
         //Allow the client's browser to cache the JSF resources (JavaScript, CSS...) 
@@ -96,11 +102,11 @@ public class MyFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        logger.log(Level.INFO, "Filter initialized");
+        LOG.log(Level.INFO, "Filter initialized");
     }
 
     @Override
     public void destroy() {
-        logger.log(Level.INFO, "Filter destroyed");
+        LOG.log(Level.INFO, "Filter destroyed");
     }
 }

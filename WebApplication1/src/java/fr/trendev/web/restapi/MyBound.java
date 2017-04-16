@@ -6,6 +6,7 @@
 package fr.trendev.web.restapi;
 
 import fr.trendev.bean.ActiveSessionTracker;
+import fr.trendev.web.filter.MyFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,11 +32,8 @@ import javax.ws.rs.core.Response;
 @Singleton
 public class MyBound {
 
-    public static final Logger logger =
+    public static final Logger LOG =
             Logger.getLogger(MyBound.class.getCanonicalName());
-
-    @Context
-    private HttpServletRequest req;
 
     //tracker is an EJB, should be injected using @EJB
     @EJB
@@ -43,7 +41,7 @@ public class MyBound {
 
     @PostConstruct
     public void init() {
-        logger.log(Level.INFO, "RESTAPI MyBound created");
+        LOG.log(Level.INFO, "RESTAPI MyBound created");
     }
 
     /**
@@ -51,14 +49,15 @@ public class MyBound {
      * tracker. If no user is authenticated and no session are valid, will
      * return an UNAUTHORIZED HTTP message
      *
+     * @param req
      * @return a JSON object including the list of the active sessions
      */
     @GET
     @Path("sessions")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllActiveSessions() {
+    public Response getAllActiveSessions(@Context HttpServletRequest req) {
 
-        logger.log(Level.INFO, "Providing the sessions list");
+        LOG.log(Level.INFO, "Providing the sessions list");
 
         if (tracker.isEmpty()) {
             return Response.status(Response.Status.NO_CONTENT).build();
@@ -73,7 +72,7 @@ public class MyBound {
                         factory.createObjectBuilder().add("sessionId", id)
                                 .add("creationTime", session.getCreationTime()));
             } catch (IllegalStateException e) {
-                logger.log(Level.WARNING,
+                LOG.log(Level.WARNING,
                         "## session {0} invalidated but still in the tracker ## - REMOVED [{1}]",
                         new Object[]{id, tracker.remove(session) ? "YES" : "NO"});
             }
@@ -81,6 +80,12 @@ public class MyBound {
 
         JsonObjectBuilder jsonlist = factory.createObjectBuilder()
                 .add("trackerList", trackerList);
+
+        MyFilter.LOG.log(Level.INFO,
+                "MY BOUND REST-API ==> UserPrincipal = [{0}] ; AuthType={1} ; RemoteUser = [{2}]",
+                new Object[]{req.
+                            getUserPrincipal().getName(), req.getAuthType(),
+                    req.getRemoteUser()});
 
         return Response.ok(jsonlist.build()).build();
     }
