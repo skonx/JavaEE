@@ -9,9 +9,12 @@ and open the template in the editor.
         <title>My first clustered app</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <base href=".">
         <link href="resources/css/default.css" rel="stylesheet" type="text/css"/>
-        <link rel="icon" type="image/x-icon" href="resources/dist/favicon.ico">
-        <link href="resources/dist/styles.d41d8cd98f00b204e980.bundle.css" rel="stylesheet"/>
+
+        <link rel="icon" type="image/x-icon" href="ng4test/dist/favicon.ico">
+        <link href="ng4test/dist/styles.d41d8cd98f00b204e980.bundle.css" rel="stylesheet"/>
+
     </head>
 
     <body>
@@ -26,11 +29,15 @@ and open the template in the editor.
             <a href="video_stream.xhtml" class="lnkvideo">Video Streaming</a>
             <a href="logout.xhtml" class="lnklogout">Logout Page</a>
         </div>
-    <app-root>Loading...</app-root>
-    <script type="text/javascript" src="resources/dist/inline.65891407d8c33fc6794a.bundle.js"></script>
-    <script type="text/javascript" src="resources/dist/polyfills.2d45a4c73c85e24fe474.bundle.js"></script>
-    <script type="text/javascript" src="resources/dist/vendor.58f0488d09236b986a1d.bundle.js"></script>
-    <script type="text/javascript" src="resources/dist/main.874363bac8c4a4d4ecd4.bundle.js"></script>
-    <script src="resources/js/shuffle_links.js"></script>
-</body>
+        <div id="ng4test">
+            <app-root>Loading...</app-root>
+        </div>
+
+        <script src="resources/js/shuffle_links.js"></script>
+
+        <script type="text/javascript" src="ng4test/dist/inline.b0c4d30260c8b4f24339.bundle.js"></script>
+        <script type="text/javascript" src="ng4test/dist/polyfills.2d45a4c73c85e24fe474.bundle.js"></script>
+        <script type="text/javascript" src="ng4test/dist/vendor.4fbfdef87a2030cad434.bundle.js"></script>
+        <script type="text/javascript" src="ng4test/dist/main.ac7d250d4be9c226b91b.bundle.js"></script>
+    </body>
 </html>

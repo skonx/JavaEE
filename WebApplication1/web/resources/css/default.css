@@ -29,6 +29,10 @@ div, form
 
 }
 
+#ng4test{
+    border : 3px dotted lightcoral;
+}
+
 a, a:visited 
 {
     color: black;
