@@ -7,7 +7,6 @@ package fr.trendev.web.filter;
 
 import fr.trendev.bean.ActiveSessionTracker;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -18,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,7 +27,7 @@ import javax.servlet.http.HttpSession;
  */
 /*servletNames = {"Faces Servlet", "javax.ws.rs.core.Application",
     "MyServletTest"}*/
-@WebFilter(urlPatterns = {"/*"}, asyncSupported = true)
+@WebFilter(urlPatterns = {"/"}, asyncSupported = true)
 public class MyFilter implements Filter {
 
     @EJB
@@ -88,8 +86,9 @@ public class MyFilter implements Filter {
             }
         }
 
-        LOG.log(Level.INFO, "Requested URL = {0}", req.getRequestURL().
-                toString());
+        LOG.log(Level.INFO, "Requested URL = {0} ; requested session id = {1}",
+                new Object[]{req.getRequestURL().
+                            toString(), sid});
 
         //Allow the client's browser to cache the JSF resources (JavaScript, CSS...) 
         /*if (req.getRequestURI().startsWith(req.getContextPath()
@@ -101,14 +100,14 @@ public class MyFilter implements Filter {
         /**
          * Cookie JSESSIONID : Reset the expiration date
          */
-        Cookie[] cookies = req.getCookies();
+        /*Cookie[] cookies = req.getCookies();
         if (cookies != null) {
             Arrays.asList(cookies).stream()
                     .filter(c -> "JSESSIONID".equals(c.getName()) && session
                             != null)
                     .forEach(c -> {
 
-                        c.setMaxAge(1800);//30 minutes, should be equal to the server session duration
+                        c.setMaxAge(180);//3 minutes, should be equal to the server session duration
                         c.setValue(session.getId());
                         c.setPath(req.getContextPath());
                         resp.addCookie(c);
@@ -118,7 +117,7 @@ public class MyFilter implements Filter {
                                 new Object[]{c.getName(), c.getValue(), c.
                                     getMaxAge(), c.getPath()});
                     });
-        }
+        }*/
         chain.doFilter(request, response);
 
     }

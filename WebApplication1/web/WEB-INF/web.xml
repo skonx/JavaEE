@@ -47,7 +47,7 @@
         <url-pattern>/webresources/*</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>3</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
@@ -61,7 +61,7 @@
         <web-resource-collection>
             <web-resource-name>secured_access</web-resource-name>
             <description/>
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
