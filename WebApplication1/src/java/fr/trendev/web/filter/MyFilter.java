@@ -7,6 +7,7 @@ package fr.trendev.web.filter;
 
 import fr.trendev.bean.ActiveSessionTracker;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -17,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -96,6 +98,27 @@ public class MyFilter implements Filter {
                     "private, max-age=31536000"); // HTTP 1.1. 
             //resp.setDateHeader("Expires", 0); // Proxies.
         }*/
+        /**
+         * Cookie JSESSIONID : Reset the expiration date
+         */
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            Arrays.asList(cookies).stream()
+                    .filter(c -> "JSESSIONID".equals(c.getName()) && session
+                            != null)
+                    .forEach(c -> {
+
+                        c.setMaxAge(1800);//30 minutes, should be equal to the server session duration
+                        c.setValue(session.getId());
+                        c.setPath(req.getContextPath());
+                        resp.addCookie(c);
+
+                        LOG.log(Level.INFO,
+                                "Path : [{3}]; Cookie : [{0}] ; value : [{1}] ; expiration : [{2}] seconds",
+                                new Object[]{c.getName(), c.getValue(), c.
+                                    getMaxAge(), c.getPath()});
+                    });
+        }
         chain.doFilter(request, response);
 
     }

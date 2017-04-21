@@ -79,6 +79,7 @@ public class MyBeanJSF implements Serializable {
      * Creates a new instance of MyBeanJSF
      */
     public MyBeanJSF() {
+        date = Calendar.getInstance();
     }
 
     public Calendar getDate() {
@@ -92,7 +93,7 @@ public class MyBeanJSF implements Serializable {
      */
     public void setDate(Calendar date) {
         this.date = date;
-
+        logger.log(Level.INFO, "Date = {0}", date.toString());
         //logger.log(Level.INFO, "Date field is : {0}", this.convertDate(date));
     }
 
