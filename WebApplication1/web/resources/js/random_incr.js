@@ -4,7 +4,7 @@
 
 var ri = {
     //the default delay 
-    delay: 20,
+    delay: 10,
 
     //the id of the started time interval
     timerID: 0,
@@ -49,7 +49,8 @@ var ri = {
         var dates = ["1982-11-28", "1983-10-25", "2007-03-17", "2011-04-16", "2015-11-06"];
 
         var date = new Date();
-        var today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        var today = date.toISOString().split("T")[0];
+        console.warn('today = ' + today);
         dates.push(today);
 
         return dates;
@@ -100,7 +101,8 @@ var ri = {
 
                     if (!date.value) {
                         console.error("date is null !!!");
-                        console.log("dates[" + incr.value % dates.length + "]");
+                        console.error("dates[" + incr.value % dates.length + "] = " + dates[incr.value % dates.length]);
+                        console.error("today = " + new Date());
 
                         for (var i = 0; i < dates.length; i++) {
                             console.log("dates[" + i + "] = " + dates[i]);
