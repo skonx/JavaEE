@@ -49,9 +49,6 @@
     <session-config>
         <session-timeout>2</session-timeout>
     </session-config>
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/index.html</location>
@@ -61,8 +58,9 @@
         <web-resource-collection>
             <web-resource-name>secured_access</web-resource-name>
             <description/>
-            <url-pattern>/index.html</url-pattern>
             <url-pattern>/newjsf.xhtml</url-pattern>
+            <url-pattern>/index2.html</url-pattern>
+            <url-pattern>/dashboard.html</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

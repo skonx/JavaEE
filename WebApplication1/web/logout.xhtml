@@ -7,8 +7,8 @@
     </h:head>
     <h:body>
         <h:form id="logout_form">
-            <h:outputLabel for="logout_button" value="Click to logout"/>
-            <h:commandButton id="logout_button" action="${myBeanJSF2.logout}" value="invalidate"/>
+            <h:outputLabel for="logout_button" value="Click to logout: "/>
+            <h:commandButton id="logout_button" action="${myBeanJSF2.logout}" value="invalidate / logout"/>
             <p/>
             <h:outputLink value="index.html?faces-redirect=true">#{bundle.Back}</h:outputLink>
         </h:form>
