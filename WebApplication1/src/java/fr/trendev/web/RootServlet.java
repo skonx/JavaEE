@@ -76,7 +76,7 @@ public class RootServlet extends HttpServlet {
             } else {
                 processRequest(request, response,
                         "<h1>I'm sorry " + p.getName()
-                        + " but you're not allowed to access to this resource through this link</h1>");
+                        + " but you're not allowed to access to the dashboard through this link</h1>");
             }
         }
 
