@@ -114,7 +114,7 @@ public class MyFilter implements Filter {
                             != null)
                     .forEach(c -> {
 
-                        c.setMaxAge(180);//3 minutes, should be equal to the server session duration
+                        c.setMaxAge(300);//5 minutes, should be equal to the server session duration
                         c.setValue(session.getId());
                         c.setPath(req.getContextPath());
                         resp.addCookie(c);

@@ -47,7 +47,7 @@
         <url-pattern>/webresources/*</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>2</session-timeout>
+        <session-timeout>5</session-timeout>
     </session-config>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
