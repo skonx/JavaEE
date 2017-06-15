@@ -10,16 +10,20 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <base href=".">
-        <link href="resources/css/default.css" rel="stylesheet" type="text/css"/>
+
 
         <link rel="icon" type="image/x-icon" href="ng4test/dist/favicon.ico">
         <link href="ng4test/dist/styles.bundle.css" rel="stylesheet"/>
+        <!--link href="resources/css/default.css" rel="stylesheet" type="text/css"/-->
 
     </head>
 
     <body>
+        <div id="ng4test">
+            <app-root>Loading...</app-root>
+        </div>
         <div id="div">
-            <h1>Hello, the webapp v10.0 is up and running...</h1>
+            <h1>Hello, the webapp v12.0 is up and running...</h1>
             <p><span id="pos"></span></p>
             <a href="test" class="lnkjsp">Test JSP</a>
             <a href="newjsf.xhtml" class="lnkjsf">Test JSF</a>
@@ -29,10 +33,6 @@ and open the template in the editor.
             <a href="video_stream.xhtml" class="lnkvideo">Video Streaming</a>
             <a href="logout.xhtml" class="lnklogout">Logout Page</a>
         </div>
-        <div id="ng4test">
-            <app-root>Loading...</app-root>
-        </div>
-
         <script src="resources/js/shuffle_links.js"></script>
 
         <script type="text/javascript" src="ng4test/dist/inline.bundle.js"></script>
