@@ -71,7 +71,8 @@ public class RootServlet extends HttpServlet {
                     "<h1>I'm sorry but you are not authenticated !</h1>");
         } else {
             if ("jsie".equals(p.getName())) {
-                request.getRequestDispatcher("/dashboard.html").include(request,
+                request.getRequestDispatcher("/WEB-INF/dashboard.html").include(
+                        request,
                         response);
             } else {
                 processRequest(request, response,
