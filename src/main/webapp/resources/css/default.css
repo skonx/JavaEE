@@ -1,0 +1,162 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 14, 2016, 5:28:49 PM
+    Author     : jsie
+*/
+
+body
+{
+    background-color: dimgrey; 
+    border : 5px dotted lightgreen;
+    border-radius: 10px;
+}
+
+div, form
+{
+    margin: 25px 50px 25px 50px;
+    color: white;
+    text-align: justify;
+
+    /*display: flex;
+    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;*/
+
+}
+
+#ng4test{
+    border : 3px dotted lightcoral;
+}
+
+a, a:visited 
+{
+    color: black;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+a:hover 
+{
+    text-decoration: underline;
+    color: lightseagreen;
+}
+
+.outofbound{
+    color : limegreen;
+}
+
+.progressfont{
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background-color: #ddd;
+    margin: 0px 0px 0px 0px;
+}
+
+.progressbar{
+    transition: all linear 1.0s;
+    position: absolute;
+    height: 100%;
+    margin:inherit;
+}
+
+.progresslabel {
+    display: block;
+    font-size: 1.5em;
+    text-align: center;
+    line-height: 30px;
+    margin:inherit;
+}
+
+.lnkjsp{
+    font-family: cursive;
+    background-color: lightcoral;
+}
+
+.lnkjsf{
+    font-family: cursive;
+    background-color: blueviolet;
+}
+
+.lnkrestapi{
+    font-family: cursive;
+    background-color: darkseagreen;
+}
+
+.lnkpict{
+    font-family: cursive;
+    background-color: orange;
+}
+
+.lnkvideo{
+    font-family: cursive;
+    background-color: lightyellow;
+}
+
+.lnklogout{
+    background-color: lightgrey;
+}
+
+.evens_odds{
+    font-family: cursive;
+    background-color: lightskyblue;
+}
+
+.counter{
+    border: 2px black solid;
+    background-color: lightgray;
+    font-family: courier ;
+    font-size: 3em;
+    padding: 5px 5px 5px 5px;
+}
+
+.column-left{
+    text-align: left;
+}
+
+.column-right{
+    position: absolute;
+    text-align: right;
+    right: 0px;
+    padding: 0px;
+    margin-right: 113px;
+}
+
+@media all and (max-device-width: 480px)
+{
+    div, form
+    {
+        margin: 10px 25px 25px 10px;
+        color: white;
+        text-align: justify;
+
+        /*display: flex;
+        justify-content: center;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;*/
+
+    }
+
+    .counter{
+        border: 2px black solid;
+        background-color: lightgray;
+        font-family: courier ;
+        font-size: 1.5em;
+        padding: 5px 5px 5px 5px;
+    }
+
+    .column-right{
+        position: absolute;
+        text-align: right;
+        right: 0px;
+        padding: 0px;
+        margin-right: 20px;
+    }
+}
+

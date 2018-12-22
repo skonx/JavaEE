@@ -1,0 +1,14 @@
+<div>
+    <div id="preview_header">
+        <button type="button" id="refresh" ng-click="refresh()">Refresh</button>
+        <label for="refresh">Display the thumbnails of the pictures stored on the server</label>
+        <h2 ng-if="total">Pictures List ({{total}}):</h2>
+    </div>
+    <div id="preview_content" ng-if="total">
+        <ul>
+            <il ng-repeat="p in            pictures">
+                <a href="{{path}}{{p}}"><img ng-src="{{path}}{{p}}" alt="{{p}}" ng-mouseover="seturl({pict: p})"/></a>
+            </il>
+        </ul>
+    </div>
+</div>

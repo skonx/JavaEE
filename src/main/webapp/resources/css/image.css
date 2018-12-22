@@ -1,0 +1,79 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 4, 2017, 4:24:46 PM
+    Author     : jsie
+*/
+
+div{
+    background-color: lightgrey; 
+}
+
+#upload{
+    border : 2px solid lightgreen;
+}
+
+#download{
+    border : 2px solid lightsalmon;
+    flex: 1;
+}
+
+#preview{
+    border : 2px solid darkorchid;
+    width: 50%;
+    height: 500px;
+}
+
+img{
+    max-height: 150px;
+    max-width: 150px;
+    image-orientation: from-image;
+}
+
+#imgprev{
+    max-height: 350px;
+    max-width: 350px;
+}
+
+#preview_header{
+    background-color: lightsteelblue;
+}
+
+#preview_content{
+    overflow: scroll;
+    max-height: 400px;
+}
+
+#container{
+    display: flex;
+    align-items: stretch;
+}
+
+#fn{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+@media all and (max-device-width: 480px)
+{
+    img{
+        max-height: 75px;
+        max-width: 75px;
+        image-orientation: from-image;
+    }
+
+    #imgprev{
+        max-height: 150px;
+        max-width: 150px;
+    }
+
+    #preview_content{
+        overflow: scroll;
+        max-height: 300px;
+    }
+}
+
