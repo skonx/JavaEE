@@ -9,7 +9,7 @@ cache:
   - $HOME/.m2
 services:
   - docker
-  before_install:
+before_install:
   - docker build -t jsie/javaee .
 deploy:
   provider: script
