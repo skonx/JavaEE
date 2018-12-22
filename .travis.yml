@@ -7,3 +7,5 @@ script:
 cache:
   directories:
   - $HOME/.m2
+services:
+  - docker
