@@ -10,7 +10,7 @@ cache:
 services:
   - docker
 before_install:
-  - docker build -t jsie/javaee .
+  - docker build -t jsie/test-webapp1 .
 deploy:
   provider: script
   script: bash docker_push
