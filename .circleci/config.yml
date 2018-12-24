@@ -48,5 +48,5 @@ jobs:
           path: target/surefire-reports
       
       - store_artifacts: # store the uberjar as an artifact
-          path: target/webapp1.12-1.war
+          path: target/webapp1-12.1.war
       
